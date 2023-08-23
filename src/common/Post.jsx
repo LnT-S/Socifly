@@ -7,8 +7,6 @@ import FeatherIcon from "react-native-vector-icons/Feather";
 import EntypoIcon from "react-native-vector-icons/Entypo";
 import IconButton from '../atoms/IconButton';
 import { getResponsiveValue,screenWidth} from '../styles/responsive'; 
-
-
 import defaultProfileImage from '../assets/images/Profile2.png';
 
 const Post = ({ source }) => {

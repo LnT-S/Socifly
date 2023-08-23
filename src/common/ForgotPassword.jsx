@@ -93,7 +93,6 @@ const ForgotPassword = (props) => {
             value={inputValue}
           />
         )}
-     
         <ButtonA
           name={"Send OTP"}
           onPress={handleLogin}

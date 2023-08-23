@@ -123,7 +123,7 @@ const styles = StyleSheet.create({
     height: getResponsiveValue(50, 34),
     borderWidth: getResponsiveValue(3, 2),
     borderColor: WHITE,
-    borderRadius: getResponsiveValue(25,22),
+    borderRadius: getResponsiveValue(25, 22),
     color: WHITE,
   },
   create: {
@@ -137,7 +137,7 @@ const styles = StyleSheet.create({
     height: getResponsiveValue(50, 34),
     borderWidth: getResponsiveValue(3, 2),
     borderColor: 'rgba(255,255,255,1)',
-    borderRadius: getResponsiveValue(25,22),
+    borderRadius: getResponsiveValue(25, 22),
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
