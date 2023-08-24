@@ -9,15 +9,19 @@ import {
 import React from 'react';
 import LinearGradient2 from '../atoms/LinearGradient2';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import Category from './Category';
+import Category from '../common/Category';
 import EntypoIcon from 'react-native-vector-icons/Entypo';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import IoniconsIcon from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIconsIcon from 'react-native-vector-icons/MaterialCommunityIcons';
-import Post from './Post';
+import Post from '../common/Post';
 import {BLACK, WHITE} from '../styles/colors';
 
 import {getResponsiveValue} from '../styles/responsive';
+import GoogleAds from '../common/GoogleAds';
+import InterstitialAds from '../common/InterstitialAds';
+import RewardedAds from '../common/RewardedAds';
+import RewardedInterstitialAds from '../common/RewardedInterstitialAds';
 
 const HomePage = props => {
   const handleNextPage = () => {
@@ -58,8 +62,19 @@ const HomePage = props => {
       <ScrollView style={styles.postS}>
         <Post source={require('../assets/pics/pic1.png')} />
         <Post source={require('../assets/pics/pic1.png')} />
+        <GoogleAds/>
+
         <Post source={require('../assets/pics/pic1.png')} />
-      </ScrollView>
+        <Post source={require('../assets/pics/pic1.png')} />
+        <InterstitialAds/>
+        <Post source={require('../assets/pics/pic1.png')} />
+        <Post source={require('../assets/pics/pic1.png')} />
+        <RewardedAds/>
+        <Post source={require('../assets/pics/pic1.png')} />
+        <Post source={require('../assets/pics/pic1.png')} />
+        <RewardedInterstitialAds/>
+        </ScrollView>
+    
     </SafeAreaView>
   );
 };

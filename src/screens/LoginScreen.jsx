@@ -4,7 +4,6 @@ import LinearGradients from '../atoms/LinearGradients';
 import global from '../styles/global';
 import TextinputA from '../atoms/TextinputA';
 import ButtonA from '../atoms/ButtonA';
-import {login} from './api';
 import {LINKS} from '../styles/colors';
 
 // import { isEmailValid } from "../utils/validation/formValidation";

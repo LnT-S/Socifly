@@ -7,7 +7,7 @@ import FontAwesomeIcon from "react-native-vector-icons/FontAwesome";
 import MaterialCommunityIconsIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import MaterialIconsIcon from "react-native-vector-icons/MaterialIcons";
 import Icon from "react-native-vector-icons/MaterialIcons";
-import Post from './Post';
+import Post from '../common/Post';
 import { BLACK, WHITE } from '../styles/colors';
 
 import { getResponsiveValue} from '../styles/responsive'; 
@@ -16,13 +16,14 @@ const CreatePage = (props) => {
   const handleNextPage = () => {
     props.navigation.navigate('HomePage');
   };
-
+  const handleNextPage2 = () => {
+    props.navigation.navigate('Settings');
+  };
   return (
     <SafeAreaView style={styles.container}>
       <LinearGradient2>
         <View style={styles.iconRow}>
           <View style={styles.iconContainer}>
-            <EntypoIcon name="menu" style={styles.icon} />
             <FontAwesomeIcon
               name="angle-left"
               onPress={handleNextPage}
@@ -30,10 +31,15 @@ const CreatePage = (props) => {
             />
           </View>
           <Text style={styles.create}>NEW</Text>
-          <MaterialIconsIcon
-            name="settings"
-            style={ styles.settingsIcon}
-          />
+          <Pressable
+          onPress={handleNextPage2}
+            style={styles.iconWrapper}
+          >
+            <MaterialIconsIcon
+              name="settings"
+              style={styles.icon}
+            />
+          </Pressable>
         </View>
       </LinearGradient2>
 
@@ -86,19 +92,21 @@ const styles = StyleSheet.create({
   },
   icon: {
     color: "#fff",
-    fontSize: getResponsiveValue(40, 30),
+    fontSize: getResponsiveValue(40,30),
+    left:60
+
   },
   iconA: {
     color: "#fff",
     fontSize: getResponsiveValue(40, 30),
-    marginLeft: getResponsiveValue(30, 20),
+    marginLeft: getResponsiveValue(30, 0),
   },
   create: {
     color: "#fff",
     fontSize: getResponsiveValue(20, 16),
     textAlign: "center",
     fontWeight: "bold",
-    // marginLeft: getResponsiveValue(50, 30),
+    
   },
   settingsIcon: {
     color: "#fff",

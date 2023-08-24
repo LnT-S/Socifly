@@ -27,7 +27,8 @@ const Settings = props => {
             <View style={styles.textContainer}>
               <Text style={styles.text1}>Your Name</Text>
               <Text style={styles.text2}>your_email123@isEmail.com</Text>
-            </View>
+              <Text style={styles.text2}>+91 1234567890</Text>
+              </View>
           </View>
         </View>
         <View style={styles.rect2}>
@@ -160,7 +161,7 @@ const styles = StyleSheet.create({
   },
   rect3: {
     position: 'relative',
-    top: getResponsiveValue('25%', '35%'),
+    top: getResponsiveValue('25%', '20%'),
     alignItems: 'center',
     width: '100%',
     flexDirection: 'row',

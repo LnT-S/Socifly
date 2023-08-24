@@ -23,8 +23,8 @@ const Post = ({ source }) => {
         </View>
         <Image source={defaultProfileImage} style={styles.profileImage} />
         <Text style={styles.Name}>User Name</Text>
-        <Text style={styles.Name2}>+91 9999555500</Text>
         <Text style={styles.Name2}>user123email@email.com</Text>
+        <Text style={styles.Name2}>+91 9999555500</Text>
         <View style={styles.horizontal}></View>
         <View style={styles.toolbar}>
           <Pressable>
@@ -127,7 +127,7 @@ const styles = StyleSheet.create({
     // width:"auto",
     position: 'relative',
     left:getResponsiveValue("45%", "45%"),
-    bottom:getResponsiveValue("25%", "25%"),
+    bottom:getResponsiveValue("23%", "23%"),
   },
   Name2:{
     fontSize:getResponsiveValue(14,12),
@@ -137,7 +137,7 @@ const styles = StyleSheet.create({
     // width:"auto",
     position: 'relative',
     left:getResponsiveValue("45%", "45%"),
-    bottom:getResponsiveValue("25%", "25%"),
+    bottom:getResponsiveValue("23%", "23%"),
   },
   horizontal:{
     width:"100%",

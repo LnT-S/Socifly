@@ -1,4 +1,4 @@
-import { SafeAreaView, StyleSheet, View, Text, Pressable, TextInput,Image, KeyboardAvoidingView } from 'react-native';
+import { SafeAreaView,TouchableOpacity, StyleSheet, View, Text, Pressable, TextInput,Image, KeyboardAvoidingView } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import ButtonA from "../atoms/ButtonA";
 
@@ -9,8 +9,7 @@ import MaterialIconsIcon from "react-native-vector-icons/MaterialIcons";
 import { getResponsiveValue } from '../styles/responsive'; 
 import { launchImageLibrary} from 'react-native-image-picker';
 import defaultProfileImage from '../assets/images/Profile.png';
-import SettingsScreen from './Settings';
-
+import DialogueBox from '../common/DialogueBox';
 
 const ProfileScreen = (props) => {
 
@@ -19,7 +18,7 @@ const ProfileScreen = (props) => {
   const [name, setName] = useState("Your Name");
   const [email, setEmail] = useState("your-email@email.com");
   const [profileImage, setProfileImage] = useState(defaultProfileImage);
-
+  const [phoneNumber, setPhoneNumber] = useState("1234567890");
  
   const handleNextPage = () => {
     props.navigation.navigate('HomePage');
@@ -27,8 +26,6 @@ const ProfileScreen = (props) => {
   const handleNextPage2 = () => {
     props.navigation.navigate('Settings');
   };
-
-  
   const selectImage = () => {
     console.log('Selecting image...');
     const options = {
@@ -38,8 +35,6 @@ const ProfileScreen = (props) => {
       quality: 1,         // Image quality: 0 to 1
       includeBase64: false, // Set to true if you want to get base64 data
     };
-  
-
 
    launchImageLibrary(options, (response) => {
     if (response.assets && response.assets.length > 0) {
@@ -67,6 +62,14 @@ const ProfileScreen = (props) => {
    
     toggleEdit();
   };
+  const openDialogue = () => {
+    setIsDialogueVisible(true);
+  };
+
+  const closeDialogue = () => {
+    setIsDialogueVisible(false);
+  };
+  const [isDialogueVisible, setIsDialogueVisible] = useState(false);
 
   return (
     <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={{ flex: 1 }}>
@@ -112,6 +115,17 @@ const ProfileScreen = (props) => {
         ) : (
           <Text style={styles.yourEmail}>{email}</Text>
         )}
+        {isEditing ? (
+          <TextInput
+            style={styles.editableField}
+            value={phoneNumber}
+            onChangeText={setPhoneNumber}
+            keyboardType="numeric"
+            maxLength={10}
+          />
+        ) : (
+          <Text style={styles.yourphoneNumber}>{phoneNumber}</Text>
+        )}
         </View>
       </LinearGradients>
       <View style={global.aContainer}>
@@ -121,6 +135,18 @@ const ProfileScreen = (props) => {
         <ButtonA name={"EDIT PROFILE"} onPress={toggleEdit} />
       )}
       </View>
+
+      <TouchableOpacity onPress={() => {
+        openDialogue();
+        toggleEdit();
+    }} style={styles.openButton}>
+        <Text style={styles.openButtonText}>Open Dialogue</Text>
+    </TouchableOpacity>
+      <DialogueBox 
+      isVisible={isDialogueVisible} 
+      onClose={closeDialogue}
+      textContent="Edit Your Profile"
+      />
     </SafeAreaView>
     </KeyboardAvoidingView>
   );
@@ -164,6 +190,10 @@ height:"40%",
     fontWeight: "bold",
   },
   yourEmail: {
+    color: "#fff",
+    fontSize:getResponsiveValue(20,16),
+  },
+  yourphoneNumber:{
     color: "#fff",
     fontSize:getResponsiveValue(20,16),
   },
