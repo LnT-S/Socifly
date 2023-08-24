@@ -1,4 +1,4 @@
-import { StyleSheet, View, Text, Pressable, Dimensions } from 'react-native';
+import { StyleSheet, View, Text, Pressable, ScrollView } from 'react-native';
 import React from 'react';
 import LinearGradient2 from "../atoms/LinearGradient2";
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -21,9 +21,10 @@ const CreatePage = (props) => {
   };
   return (
     <SafeAreaView style={styles.container}>
-      <LinearGradient2>
+      <LinearGradient2 customStyle={styles.loginGradient}>
         <View style={styles.iconRow}>
           <View style={styles.iconContainer}>
+           
             <FontAwesomeIcon
               name="angle-left"
               onPress={handleNextPage}
@@ -31,15 +32,11 @@ const CreatePage = (props) => {
             />
           </View>
           <Text style={styles.create}>NEW</Text>
-          <Pressable
-          onPress={handleNextPage2}
-            style={styles.iconWrapper}
-          >
-            <MaterialIconsIcon
-              name="settings"
-              style={styles.icon}
-            />
-          </Pressable>
+          <MaterialIconsIcon
+            name="settings"
+            onPress={handleNextPage2}
+            style={ styles.settingsIcon}
+          />
         </View>
       </LinearGradient2>
 
@@ -55,7 +52,7 @@ const CreatePage = (props) => {
           <Text style={styles.loremIpsum2}>Add your name and photo</Text>
         </View>
       </View>
-
+      <ScrollView>
       <View style={styles.rect3}>
         <Text style={styles.or}>OR</Text>
         <View style={styles.icon4Row}>
@@ -65,16 +62,28 @@ const CreatePage = (props) => {
           </Pressable>
         </View>
       </View>
+     
+      <View>
 
       <Post source={require("../assets/pics/pic2.png")} />
+      <Post source={require("../assets/pics/pic2.png")} />
+      <Post source={require("../assets/pics/pic2.png")} />
+      </View>
+      </ScrollView>
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
+  loginGradient:{
+    // top:20,
+height:"8%",
+// justifyContent: "center"
+// paddingHorizontal:5,
+  },
   container: {
     flex: 1,
-    alignItems: "center",
+    // alignItems: "center",
   },
 
   iconRow: {
@@ -99,19 +108,19 @@ const styles = StyleSheet.create({
   iconA: {
     color: "#fff",
     fontSize: getResponsiveValue(40, 30),
-    marginLeft: getResponsiveValue(30, 0),
+    // marginLeft: getResponsiveValue(30, 20),
   },
   create: {
     color: "#fff",
     fontSize: getResponsiveValue(20, 16),
     textAlign: "center",
     fontWeight: "bold",
-    
+    // marginLeft: getResponsiveValue(80, 40),
   },
   settingsIcon: {
     color: "#fff",
-    position:"relative",
-    left:getResponsiveValue(100, 40),
+    // position:"relative",
+    // left:getResponsiveValue(100, 40),
     // marginLeft: getResponsiveValue(100, 60),
     fontSize: getResponsiveValue(35, 25),
   },

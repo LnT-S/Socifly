@@ -2,6 +2,7 @@ import React, { useRef } from 'react';
 import { StyleSheet, Image, TouchableOpacity, Animated } from 'react-native';
 import { LinearGradient } from 'react-native-linear-gradient';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
+import {getResponsiveValue} from '../styles/responsive';
 
 const SplashScreen = () => {
   const navigation = useNavigation();
@@ -47,8 +48,8 @@ const styles = StyleSheet.create({
 
   },
   image: {
-    width: 236,
-    height: 236,
+    width: getResponsiveValue(472,236),
+    height:  getResponsiveValue(472,236),
     alignSelf: 'center',
   },
 });

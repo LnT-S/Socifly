@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, View, Text, Pressable, Image, Dimensions } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { BLACK, WHITE } from '../styles/colors';
+import { BLACK, PRIMARY, WHITE } from '../styles/colors';
 import MaterialCommunityIconsIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import FeatherIcon from "react-native-vector-icons/Feather";
 import EntypoIcon from "react-native-vector-icons/Entypo";
@@ -9,9 +9,7 @@ import IconButton from '../atoms/IconButton';
 import { getResponsiveValue,screenWidth} from '../styles/responsive'; 
 import defaultProfileImage from '../assets/images/Profile2.png';
 
-const Post = ({ source }) => {
-  
-   
+const Post3 = ({ source }) => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.cardContainer}> 
@@ -25,8 +23,8 @@ const Post = ({ source }) => {
         </View>
         <Image source={defaultProfileImage} style={styles.profileImage} />
         <Text style={styles.Name}>User Name</Text>
-        <Text style={styles.Name2}>user123email@email.com</Text>
         <Text style={styles.Name2}>+91 9999555500</Text>
+        <Text style={styles.Name2}>user123email@email.com</Text>
         <View style={styles.horizontal}></View>
         <View style={styles.toolbar}>
           <Pressable>
@@ -57,12 +55,14 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
+    
  
   },
   cardContainer: {
     height:"85%",
     width:getResponsiveValue(screenWidth * 0.8 , screenWidth - 50),
     backgroundColor: WHITE,
+   
     shadowColor: BLACK,
     marginTop:getResponsiveValue(0,10),
     marginBottom:getResponsiveValue(10,10),
@@ -114,31 +114,35 @@ const styles = StyleSheet.create({
   profileImage: {
     width: getResponsiveValue(200, 100),
     height: getResponsiveValue(200, 100),
-    borderRadius: getResponsiveValue(120, 60),
+    borderRadius: getResponsiveValue(44, 22),
+    transform: [{ rotate: '-10deg' }],
     backgroundColor: WHITE,
+    borderWidth: getResponsiveValue(10,5), 
+    borderColor: PRIMARY,
     position: 'relative',
-    left:getResponsiveValue("10%", "10%"),
-    bottom:getResponsiveValue("10%", "10%"),
+    left:getResponsiveValue("60%", "60%"),
+  
+    bottom:getResponsiveValue("12%", "12%"),
     // marginBottom: getResponsiveValue(10, 15),
   },
   Name:{
     fontSize:getResponsiveValue(20,16),
-    color: BLACK,
+    color: PRIMARY,
     fontWeight:"bold",
     // backgroundColor:WHITE,
     // width:"auto",
     position: 'relative',
-    left:getResponsiveValue("45%", "45%"),
+    left:getResponsiveValue("10%", "10%"),
     bottom:getResponsiveValue("23%", "23%"),
   },
   Name2:{
     fontSize:getResponsiveValue(14,12),
-    color: BLACK,
+    color: PRIMARY,
 
     // backgroundColor:WHITE,
     // width:"auto",
     position: 'relative',
-    left:getResponsiveValue("45%", "45%"),
+    left:getResponsiveValue("10%", "10%"),
     bottom:getResponsiveValue("23%", "23%"),
   },
   horizontal:{
@@ -152,4 +156,4 @@ const styles = StyleSheet.create({
 
 });
 
-export default Post;
+export default Post3;
