@@ -77,7 +77,7 @@ const SignUpScreen = props => {
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={{flex: 1}}>
       <SafeAreaView style={styles.container}>
-        <LinearGradients>
+        <LinearGradients customStyle={styles.loginGradient}>
           <Text style={global.title}>SIGN UP</Text>
         </LinearGradients>
 
@@ -159,6 +159,13 @@ const SignUpScreen = props => {
 };
 
 const styles = StyleSheet.create({
+  loginGradient: {
+    flex: 0.5,
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: '50%',
+    // Add any other custom styles you want for the LinearGradients in the LoginScreen
+  },
   container: {
     flex: 1,
     backgroundColor: 'white',

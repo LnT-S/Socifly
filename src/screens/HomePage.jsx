@@ -9,13 +9,17 @@ import {
 import React from 'react';
 import LinearGradient2 from '../atoms/LinearGradient2';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import Category from './Category';
-import EntypoIcon from 'react-native-vector-icons/Entypo';
+import Category from '../common/Category';
+// import EntypoIcon from 'react-native-vector-icons/Entypo';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import IoniconsIcon from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIconsIcon from 'react-native-vector-icons/MaterialCommunityIcons';
-import Post from './Post';
+import Post from '../common/Post';
+import Post2 from '../common/Post2';
+import Post3 from '../common/Post3';
+import Post4 from '../common/Post4';
 import {BLACK, WHITE} from '../styles/colors';
+
 
 import {getResponsiveValue} from '../styles/responsive';
 
@@ -30,7 +34,7 @@ const HomePage = props => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <LinearGradient2>
+      <LinearGradient2 customStyle={styles.loginGradient}>
         <View style={styles.iconStackRow}>
           <View style={styles.iconStack}>
             <TextInput placeholder="" style={styles.textInput} />
@@ -57,8 +61,9 @@ const HomePage = props => {
       </View>
       <ScrollView style={styles.postS}>
         <Post source={require('../assets/pics/pic1.png')} />
-        <Post source={require('../assets/pics/pic1.png')} />
-        <Post source={require('../assets/pics/pic1.png')} />
+        <Post2 source={require('../assets/pics/pic1.png')} />
+        <Post3 source={require('../assets/pics/pic1.png')} />
+        <Post4 source={require('../assets/pics/pic1.png')} />
       </ScrollView>
     </SafeAreaView>
   );
@@ -67,6 +72,10 @@ const HomePage = props => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  loginGradient: {
+    flex: 0.12,
+    height: '10%',
   },
 
   Container: {

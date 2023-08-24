@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, View, Text, Pressable, Image, Dimensions } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { BLACK, WHITE } from '../styles/colors';
+import { BLACK, PRIMARY, SECONDARY, WHITE } from '../styles/colors';
 import MaterialCommunityIconsIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import FeatherIcon from "react-native-vector-icons/Feather";
 import EntypoIcon from "react-native-vector-icons/Entypo";
@@ -9,9 +9,7 @@ import IconButton from '../atoms/IconButton';
 import { getResponsiveValue,screenWidth} from '../styles/responsive'; 
 import defaultProfileImage from '../assets/images/Profile2.png';
 
-const Post = ({ source }) => {
-  
-   
+const Post4 = ({ source }) => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.cardContainer}> 
@@ -57,12 +55,14 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
+    
  
   },
   cardContainer: {
-    height:"85%",
+    height:"90%",
     width:getResponsiveValue(screenWidth * 0.8 , screenWidth - 50),
-    backgroundColor: WHITE,
+    backgroundColor: SECONDARY,
+   
     shadowColor: BLACK,
     marginTop:getResponsiveValue(0,10),
     marginBottom:getResponsiveValue(10,10),
@@ -79,9 +79,11 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   image: {
-    width: '90%', 
+    width: '100%', 
     height: undefined, 
     aspectRatio: 308 / 346, 
+    borderWidth: getResponsiveValue(4,2), 
+    borderColor: WHITE,
   },
   toolbar: {
     flexDirection: "row",
@@ -89,67 +91,75 @@ const styles = StyleSheet.create({
     alignItems: "center",
     // padding: 10,
     paddingHorizontal:getResponsiveValue(15,10),
-    backgroundColor: "#fff",
+    backgroundColor: SECONDARY,
     position: 'relative',
     
-    bottom:getResponsiveValue("25%","25%"),
+    bottom:getResponsiveValue("20%","20%"),
   },
   iconGroup: {
     flexDirection: "row",
     alignItems: "center",
     marginRight:getResponsiveValue(20,7),
+ 
+    
   },
   icon1: {
     color: "rgba(235,124,148,1)",
     marginLeft:getResponsiveValue(10,0),
     fontSize:getResponsiveValue(100,50),
+    backgroundColor:WHITE,
+    borderRadius:getResponsiveValue(100,50),
   },
   icon2: {
     color: "rgba(255,255,255,1)",
     padding: 7,
     fontSize:getResponsiveValue(60,30),
     // paddingLeft:getResponsiveValue(10,0),
-
+    // backgroundColor:WHITE,
   },
   profileImage: {
     width: getResponsiveValue(200, 100),
     height: getResponsiveValue(200, 100),
     borderRadius: getResponsiveValue(120, 60),
-    backgroundColor: WHITE,
+    // transform: [{ rotate: '-10deg' }],
+    backgroundColor: "grey",
+    borderWidth: getResponsiveValue(6.5,3.5), 
+    borderColor: WHITE,
     position: 'relative',
-    left:getResponsiveValue("10%", "10%"),
-    bottom:getResponsiveValue("10%", "10%"),
+    left:getResponsiveValue("35%", "35%"),
+  
+    bottom:getResponsiveValue("12%", "12%"),
     // marginBottom: getResponsiveValue(10, 15),
   },
   Name:{
-    fontSize:getResponsiveValue(20,16),
-    color: BLACK,
+    fontSize:getResponsiveValue(20,20),
+    color: WHITE,
     fontWeight:"bold",
     // backgroundColor:WHITE,
     // width:"auto",
     position: 'relative',
-    left:getResponsiveValue("45%", "45%"),
-    bottom:getResponsiveValue("23%", "23%"),
+    left:getResponsiveValue("10%", "10%"),
+    bottom:getResponsiveValue("13%", "13%"),
   },
   Name2:{
     fontSize:getResponsiveValue(14,12),
-    color: BLACK,
+    color: WHITE,
 
     // backgroundColor:WHITE,
     // width:"auto",
     position: 'relative',
-    left:getResponsiveValue("45%", "45%"),
-    bottom:getResponsiveValue("23%", "23%"),
+    left:getResponsiveValue("50%", "50%"),
+    bottom:getResponsiveValue("16%", "16%"),
   },
   horizontal:{
     width:"100%",
-    height:getResponsiveValue(2,1),
-    backgroundColor:BLACK,
+    height:getResponsiveValue(4,2),
+    backgroundColor:WHITE,
     position: 'relative',
     // left:getResponsiveValue("50%", "50%"),
-    bottom:getResponsiveValue("20%", "20%"),
+    bottom:getResponsiveValue("15%", "15%"),
   }
 
 });
 
-export default Post;
+export default Post4;

@@ -76,7 +76,7 @@ const LoginScreen = props => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <LinearGradients>
+      <LinearGradients customStyle={styles.loginGradient}>
         <Text style={global.title}>WELCOME!</Text>
       </LinearGradients>
 
@@ -120,10 +120,12 @@ const LoginScreen = props => {
   );
 };
 const styles = StyleSheet.create({
-  backgroundGradient: {
-    flex: 1,
+  loginGradient: {
+    flex: 0.5,
     justifyContent: 'center',
     alignItems: 'center',
+    height: '50%',
+    
   },
   container: {
     flex: 1,

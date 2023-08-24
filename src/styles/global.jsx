@@ -17,6 +17,12 @@ module.exports = StyleSheet.create({
     alignItems: 'center',
     flex: 0.5,
   },
+  dContainer: {
+    top: getResponsiveValue(100, 50),
+
+    alignItems: 'center',
+    flex: 0.5,
+  },
   cContainer: {
     top: '45%',
     justifyContent: 'center',

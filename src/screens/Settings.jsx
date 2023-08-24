@@ -27,6 +27,7 @@ const Settings = props => {
             <View style={styles.textContainer}>
               <Text style={styles.text1}>Your Name</Text>
               <Text style={styles.text2}>your_email123@isEmail.com</Text>
+              <Text style={styles.text2}>+91 1234567890</Text>
             </View>
           </View>
         </View>
@@ -77,7 +78,6 @@ const styles = StyleSheet.create({
   },
   mainRect: {
     top: getResponsiveValue(60, 40),
-    // justifyContent:"center",
     alignItems: 'center',
   },
   rect1: {
@@ -159,8 +159,10 @@ const styles = StyleSheet.create({
     backgroundColor: 'grey',
   },
   rect3: {
-    position: 'relative',
+    // position: 'relative',
     top: getResponsiveValue('25%', '35%'),
+    // flexDirection:"column-reverse",
+    bottom: 0,
     alignItems: 'center',
     width: '100%',
     flexDirection: 'row',
