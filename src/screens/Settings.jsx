@@ -6,8 +6,9 @@ import {
   Pressable,
   TextInput,
   Image,
+  Animated,
 } from 'react-native';
-
+import React, { useState } from 'react';
 import global from '../styles/global';
 
 import {getResponsiveValue} from '../styles/responsive';
@@ -18,21 +19,59 @@ import MaterialCommunityIconsIcon from 'react-native-vector-icons/MaterialCommun
 import FeatherIcon from 'react-native-vector-icons/Feather';
 
 const Settings = props => {
+  const handleAboutPage = () => {
+    props.navigation.navigate('AboutUsScreen');
+  };
+  const [isTextContainerPressed, setIsTextContainerPressed] = useState(false);
+  const textContainerScaleValue = new Animated.Value(1);
+
+  const handleTextContainerPressIn = () => {
+    setIsTextContainerPressed(true);
+    Animated.spring(textContainerScaleValue, {
+      toValue: 0.75, // Zoom out effect
+      useNativeDriver: true,
+    }).start();
+  };
+
+  const handleTextContainerPressOut = () => {
+    setIsTextContainerPressed(false);
+    Animated.spring(textContainerScaleValue, {
+      toValue: 2, // Zoom in effect
+      useNativeDriver: true,
+    }).start();
+    // ... Your navigation logic here
+  };
+
+  const animatedTextContainerStyles = {
+    transform: [{ scale: textContainerScaleValue }],
+  };
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.mainRect}>
         <View style={styles.rect1}>
           <View style={styles.innerRect1}>
             <Image source={defaultProfileImage} style={styles.profileImage} />
-            <View style={styles.textContainer}>
+            <Pressable
+            onPressIn={handleTextContainerPressIn}
+            onPressOut={handleTextContainerPressOut}
+          >
+            <Animated.View
+              style={[styles.textContainer, animatedTextContainerStyles]}
+            >
               <Text style={styles.text1}>Your Name</Text>
               <Text style={styles.text2}>your_email123@isEmail.com</Text>
               <Text style={styles.text2}>+91 1234567890</Text>
-              </View>
+              </Animated.View>
+            </Pressable>
+              
           </View>
         </View>
         <View style={styles.rect2}>
-          <Pressable style={styles.row}>
+        <Pressable  style={({ pressed }) => [
+          { opacity: pressed ? 0.6 : 0.9 },
+          styles.iconWrapper,
+          styles.row,
+        ]}>
             <MaterialCommunityIconsIcon
               name="comment-question-outline"
               style={styles.icon}></MaterialCommunityIconsIcon>
@@ -40,12 +79,20 @@ const Settings = props => {
             <Text style={styles.text3}>Contact Us</Text>
           </Pressable>
           <View style={styles.divider}></View>
-          <Pressable style={styles.row}>
+          <Pressable  style={({ pressed }) => [
+            { opacity: pressed ? 0.6 : 0.9 },
+            styles.iconWrapper,
+            styles.row,
+          ]}>
             <FeatherIcon name="info" style={styles.icon}></FeatherIcon>
-            <Text style={styles.text3}>About Us</Text>
+            <Text style={styles.text3} onPress={handleAboutPage}>About Us</Text>
           </Pressable>
           <View style={styles.divider}></View>
-          <Pressable style={styles.row}>
+          <Pressable  style={({ pressed }) => [
+            { opacity: pressed ? 0.6 : 0.9 },
+            styles.iconWrapper,
+            styles.row,
+          ]}>
             <MaterialCommunityIconsIcon
               name="logout"
               style={styles.icon}></MaterialCommunityIconsIcon>
@@ -73,6 +120,11 @@ const Settings = props => {
 };
 
 const styles = StyleSheet.create({
+  textContainer: {
+    top: '5%',
+    left: getResponsiveValue('20%', '10%'),
+    flexDirection: 'column',
+  },
   container: {
     flex: 1,
   },
@@ -120,6 +172,7 @@ const styles = StyleSheet.create({
     top: '5%',
     left: getResponsiveValue('20%', '10%'),
     flexDirection: 'column',
+    
   },
   rect2: {
     width: '90%',

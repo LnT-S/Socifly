@@ -7,7 +7,11 @@ import { PRIMARY, SECONDARY } from '../styles/colors';
 
 const ButtonA = (props) => {
   return (
-    <Pressable onPress={props.onPress} style={[styles.buttonContainer]}>
+    <Pressable onPress={props.onPress} style={({ pressed }) => [
+      { opacity: pressed ? 0.9 : 1 },
+      styles.iconWrapper,
+      styles.buttonContainer
+    ]}>
       <LinearGradient style={[styles.button]} colors={[PRIMARY, SECONDARY]}>
         <Text style={styles.text}>{props.name}</Text>
       </LinearGradient>
@@ -20,6 +24,9 @@ export default ButtonA;
 const styles = StyleSheet.create({
   buttonContainer: {
     alignItems: 'center',
+  },
+  iconWrapper: {
+    paddingHorizontal: 10,
   },
   text: {
     color: 'white',

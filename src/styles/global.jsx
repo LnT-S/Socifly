@@ -45,6 +45,16 @@ module.exports = StyleSheet.create({
   },
   error: {
     color: ERROR,
-    textAlign: 'center',
+    bottom:20,
+    
   },
+  textInput: {
+    borderWidth: 1,
+    borderColor: 'grey', // Default border color
+  },
+  textInputError: {
+    borderWidth: 2,
+    borderColor: 'red', // Border color for error state
+  },
+
 });

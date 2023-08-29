@@ -5,7 +5,7 @@ import { RewardedInterstitialAd,RewardedAdEventType, TestIds } from 'react-nativ
 
 
 
-const adUnitId = __DEV__ ? TestIds.REWARDED_INTERSTITIAL : 'ca-app-pub-7476617068399590~3695488497';
+const adUnitId = __DEV__ ? TestIds.REWARDED_INTERSTITIAL : 'ca-app-pub-7476617068399590/2806493368';
 const rewardedInterstitial = RewardedInterstitialAd.createForAdRequest(adUnitId, {
     requestNonPersonalizedAdsOnly: true,
     keywords: ['fashion', 'clothing'],

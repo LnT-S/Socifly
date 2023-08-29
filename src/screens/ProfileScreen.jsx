@@ -70,10 +70,16 @@ const ProfileScreen = props => {
       <SafeAreaView style={styles.container}>
         <LinearGradients customStyle={styles.loginGradient}>
           <View style={styles.header}>
-            <Pressable onPress={handleNextPage} style={styles.iconWrapper}>
+            <Pressable onPress={handleNextPage}  style={({ pressed }) => [
+              { opacity: pressed ? 0.8 : 1 },
+              styles.iconWrapper,
+            ]}>
               <Icon name="home" style={styles.icon}></Icon>
             </Pressable>
-            <Pressable onPress={handleNextPage2} style={styles.iconWrapper}>
+            <Pressable onPress={handleNextPage2}  style={({ pressed }) => [
+              { opacity: pressed ? 0.8 : 1 },
+              styles.iconWrapper,
+            ]}>
               <MaterialIconsIcon name="settings" style={styles.icon} />
             </Pressable>
           </View>
@@ -126,6 +132,14 @@ const ProfileScreen = props => {
 };
 
 const styles = StyleSheet.create({
+
+  iconWrapper: {
+    paddingHorizontal: 10,
+  },
+  icon: {
+    color: 'white',
+    fontSize: getResponsiveValue(40, 30),
+  },
   loginGradient: {
     flex: getResponsiveValue(2, 1),
     justifyContent: 'center',

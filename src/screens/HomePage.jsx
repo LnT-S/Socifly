@@ -5,10 +5,11 @@ import {
   Pressable,
   TextInput,
   ScrollView,
+  Animated,
 } from 'react-native';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import LinearGradient2 from '../atoms/LinearGradient2';
-import {SafeAreaView} from 'react-native-safe-area-context';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import Category from '../common/Category';
 // import EntypoIcon from 'react-native-vector-icons/Entypo';
 import FeatherIcon from 'react-native-vector-icons/Feather';
@@ -18,69 +19,79 @@ import Post from '../common/Post';
 import Post2 from '../common/Post2';
 import Post3 from '../common/Post3';
 import Post4 from '../common/Post4';
-import {BLACK, WHITE} from '../styles/colors';
-
-
-import {getResponsiveValue} from '../styles/responsive';
+import { BLACK, WHITE } from '../styles/colors';
+// import { AdMobBanner } from 'react-native-admob';
+import { getResponsiveValue } from '../styles/responsive';
 import GoogleAds from '../common/GoogleAds';
 import InterstitialAds from '../common/InterstitialAds';
-import RewardedAds from '../common/RewardedAds';
-import RewardedInterstitialAds from '../common/RewardedInterstitialAds';
 
+// import GoogleAds from '../common/GoogleAds';
+// import InterstitialAds from '../common/InterstitialAds';
+import RewardedAds from '../common/RewardedAds';
+ //import RewardedInterstitialAds from '../common/RewardedInterstitialAds';
+import { AdView } from 'react-native-fbads';
 const HomePage = props => {
+
+
   const handleNextPage = () => {
     props.navigation.navigate('ProfileScreen');
   };
-
   const handleNextPage2 = () => {
     props.navigation.navigate('CreatePage');
   };
-
   return (
     <SafeAreaView style={styles.container}>
       <LinearGradient2 customStyle={styles.loginGradient}>
         <View style={styles.iconStackRow}>
           <View style={styles.iconStack}>
             <TextInput placeholder="" style={styles.textInput} />
+           
             <FeatherIcon name="search" style={styles.icon2} />
+          
           </View>
-          <Pressable style={styles.button}>
+          <Pressable style={styles.button} onPress={handleNextPage2}>
             <View style={styles.createRow}>
               <Text style={styles.create}>New</Text>
-
               <IoniconsIcon
-                onPress={handleNextPage2}
                 name="ios-add-circle-outline"
                 style={styles.icon3}></IoniconsIcon>
             </View>
           </Pressable>
-          <MaterialCommunityIconsIcon
-            name="account-settings"
-            style={styles.icon4}
-            onPress={handleNextPage}></MaterialCommunityIconsIcon>
+          <Pressable onPress={handleNextPage} style={({ pressed }) => [
+            { opacity: pressed ? 0.8 : 1 },
+            styles.iconWrapper,
+          ]}>
+            <MaterialCommunityIconsIcon
+              name="account-settings"
+              style={styles.icon4}
+            ></MaterialCommunityIconsIcon>
+          </Pressable>
+
         </View>
       </LinearGradient2>
       <View style={styles.cardSection}>
         <Category />
       </View>
       <ScrollView style={styles.postS}>
-        <Post source={require('../assets/pics/pic1.png')} />
-        <Post source={require('../assets/pics/pic1.png')} />
-        <GoogleAds/>
-
-        <Post source={require('../assets/pics/pic1.png')} />
-        <Post source={require('../assets/pics/pic1.png')} />
+        <Post source={require('../assets/pics/pic1.png')} props={props} />
         <InterstitialAds/>
-        <Post source={require('../assets/pics/pic1.png')} />
-        <Post source={require('../assets/pics/pic1.png')} />
+        <Post source={require('../assets/pics/pic1.png')} props={props} />
         <RewardedAds/>
-        <Post source={require('../assets/pics/pic1.png')} />
-        <Post source={require('../assets/pics/pic1.png')} />
-        <RewardedInterstitialAds/>
-    
-        <Post2 source={require('../assets/pics/pic1.png')} />
-        <Post3 source={require('../assets/pics/pic1.png')} />
-        <Post4 source={require('../assets/pics/pic1.png')} />
+        <Post2 source={require('../assets/pics/pic1.png')} props={props} />
+        <GoogleAds/>
+        <Post3 source={require('../assets/pics/pic1.png')} props={props} />
+       
+        <Post4 source={require('../assets/pics/pic1.png')} props={props} />
+        <Post source={require('../assets/pics/pic1.png')} props={props} />
+        <GoogleAds/>
+        <Post2 source={require('../assets/pics/pic1.png')} props={props} />
+        <Post3 source={require('../assets/pics/pic1.png')} props={props} />
+        <Post4 source={require('../assets/pics/pic1.png')} props={props} />
+        <GoogleAds/>
+        <Post source={require('../assets/pics/pic1.png')} props={props} />
+        <Post3 source={require('../assets/pics/pic1.png')} props={props} />
+        <Post4 source={require('../assets/pics/pic1.png')} props={props} />
+        <GoogleAds/>
       </ScrollView>
     </SafeAreaView>
   );
@@ -91,8 +102,8 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   loginGradient: {
-    flex: 0.12,
-    height: '10%',
+  
+    height:getResponsiveValue(100,60),
   },
 
   Container: {
@@ -126,7 +137,7 @@ const styles = StyleSheet.create({
   icon3: {
     color: WHITE,
     fontSize: getResponsiveValue(44, 29),
-    marginLeft: getResponsiveValue('45%', '30%'),
+    // marginLeft: getResponsiveValue('45%', '30%'),
   },
   icon4: {
     color: WHITE,
@@ -138,6 +149,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     // justifyContent: "center",
     justifyContent: 'space-between',
+    width:"100%",
+    paddingHorizontal:"2%",
   },
   textInput: {
     flex: 1,
@@ -165,8 +178,8 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(255,255,255,1)',
     borderRadius: getResponsiveValue(25, 22),
     flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
+    // alignItems: 'center',
+    // justifyContent: 'center',
   },
   cardSection: {
     // height: "20%",

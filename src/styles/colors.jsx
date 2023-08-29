@@ -13,3 +13,8 @@ export const BACK_COLOR = '#f6f7fb';
 export const LINKS = '#3f85d8';
 
 export const ERROR = "#FF0000";
+
+export const POST =  "#FFDAB9";
+export const POST1 =  "#1e203b";
+
+export const ICON = "#372b41";

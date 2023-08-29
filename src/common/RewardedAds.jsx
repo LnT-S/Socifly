@@ -5,11 +5,14 @@ import { AdEventType } from 'react-native-google-mobile-ads';
 import {RewardedAdEventType,  RewardedAd, TestIds } from 'react-native-google-mobile-ads';
 
 
-const adUnitId = __DEV__ ? TestIds.REWARDED : 'ca-app-pub-7476617068399590~3695488497';
+const adUnitId = __DEV__ ? TestIds.REWARDED : 'ca-app-pub-7476617068399590/2806493368';
 const rewarded = RewardedAd.createForAdRequest(adUnitId, {
     requestNonPersonalizedAdsOnly: true,
     keywords: ['fashion', 'clothing'],
   });
+
+
+  
 const RewardedAds = (props) => {
     const [loaded, setLoaded] = useState(false);
 
@@ -35,9 +38,43 @@ const RewardedAds = (props) => {
   }, []);
 
   // No advert ready to show yet
-  if (!loaded) {
-    return null;
-  }
+  const loadRewarded = () => {
+    const unsubscribeLoaded = rewarded.addAdEventListener(
+      RewardedAdEventType.LOADED,
+      () => {
+        setLoaded(true);
+      }
+    );
+
+    const unsubscribeEarned = rewarded.addAdEventListener(
+      RewardedAdEventType.EARNED_REWARD,
+      reward => {
+        console.log(`User earned reward of ${reward.amount} ${reward.type}`);
+      }
+    );
+
+    const unsubscribeClosed = rewarded.addAdEventListener(
+      AdEventType.CLOSED,
+      () => {
+        setLoaded(false);
+        rewarded.load();
+      }
+    );
+
+    rewarded.load();
+
+    return () => {
+      unsubscribeLoaded();
+      unsubscribeClosed();
+      unsubscribeEarned();
+    }
+  };
+  useEffect(() => {
+    const unsubscribeInterstitialEvents =  loadRewarded();
+    return () => {
+      unsubscribeInterstitialEvents();
+    };
+  }, [])
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.adContainer}>

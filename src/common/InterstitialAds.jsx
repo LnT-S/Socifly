@@ -23,11 +23,37 @@ const InterstitialAds = (props) => {
         // Unsubscribe from events on unmount
         return unsubscribe;
       }, []);
+
+      const loadInterstitial = () => {
+        const unsubscribeLoaded = interstitial.addAdEventListener(
+          AdEventType.LOADED,
+          () => {
+            setLoaded(true);
+          }
+        );
     
-      // No advert ready to show yet
-      if (!loaded) {
-        return null;
+        const unsubscribeClosed = interstitial.addAdEventListener(
+          AdEventType.CLOSED,
+          () => {
+            setLoaded(false);
+            interstitial.load();
+          }
+        );
+    
+        interstitial.load();
+
+        return () => {
+          unsubscribeClosed();
+          unsubscribeLoaded();
+        }
       }
+      useEffect(() => {
+        const unsubscribeInterstitialEvents = loadInterstitial();
+        return () => {
+          unsubscribeInterstitialEvents();
+        };
+      }, [])
+    
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.adContainer}>
@@ -35,7 +61,7 @@ const InterstitialAds = (props) => {
           <TouchableOpacity style={styles.nextadd} onPress={() => {
             interstitial.show();
           }}>
-            <Text>Show Interstial Ads</Text>
+            <Text>Free images download...</Text>
           </TouchableOpacity>
          
             </View>

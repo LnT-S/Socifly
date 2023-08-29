@@ -1,14 +1,11 @@
-import React, {useState} from 'react';
-import {StyleSheet, View, Pressable, Text, SafeAreaView} from 'react-native';
+import React, { useState } from 'react';
+import { StyleSheet, View, Pressable, Text, SafeAreaView } from 'react-native';
 import LinearGradients from '../atoms/LinearGradients';
 import global from '../styles/global';
 import TextinputA from '../atoms/TextinputA';
 import ButtonA from '../atoms/ButtonA';
-import {LINKS} from '../styles/colors';
-
-// import { isEmailValid } from "../utils/validation/formValidation";
-import {validateForm} from '../utils/validation/validateForm';
-
+import { LINKS } from '../styles/colors';
+import { validate2 } from '../utils/validation/validate2';
 const LoginScreen = props => {
   const [errors, setErrors] = useState({});
   // .....
@@ -17,44 +14,45 @@ const LoginScreen = props => {
   const [isLoading, setIsLoading] = useState(false);
 
   const handleLogin = async () => {
+    console.log('handleLogin function executed');
     setErrors({});
-
-    const formData = {
-      name: '',
+    
+    // Define the formData object with correct order
+    const formData1 = {
       email: username,
-      phone: '',
       password,
-      confirm_password: '',
+   
     };
-
-    const validationErrors = validateForm(formData);
-
+    
+    const validationErrors = validate2(formData1);
+    console.log('Validation errors:', validationErrors);
+    console.log('formData:', formData1);
+    
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
       return;
     }
-
+    
     try {
       setIsLoading(true); // Start loading
-
       console.log(
         'Sending login request with username:',
         username,
-        'and password:',
-        password,
+        // 'and password:',
+        // password,
       );
-
-      //   const userData = await login(username, password);
-
+  
+      // const userData = await login(username, password);
+  
       setIsLoading(false); // End loading
-
-      //   console.log('Received user data:', userData);
-
-      //   console.log("Login successful:", userData);
+  
+      // console.log('Received user data:', userData);
+  
+      // console.log("Login successful:", userData);
       props.navigation.navigate('HomePage');
     } catch (error) {
       setIsLoading(false); // End loading on error
-
+  
       // Handle login error
       console.error('Login error:', error);
     }
@@ -62,9 +60,9 @@ const LoginScreen = props => {
 
   // ..............
 
-  const handleHome = () => {
-    props.navigation.navigate('HomePage');
-  };
+  // const handleHome = () => {
+  //   props.navigation.navigate('HomePage');
+  // };
   const handleNextPage = () => {
     props.navigation.navigate('ForgotPassword');
   };
@@ -80,26 +78,45 @@ const LoginScreen = props => {
       </LinearGradients>
 
       <View style={global.aContainer}>
-        {errors.email && <Text style={global.error}>{errors.email}</Text>}
-        <TextinputA
-          style={styles.pl}
+      <TextinputA
+          style={[
+            styles.input,
+            errors.email ? styles.inputError : null
+          ]}
+
           placeholder="Username or Email"
           value={username}
-          onChangeText={text => setUsername(text)}
+          onChangeText={(text) => {
+            setUsername(text);
+            setErrors({ ...errors, email: '' }); // Clear the error when typing
+        }}
+          error={errors.email}
+          onChangeError={(errorText) => setErrors({ ...errors, email: errorText })}
         />
-
-        {errors.password && <Text style={global.error}>{errors.password}</Text>}
+        {errors.email && <Text style={global.error}>{errors.email}</Text>}
+ 
+        
         <TextinputA
+        style={[
+          styles.input,
+          errors.password ? styles.inputError : null
+        ]}
           placeholder="Password"
           value={password}
-          onChangeText={text => setPassword(text)}
+          onChangeText={(text) => {
+            setPassword(text);
+            setErrors({ ...errors, password: '' }); // Clear the error when typing
+        }}
           secureTextEntry={true}
+          error={errors.password}
+          onChangeError={(errorText) => setErrors({ ...errors, password: errorText })}
         />
+        {errors.password && <Text style={global.error}>{errors.password}</Text>}
 
         <ButtonA
           name={'Log In'}
-          // onPress={handleNextPage}
-          onPress={handleHome}
+          //  onPress={handleHome}
+          onPress={handleLogin}
           disabled={isLoading}
         />
 
@@ -124,7 +141,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     height: '50%',
-    
+
+  },
+  inputError: {
+    borderColor: 'red', // Border color for error state
   },
   container: {
     flex: 1,
@@ -135,7 +155,7 @@ const styles = StyleSheet.create({
   },
 
   content: {
-    top: 40,
+    top: 10,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -144,6 +164,7 @@ const styles = StyleSheet.create({
     fontSize: 50,
     marginBottom: 20,
   },
+
 
   link: {
     color: LINKS,
@@ -161,6 +182,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginRight: 5,
   },
+  
 });
 
 export default LoginScreen;

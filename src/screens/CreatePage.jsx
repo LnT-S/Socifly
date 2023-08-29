@@ -10,7 +10,7 @@ import Icon from "react-native-vector-icons/MaterialIcons";
 import Post from '../common/Post';
 import { BLACK, WHITE } from '../styles/colors';
 
-import { getResponsiveValue} from '../styles/responsive'; 
+import { getResponsiveValue } from '../styles/responsive';
 
 const CreatePage = (props) => {
   const handleNextPage = () => {
@@ -24,7 +24,7 @@ const CreatePage = (props) => {
       <LinearGradient2 customStyle={styles.loginGradient}>
         <View style={styles.iconRow}>
           <View style={styles.iconContainer}>
-           
+
             <FontAwesomeIcon
               name="angle-left"
               onPress={handleNextPage}
@@ -32,54 +32,67 @@ const CreatePage = (props) => {
             />
           </View>
           <Text style={styles.create}>NEW</Text>
-          <MaterialIconsIcon
-            name="settings"
-            onPress={handleNextPage2}
-            style={ styles.settingsIcon}
-          />
+          <Pressable onPress={handleNextPage2} style={({ pressed }) => [
+            { opacity: pressed ? 0.7 : 0.9 },
+            styles.iconWrapper,
+          ]}>
+            <MaterialIconsIcon
+              name="settings"
+              style={styles.settingsIcon}
+            />
+          </Pressable>
         </View>
       </LinearGradient2>
 
       <View style={styles.iconRow2}>
-        <MaterialCommunityIconsIcon
-          name="image-plus"
-          style={styles.icon2}
-        />
+        <Pressable style={({ pressed }) => [
+          { opacity: pressed ? 0.8 : 1 },
+          styles.iconWrapper,
+        ]}>
+          <MaterialCommunityIconsIcon
+            name="image-plus"
+            style={styles.icon2}
+          />
+        </Pressable>
         <View style={styles.loremIpsumColumn}>
-          <Pressable>
+          <Pressable style={({ pressed }) => [
+            { opacity: pressed ? 0.8 : 1 },
+            styles.iconWrapper,
+          ]}>
             <Text style={styles.loremIpsum}>Add Images from gallery</Text>
           </Pressable>
+
           <Text style={styles.loremIpsum2}>Add your name and photo</Text>
         </View>
       </View>
       <ScrollView>
-      <View style={styles.rect3}>
-        <Text style={styles.or}>OR</Text>
-        <View style={styles.icon4Row}>
-          <Icon name="wallpaper" style={styles.icon4} />
-          <Pressable>
-            <Text style={styles.selectWallpaper}>Select Wallpaper</Text>
-          </Pressable>
+        <View style={styles.rect3}>
+          <Text style={styles.or}>OR</Text>
+          <View style={styles.icon4Row}>
+            <Icon name="wallpaper" style={styles.icon4} />
+            <Pressable>
+              <Text style={styles.selectWallpaper}>Select Wallpaper</Text>
+            </Pressable>
+          </View>
         </View>
-      </View>
-     
-      <View>
 
-      <Post source={require("../assets/pics/pic2.png")} />
-      <Post source={require("../assets/pics/pic2.png")} />
-      <Post source={require("../assets/pics/pic2.png")} />
-      </View>
+        <View>
+
+          <Post source={require("../assets/pics/pic2.png")} />
+          <Post source={require("../assets/pics/pic2.png")} />
+          <Post source={require("../assets/pics/pic2.png")} />
+        </View>
       </ScrollView>
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  loginGradient:{
+  loginGradient: {
     // top:20,
-height:"8%",
-// justifyContent: "center"
-// paddingHorizontal:5,
+    height: "8%",
+    // justifyContent: "center"
+    // paddingHorizontal:5,
   },
   container: {
     flex: 1,
@@ -90,7 +103,7 @@ height:"8%",
     // paddingHorizontal: getResponsiveValue(40, 20),
     flexDirection: "row",
     alignItems: "center",
-    justifyContent:"space-around",
+    justifyContent: "space-around",
     // justifyContent: "space-between",
     width: "100%",
     marginTop: getResponsiveValue(20, 10),
@@ -101,8 +114,8 @@ height:"8%",
   },
   icon: {
     color: "#fff",
-    fontSize: getResponsiveValue(40,30),
-    left:60
+    fontSize: getResponsiveValue(40, 30),
+    left: 60
 
   },
   iconA: {

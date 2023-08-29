@@ -10,11 +10,15 @@ const CategoryButtons = ({ text }) => {
       justifyContent: 'center',
       alignItems: 'center',
       backgroundColor: WHITE,
-      padding: getResponsiveValue(10, "2%"),
+      padding: getResponsiveValue(10, 8),
       borderRadius: 22,
-      marginLeft: getResponsiveValue(15, "2%"),
-      // marginRight: getResponsiveValue(10, "2%"),
-      marginBottom: getResponsiveValue(15, "3%"),
+      // marginLeft: getResponsiveValue(15, "5%"),
+      // marginRight: getResponsiveValue(0, "1%"),
+      // marginBottom: getResponsiveValue(15, "3%"),
+
+      marginHorizontal:"3%",
+      marginVertical:"1.5%",
+
       shadowColor: BLACK,
       shadowOffset: {
         width: 0,
@@ -26,7 +30,7 @@ const CategoryButtons = ({ text }) => {
     },
     text: {
       color: BLACK,
-      fontSize: getResponsiveValue(14, 13),
+      fontSize: getResponsiveValue(14, 12),
     },
   });
 

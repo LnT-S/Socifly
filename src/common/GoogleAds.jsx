@@ -4,9 +4,9 @@ import React, { useEffect, useState,  } from 'react';
 
 import { BannerAd, BannerAdSize, TestIds } from 'react-native-google-mobile-ads';
 
-const adUnitId = __DEV__ ? TestIds.BANNER : 'ca-app-pub-7476617068399590~3695488497';
+const adUnitId = __DEV__ ? TestIds.BANNER : 'ca-app-pub-7476617068399590/2806493368';
 
-const GoogleAds2 = (props) => {
+const GoogleAds = (props) => {
    
     return (
         <SafeAreaView style={styles.container}>
@@ -18,7 +18,6 @@ const GoogleAds2 = (props) => {
               requestNonPersonalizedAdsOnly: true,
             }}
           />
-       
             </View>
         </SafeAreaView>
     );
@@ -36,4 +35,4 @@ const styles = StyleSheet.create({
    
 });
 
-export default GoogleAds2;
+export default GoogleAds;

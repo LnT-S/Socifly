@@ -11,8 +11,8 @@ import CreatePage from './src/screens/CreatePage.jsx';
 import ForgotPassword from './src/screens/ForgotPassword.jsx';
 import Settings from './src/screens/Settings.jsx';
 import OtpScreen from './src/screens/OtpScreen.jsx';
-import EditScreen from './src/screens/EditScreen.jsx';
-
+import Edit from './src/screens/Edit.jsx';
+import AboutUsScreen from './src/screens/AboutUsScreen.jsx';
 // import { store } from './src/store';
 // import { Provider } from 'react-redux';
 
@@ -68,8 +68,13 @@ function App() {
           options={{headerShown: false}}
         />
         <Stack.Screen
-          name="EditScreen"
-          component={EditScreen}
+          name="Edit"
+          component={Edit}
+          options={{headerShown: true}}
+        />
+        <Stack.Screen
+          name="AboutUsScreen"
+          component={AboutUsScreen}
           options={{headerShown: false}}
         />
       </Stack.Navigator>

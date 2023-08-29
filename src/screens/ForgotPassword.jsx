@@ -20,14 +20,15 @@ import {
   isPhoneNumberValid,
 } from '../utils/validation/formValidation';
 
-const ForgotPassword = props => {
+  const ForgotPassword = props => {
   const [inputValue, setInputValue] = useState('');
   const [inputType, setInputType] = useState('email'); // 'email' or 'phone'
   const [validationError, setValidationError] = useState('');
-
+  const [errors, setErrors] = useState({});
+  
   const handleInputValueChange = text => {
-    setInputValue(text);
-    setValidationError('');
+    setValue((prev) => ({ ...prev, [field]: text }));
+    setErrors((prev) => ({ ...prev, [field]: '' })); 
   };
 
   const handleLogin = () => {
@@ -70,9 +71,7 @@ const ForgotPassword = props => {
         <Text style={styles.title2}>Reset Password</Text>
       </LinearGradients>
       <View style={global.aContainer}>
-        {validationError ? (
-          <Text style={global.error}>{validationError}</Text>
-        ) : null}
+       
         {inputType === 'email' ? (
           <TextinputA
             style={styles.pl}
@@ -80,6 +79,7 @@ const ForgotPassword = props => {
             onChangeText={handleInputValueChange}
             value={inputValue}
           />
+          
         ) : (
           <TextinputA
             style={styles.pl}
@@ -90,6 +90,9 @@ const ForgotPassword = props => {
             maxLength={10}
           />
         )}
+        {validationError ? (
+          <Text style={global.error}>{validationError}</Text>
+        ) : null}
         <ButtonA name={'Send OTP'} onPress={handleLogin} />
         <Pressable onPress={toggleInputType}>
           <Text style={styles.toggleType}>
