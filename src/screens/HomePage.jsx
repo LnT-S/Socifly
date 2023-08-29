@@ -69,7 +69,7 @@ const HomePage = props => {
           // renderPostComponent={renderPostComponent}
           navigation={props.navigation}
         />
-
+ 
 
         <PostArray
           // posts={posts}
