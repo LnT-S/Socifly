@@ -40,7 +40,7 @@ const Settings = props => {
               <Text style={styles.text1}>Your Name</Text>
               <Text style={styles.text2}>your_email123@isEmail.com</Text>
               <Text style={styles.text2}>+91 1234567890</Text>
-            </View>
+              </View>
           </View>
         </View>
         <View style={styles.rect2}>

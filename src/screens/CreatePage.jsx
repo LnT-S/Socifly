@@ -19,7 +19,6 @@ const CreatePage = (props) => {
   const handleNextPage2 = () => {
     props.navigation.navigate('Settings');
   };
-
   return (
     <SafeAreaView style={styles.container}>
       <LinearGradient2 customStyle={styles.loginGradient}>
@@ -122,7 +121,9 @@ height:"8%",
   },
   icon: {
     color: "#fff",
-    fontSize: getResponsiveValue(40, 30),
+    fontSize: getResponsiveValue(40,30),
+    left:60
+
   },
   iconA: {
     color: "#fff",

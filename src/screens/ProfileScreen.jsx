@@ -35,7 +35,6 @@ const ProfileScreen = props => {
   const handleNextPage2 = () => {
     props.navigation.navigate('Settings');
   };
-
   const selectImage = () => {
     console.log('Selecting image...');
     const options = {
