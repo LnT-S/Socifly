@@ -18,6 +18,18 @@ import MaterialCommunityIconsIcon from 'react-native-vector-icons/MaterialCommun
 import FeatherIcon from 'react-native-vector-icons/Feather';
 
 const Settings = props => {
+  const handleNextPage1 = () => {
+    props.navigation.navigate('ContactUs');
+  };
+  const handleNextPage2 = () => {
+    props.navigation.navigate('AboutUs');
+  };
+  const handleNextPage3 = () => {
+    props.navigation.navigate('PrivacyPolicy');
+  };
+  const handleNextPage4 = () => {
+    props.navigation.navigate('TermsCondition');
+  };
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.mainRect}>
@@ -32,7 +44,11 @@ const Settings = props => {
           </View>
         </View>
         <View style={styles.rect2}>
-          <Pressable style={styles.row}>
+        <Pressable  style={({ pressed }) => [
+          { opacity: pressed ? 0.6 : 0.9 },
+          styles.iconWrapper,
+          styles.row,
+        ]} onPress={handleNextPage1}>
             <MaterialCommunityIconsIcon
               name="comment-question-outline"
               style={styles.icon}></MaterialCommunityIconsIcon>
@@ -40,12 +56,20 @@ const Settings = props => {
             <Text style={styles.text3}>Contact Us</Text>
           </Pressable>
           <View style={styles.divider}></View>
-          <Pressable style={styles.row}>
+          <Pressable  style={({ pressed }) => [
+            { opacity: pressed ? 0.6 : 0.9 },
+            styles.iconWrapper,
+            styles.row,
+          ]} onPress={handleNextPage2}>
             <FeatherIcon name="info" style={styles.icon}></FeatherIcon>
             <Text style={styles.text3}>About Us</Text>
           </Pressable>
           <View style={styles.divider}></View>
-          <Pressable style={styles.row}>
+          <Pressable  style={({ pressed }) => [
+            { opacity: pressed ? 0.6 : 0.9 },
+            styles.iconWrapper,
+            styles.row,
+          ]}>
             <MaterialCommunityIconsIcon
               name="logout"
               style={styles.icon}></MaterialCommunityIconsIcon>
@@ -56,13 +80,21 @@ const Settings = props => {
 
         <View style={styles.rect3}>
           <View style={styles.footer}>
-            <Pressable>
+          <Pressable  style={({ pressed }) => [
+            { opacity: pressed ? 0.6 : 0.9 },
+            styles.iconWrapper,
+            styles.row,
+          ]} onPress={handleNextPage3}>
               <Text style={styles.text4}>Privacy & Policy</Text>
             </Pressable>
           </View>
           <View style={styles.vertical}></View>
           <View style={styles.footer}>
-            <Pressable>
+          <Pressable  style={({ pressed }) => [
+            { opacity: pressed ? 0.6 : 0.9 },
+            styles.iconWrapper,
+            styles.row,
+          ]} onPress={handleNextPage4}>
               <Text style={styles.text4}>Terms & Condition</Text>
             </Pressable>
           </View>

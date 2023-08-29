@@ -11,14 +11,19 @@ import CreatePage from './src/screens/CreatePage.jsx';
 import ForgotPassword from './src/screens/ForgotPassword.jsx';
 import Settings from './src/screens/Settings.jsx';
 import OtpScreen from './src/screens/OtpScreen.jsx';
-import EditScreen from './src/screens/EditScreen.jsx';
-
+import Edit from './src/screens/Edit.jsx';
+import PrivacyPolicy from './src/screens/PrivacyPolicy.jsx';
+import TermsCondition from './src/screens/TermsCondition.jsx';
+import ContactUs from './src/screens/ContactUs.jsx';
+import AboutUs from './src/screens/AboutUs.jsx';
 // import { store } from './src/store';
 // import { Provider } from 'react-redux';
+
 
 const Stack = createNativeStackNavigator();
 function App() {
   return (
+
     <NavigationContainer>
       <StatusBar barStyle="light-content" backgroundColor="#8b0e68" />
       <Stack.Navigator>
@@ -68,12 +73,33 @@ function App() {
           options={{headerShown: false}}
         />
         <Stack.Screen
-          name="EditScreen"
-          component={EditScreen}
+          name="Edit"
+          component={Edit}
+          options={{headerShown: true}}
+        />
+        <Stack.Screen
+          name="PrivacyPolicy"
+          component={PrivacyPolicy}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="TermsCondition"
+          component={TermsCondition}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="ContactUs"
+          component={ContactUs}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="AboutUs"
+          component={AboutUs}
           options={{headerShown: false}}
         />
       </Stack.Navigator>
     </NavigationContainer>
+
   );
 }
 

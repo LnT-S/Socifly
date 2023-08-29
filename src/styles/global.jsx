@@ -30,7 +30,7 @@ module.exports = StyleSheet.create({
 
   title: {
     color: WHITE,
-    fontSize: 50,
+    fontSize: getResponsiveValue(50,40),
     marginBottom: 20,
   },
 
@@ -45,6 +45,6 @@ module.exports = StyleSheet.create({
   },
   error: {
     color: ERROR,
-    textAlign: 'center',
+bottom:20,
   },
 });

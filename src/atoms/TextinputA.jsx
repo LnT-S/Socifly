@@ -1,25 +1,46 @@
-import React from "react";
-import { StyleSheet, View, TextInput } from "react-native";
+import React, { useState } from "react";
+import {Text , StyleSheet, View, TextInput } from "react-native";
 import { BLACK } from "../styles/colors";
 import { getResponsiveValue, screenWidth } from '../styles/responsive';
 
 
 const TextinputA = (props) => {
+    const [isFocused, setIsFocused] = useState(false);
+    const { error, onChangeText, onChangeError, ...otherProps } = props;
+    const handleFocus = () => {
+        setIsFocused(true);
+    };
+
+    const handleBlur = () => {
+        setIsFocused(false);
+    };
+
+    const handleChangeText = (text) => {
+        onChangeText(text);
+        if (error && typeof props.onChangeError === 'function') { // Check if onChangeError is a function
+            props.onChangeError(''); // Clear the error when the user starts typing
+        }
+    };
     return (
         <View>
        
          <TextInput placeholder = { props.placeholder }
             placeholderTextColor = "#888888"
+            onFocus={handleFocus}
+            onBlur={handleBlur}
             // secureTextEntry = { props.secureTextEntry }
             // keyboardType = { props.keyboardType }
             // maxLength = { props.maxLength }
             {...props }
+            
             value = { props.value }
-            style = { styles.input }
-            // onChangeText={(v)=>{props?.onChangeText}}
-            onChangeText={props.onChangeText}
-         />
-
+            style={[
+                styles.input,
+                isFocused ? null : error ? styles.inputError : null,
+            ]}
+            onChangeText={handleChangeText} // Call the onChangeText function with the new value
+        />
+       
         </View>
     );
 };
@@ -35,6 +56,10 @@ const styles = StyleSheet.create({
         color: BLACK,
         width: getResponsiveValue(500, screenWidth * 0.8),
     },
+    inputError: {
+        borderColor: 'red',
+
+      },
 });
 
 export default TextinputA;

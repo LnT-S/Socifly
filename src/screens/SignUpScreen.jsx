@@ -26,14 +26,15 @@ const SignUpScreen = props => {
     password: '',
     confirm_password: '',
   });
-
+  
+  const [username, setUsername] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState({});
 
-  function handleChange(valObj) {
-    // console.log('Logging changed values',valObj)
-    setValue(prev => ({...prev, [valObj.field]: valObj.value}));
-  }
+  const handleChange = (field, text) => {
+    setValue((prev) => ({ ...prev, [field]: text }));
+    setErrors((prev) => ({ ...prev, [field]: '' })); // Clear the error when typing
+  };
 
   const scrollViewRef = useRef(null);
 
@@ -87,49 +88,52 @@ const SignUpScreen = props => {
             ref={scrollViewRef}
             contentContainerStyle={{flexGrow: 1, justifyContent: 'center'}}
             keyboardShouldPersistTaps="handled">
-            {errors.name && <Text style={global.error}>{errors.name}</Text>}
+            
             <TextinputA
+            style={[
+              styles.input,
+              errors.name ? styles.inputError : null,
+            ]}
               placeholder="Enter Full Name"
               value={value?.name}
-              // onFocus={() => scrollViewRef.current.scrollToEnd({ animated: true })}
-              onChangeText={v => {
-                handleChange({field: 'name', value: v});
-              }}
+              onChangeText={(text) => handleChange('name', text)}
               error={errors.fullName}
+              
             />
-            {errors.email && <Text style={global.error}>{errors.email}</Text>}
+            {errors.name && <Text style={global.error}>{errors.name}</Text>}
+            
             <TextinputA
               placeholder="Enter Email Id"
               value={value?.email}
               keyboardType="email-address"
-              // onFocus={() => scrollViewRef.current.scrollToEnd({ animated: true })}
-              onChangeText={v => handleChange({field: 'email', value: v})}
+             
+              onChangeText={(text) => handleChange('email', text)}
+              error={errors.email}
             />
-            {errors.phone && <Text style={global.error}>{errors.phone}</Text>}
+            {errors.email && <Text style={global.error}>{errors.email}</Text>}
+            
             <TextinputA
               placeholder="Enter Phone No"
               value={value?.phone}
               keyboardType="numeric"
               maxLength={10}
-              // onFocus={() => scrollViewRef.current.scrollToEnd({ animated: true })}
-              onChangeText={v => handleChange({field: 'phone', value: v})}
+              onChangeText={(numeric) => handleChange('phone', numeric)}
+              error={errors.phone}
             />
+            {errors.phone && <Text style={global.error}>{errors.phone}</Text>}
 
-            {errors.password && (
-              <Text style={global.error}>{errors.password}</Text>
-            )}
+           
             <TextinputA
               placeholder="Password"
               secureTextEntry
-              onFocus={() =>
-                scrollViewRef.current.scrollToEnd({animated: true})
-              }
-              onChangeText={v => handleChange({field: 'password', value: v})}
-            />
-
-            {errors.confirm_password && (
-              <Text style={global.error}>{errors.confirm_password}</Text>
+              onChangeText={(text) => handleChange('password', text)}
+          error={errors.password}
+        />
+            {errors.password && (
+              <Text style={global.error}>{errors.password}</Text>
             )}
+
+            
             <TextinputA
               placeholder="Confirm Password"
               value={value?.confirm_password}
@@ -137,10 +141,11 @@ const SignUpScreen = props => {
               onFocus={() =>
                 scrollViewRef.current.scrollToEnd({animated: true})
               }
-              onChangeText={v =>
-                handleChange({field: 'confirm_password', value: v})
-              }
-            />
+              onChangeText={(text) => handleChange('confirm_password', text)}
+          error={errors.confirm_password}
+            />{errors.confirm_password && (
+              <Text style={global.error}>{errors.confirm_password}</Text>
+            )}
 
             <View style={styles.buttonS}>
               <ButtonA

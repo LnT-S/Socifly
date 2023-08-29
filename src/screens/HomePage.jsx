@@ -14,14 +14,17 @@ import Category from '../common/Category';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import IoniconsIcon from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIconsIcon from 'react-native-vector-icons/MaterialCommunityIcons';
-import Post from '../common/Post';
+
+import Post1 from '../common/Post1';
 import Post2 from '../common/Post2';
 import Post3 from '../common/Post3';
 import Post4 from '../common/Post4';
 import {BLACK, WHITE} from '../styles/colors';
-
-
 import {getResponsiveValue} from '../styles/responsive';
+import PostArray from '../common/PostArray';
+
+
+
 
 const HomePage = props => {
   const handleNextPage = () => {
@@ -31,6 +34,7 @@ const HomePage = props => {
   const handleNextPage2 = () => {
     props.navigation.navigate('CreatePage');
   };
+
 
   return (
     <SafeAreaView style={styles.container}>
@@ -60,10 +64,19 @@ const HomePage = props => {
         <Category />
       </View>
       <ScrollView style={styles.postS}>
-        <Post source={require('../assets/pics/pic1.png')} />
-        <Post2 source={require('../assets/pics/pic1.png')} />
-        <Post3 source={require('../assets/pics/pic1.png')} />
-        <Post4 source={require('../assets/pics/pic1.png')} />
+        <PostArray
+          // posts={posts}
+          // renderPostComponent={renderPostComponent}
+          navigation={props.navigation}
+        />
+
+
+        <PostArray
+          // posts={posts}
+          // renderPostComponent={renderPostComponent}
+          navigation={props.navigation}
+        />
+
       </ScrollView>
     </SafeAreaView>
   );
@@ -74,8 +87,8 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   loginGradient: {
-    flex: 0.12,
-    height: '10%',
+    // flex: 0.12,
+    height:  getResponsiveValue(100,60),
   },
 
   Container: {
@@ -109,7 +122,7 @@ const styles = StyleSheet.create({
   icon3: {
     color: WHITE,
     fontSize: getResponsiveValue(44, 29),
-    marginLeft: getResponsiveValue('45%', '30%'),
+    // marginLeft: getResponsiveValue('45%', '24%'),
   },
   icon4: {
     color: WHITE,
@@ -121,6 +134,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     // justifyContent: "center",
     justifyContent: 'space-between',
+    width:"100%",
+    paddingHorizontal:"2%",
   },
   textInput: {
     flex: 1,
@@ -148,8 +163,8 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(255,255,255,1)',
     borderRadius: getResponsiveValue(25, 22),
     flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
+    // alignItems: 'center',
+    // justifyContent: 'center',
   },
   cardSection: {
     // height: "20%",

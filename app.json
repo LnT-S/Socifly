@@ -1,4 +1,8 @@
 {
   "name": "Solicify",
-  "displayName": "Solicify"
+  "displayName": "Solicify",
+  "react-native-google-mobile-ads": {
+    "android_app_id": "ca-app-pub-7476617068399590~3695488497"
+  }
+
 }

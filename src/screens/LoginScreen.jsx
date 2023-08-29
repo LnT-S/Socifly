@@ -9,6 +9,7 @@ import {LINKS} from '../styles/colors';
 
 // import { isEmailValid } from "../utils/validation/formValidation";
 import {validateForm} from '../utils/validation/validateForm';
+import {getResponsiveValue} from '../styles/responsive';
 
 const LoginScreen = props => {
   const [errors, setErrors] = useState({});
@@ -84,7 +85,7 @@ const LoginScreen = props => {
         {errors.email && <Text style={global.error}>{errors.email}</Text>}
         <TextinputA
           style={styles.pl}
-          placeholder="Username or Email"
+          placeholder="Email or Phone No."
           value={username}
           onChangeText={text => setUsername(text)}
         />
@@ -140,16 +141,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  welcome: {
-    color: 'white',
-    fontSize: 50,
-    marginBottom: 20,
-  },
+
 
   link: {
     color: LINKS,
     textDecorationLine: 'underline',
-    fontSize: 16,
+    fontSize: getResponsiveValue(16,12),
     marginTop: 10,
     marginBottom: 10,
   },
@@ -159,7 +156,7 @@ const styles = StyleSheet.create({
   },
   createAccount: {
     color: '#121212',
-    fontSize: 16,
+    fontSize:  getResponsiveValue(16,12),
     marginRight: 5,
   },
 });

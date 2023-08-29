@@ -25,34 +25,54 @@ const CreatePage = (props) => {
       <LinearGradient2 customStyle={styles.loginGradient}>
         <View style={styles.iconRow}>
           <View style={styles.iconContainer}>
+          <Pressable style={({ pressed }) => [
+            { opacity: pressed ? 0.7 : 0.9 },
+            styles.iconWrapper,
+          ]}>
            
             <FontAwesomeIcon
               name="angle-left"
               onPress={handleNextPage}
               style={styles.iconA}
             />
+            </Pressable>
           </View>
           <Text style={styles.create}>NEW</Text>
+          <Pressable style={({ pressed }) => [
+            { opacity: pressed ? 0.7 : 0.9 },
+            styles.iconWrapper,
+          ]}>
           <MaterialIconsIcon
             name="settings"
             onPress={handleNextPage2}
             style={ styles.settingsIcon}
           />
+          </Pressable>
         </View>
       </LinearGradient2>
 
+      <Pressable style={({ pressed }) => [
+        { opacity: pressed ? 0.8 : 1 },
+        styles.iconWrapper,
+      ]}>
       <View style={styles.iconRow2}>
         <MaterialCommunityIconsIcon
           name="image-plus"
           style={styles.icon2}
         />
-        <View style={styles.loremIpsumColumn}>
-          <Pressable>
-            <Text style={styles.loremIpsum}>Add Images from gallery</Text>
-          </Pressable>
+     
+      <View style={styles.loremIpsumColumn}>
+        <Pressable style={({ pressed }) => [
+          { opacity: pressed ? 0.8 : 1 },
+          styles.iconWrapper,
+        ]}>
+          <Text style={styles.loremIpsum}>Add Images from gallery</Text>
+        </Pressable>
           <Text style={styles.loremIpsum2}>Add your name and photo</Text>
         </View>
       </View>
+      </Pressable>
+
       <ScrollView>
       <View style={styles.rect3}>
         <Text style={styles.or}>OR</Text>

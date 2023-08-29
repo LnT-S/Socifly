@@ -118,7 +118,7 @@ const styles = StyleSheet.create({
   title2: {
     top: 20,
     color: 'white',
-    fontSize: getResponsiveValue(50, 40),
+    fontSize: getResponsiveValue(50, 30),
     marginBottom: 20,
   },
   or: {

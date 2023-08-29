@@ -9,7 +9,7 @@ import {
   Alert,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {BLACK, PRIMARY, SECONDARY, WHITE,POST1} from '../styles/colors';
+import {BLACK, PRIMARY, SECONDARY, WHITE} from '../styles/colors';
 import MaterialCommunityIconsIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import EntypoIcon from 'react-native-vector-icons/Entypo';
@@ -23,7 +23,7 @@ import RNFS from 'react-native-fs';
 import { TapGestureHandler, State ,GestureHandlerRootView } from 'react-native-gesture-handler';
 
 
-const Post4 = props => {
+const Post1 = props => {
   const [downloaded, setDownloaded] = useState(false);
   const cardRef = useRef(null); // Create a ref for the card view
   const doubleTapRef = useRef(null);
@@ -229,11 +229,12 @@ const Post4 = props => {
 
 const styles = StyleSheet.create({
   container: {
-    flex:1,
+    flex: 1,
     alignItems: 'center',
     marginTop: '7%',
     marginBottom: '10%',
-
+    // marginBottom: "12%",
+    // backgroundColor: WHITE,
     width: '100%',
     height: '15%',
     shadowColor: BLACK,
@@ -247,42 +248,37 @@ const styles = StyleSheet.create({
   },
   cardContainer: {
     paddingHorizontal: '3%',
-    backgroundColor: POST1,
-  
+    backgroundColor: WHITE,
+    //   alignItems:"center"
     width: '100%',
     aspectRatio: 308 / 346,
   },
   cardContainer2: {
-
-    backgroundColor: POST1,
-
+    // paddindVertical: "2%",
+    // paddingHorizontal: '3%',
+    backgroundColor: WHITE,
+    //   alignItems:"center"
     width: '80%',
-
+    // aspectRatio: 308 / 346,
   },
   image: {
     width: '100%',
     height: '100%',
     position: 'relative',
     bottom: '4%',
-
+    // paddingBottom:"20%"
   },
-  horizontal: {
-    backgroundColor:WHITE,
-    
-     height:getResponsiveValue(2,1),
-     width:"100%",
-     top: getResponsiveValue('20%', '30%'),
-     left: getResponsiveValue('40%', '40%'),
-   },
   profileContainer: {
-    backgroundColor: POST1,
+    backgroundColor: WHITE,
     width: '80%',
     height: '7%',
-
+    // backgroundColor:WHITE,
     flexDirection: 'row',
     justifyContent: 'space-around',
     paddingHorizontal: '1%',
-
+    // position:"absolute",
+    // top:getResponsiveValue("65%","65%"),
+    // bottom:
   },
   profileImage: {
     width: getResponsiveValue(180, 80),
@@ -308,16 +304,24 @@ const styles = StyleSheet.create({
   },
   name: {
     fontSize: getResponsiveValue(20, 12),
-    color: WHITE,
+    color: BLACK,
     fontWeight: 'bold',
     top: getResponsiveValue('20%', '30%'),
-    left:getResponsiveValue("40%","40%")
+    left: getResponsiveValue('40%', '40%'),
+  },
+  horizontal: {
+   backgroundColor:BLACK,
+   
+    height:getResponsiveValue(2,1),
+    width:"100%",
+    top: getResponsiveValue('20%', '30%'),
+    left: getResponsiveValue('40%', '40%'),
   },
   info: {
     fontSize: getResponsiveValue(12, 8),
-    color: WHITE,
+    color: BLACK,
     top: getResponsiveValue('20%', '30%'),
-    left:getResponsiveValue("40%","40%")
+    left: getResponsiveValue('40%', '40%'),
   },
 
   toolbar: {
@@ -328,7 +332,9 @@ const styles = StyleSheet.create({
     paddingVertical: '2%',
     backgroundColor: WHITE,
     width: '80%',
-  
+    // position: 'relative',
+    // top:"7%"
+    // bottom:getResponsiveValue("1.5%","0.5%"),
   },
   iconGroup: {
     flexDirection: 'row',
@@ -346,21 +352,21 @@ const styles = StyleSheet.create({
     fontSize: getResponsiveValue(50, 25),
   },
   likedIcon: {
-    color: "rgba(235,124,148,1)", 
+    color: 'rgba(235,124,148,1)', // Customize the color when liked
   },
 
   downloadedText: {
-    color: 'green',
+    color: 'green', // You can adjust the color as needed
     fontSize: getResponsiveValue(16, 12),
- 
-    backgroundColor:WHITE,
-    borderRadius:20,
-    padding:8,
-    position:"absolute",
-    top:"2%",
-   
- 
+    // marginRight: getResponsiveValue(10, 5),
+    backgroundColor: WHITE,
+    borderRadius: 20,
+    padding: 8,
+    position: 'absolute',
+    top: '2%',
   },
+
+
 });
 
-export default Post4;
+export default Post1;
