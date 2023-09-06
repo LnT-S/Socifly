@@ -1,5 +1,5 @@
 import { StyleSheet, View, Text, Pressable, ScrollView } from 'react-native';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import LinearGradient2 from "../atoms/LinearGradient2";
 import { SafeAreaView } from 'react-native-safe-area-context';
 import EntypoIcon from "react-native-vector-icons/Entypo";
@@ -13,58 +13,77 @@ import { BLACK, WHITE } from '../styles/colors';
 import { getResponsiveValue } from '../styles/responsive';
 
 const CreatePage = (props) => {
+  // const [shouldShowAd, setShouldShowAd] = useState(false);
   const handleNextPage = () => {
     props.navigation.navigate('HomePage');
   };
   const handleNextPage2 = () => {
     props.navigation.navigate('Settings');
   };
+  // useEffect(() => {
+  //   // Logic to show the rewarded ad when the component mounts
+  //   setShouldShowAd(true);
+
+  //   // You might also want to set shouldShowAd to false when leaving the page
+  //   return () => {
+  //     setShouldShowAd(false);
+  //   };
+  // }, []);
   return (
     <SafeAreaView style={styles.container}>
+   
+
       <LinearGradient2 customStyle={styles.loginGradient}>
         <View style={styles.iconRow}>
           <View style={styles.iconContainer}>
-
+          <Pressable style={({ pressed }) => [
+            { opacity: pressed ? 0.7 : 0.9 },
+            styles.iconWrapper,
+          ]}>
+           
             <FontAwesomeIcon
               name="angle-left"
               onPress={handleNextPage}
               style={styles.iconA}
             />
+            </Pressable>
           </View>
           <Text style={styles.create}>NEW</Text>
-          <Pressable onPress={handleNextPage2} style={({ pressed }) => [
+          <Pressable style={({ pressed }) => [
             { opacity: pressed ? 0.7 : 0.9 },
             styles.iconWrapper,
           ]}>
-            <MaterialIconsIcon
-              name="settings"
-              style={styles.settingsIcon}
-            />
+          <MaterialIconsIcon
+            name="settings"
+            onPress={handleNextPage2}
+            style={ styles.settingsIcon}
+          />
           </Pressable>
         </View>
       </LinearGradient2>
 
+      <Pressable style={({ pressed }) => [
+        { opacity: pressed ? 0.8 : 1 },
+        styles.iconWrapper,
+      ]}>
       <View style={styles.iconRow2}>
+        <MaterialCommunityIconsIcon
+          name="image-plus"
+          style={styles.icon2}
+        />
+     
+      <View style={styles.loremIpsumColumn}>
         <Pressable style={({ pressed }) => [
           { opacity: pressed ? 0.8 : 1 },
           styles.iconWrapper,
         ]}>
-          <MaterialCommunityIconsIcon
-            name="image-plus"
-            style={styles.icon2}
-          />
+          <Text style={styles.loremIpsum}>Add Images from gallery</Text>
         </Pressable>
-        <View style={styles.loremIpsumColumn}>
-          <Pressable style={({ pressed }) => [
-            { opacity: pressed ? 0.8 : 1 },
-            styles.iconWrapper,
-          ]}>
-            <Text style={styles.loremIpsum}>Add Images from gallery</Text>
-          </Pressable>
-
           <Text style={styles.loremIpsum2}>Add your name and photo</Text>
         </View>
       </View>
+      </Pressable>
+
       <ScrollView>
         <View style={styles.rect3}>
           <Text style={styles.or}>OR</Text>

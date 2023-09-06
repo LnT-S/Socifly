@@ -3,6 +3,7 @@ import { StyleSheet, Pressable, Animated } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 
 import { getResponsiveValue } from '../styles/responsive';
+import { WHITE } from '../styles/colors';
 
 const IconButton = (props) => {
   const [isPressed, setIsPressed] = useState(false);

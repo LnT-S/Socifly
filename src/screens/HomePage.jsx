@@ -7,7 +7,7 @@ import {
   ScrollView,
   Animated,
 } from 'react-native';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import LinearGradient2 from '../atoms/LinearGradient2';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Category from '../common/Category';
@@ -15,6 +15,7 @@ import Category from '../common/Category';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import IoniconsIcon from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIconsIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { FlatList } from 'react-native';
 import Post from '../common/Post';
 import Post2 from '../common/Post2';
 import Post3 from '../common/Post3';
@@ -22,39 +23,70 @@ import Post4 from '../common/Post4';
 import { BLACK, WHITE } from '../styles/colors';
 // import { AdMobBanner } from 'react-native-admob';
 import { getResponsiveValue } from '../styles/responsive';
-import GoogleAds from '../common/GoogleAds';
-import InterstitialAds from '../common/InterstitialAds';
+import GoogleAds from '../common/Ads/GoogleAds';
+import InterstitialAds from '../common/Ads/InterstitialAds';
+import PostArray from '../common/PostArray';
+import BannerAds from '../common/Ads/BannerAds';
+import Searchbar from '../atoms/Searchbar'
+import RewardedAds from '../common/Ads/RewardedAds';
+//import RewardedInterstitialAds from '../common/RewardedInterstitialAds';
 
-// import GoogleAds from '../common/GoogleAds';
-// import InterstitialAds from '../common/InterstitialAds';
-import RewardedAds from '../common/RewardedAds';
- //import RewardedInterstitialAds from '../common/RewardedInterstitialAds';
-import { AdView } from 'react-native-fbads';
 const HomePage = props => {
-
-
+  const [shouldShowAd, setShouldShowAd] = useState(false);
+  const bannerData = [1, 2, 3];
+  const [currentBannerIndex, setCurrentBannerIndex] = useState(0);
+  const flatListRef = useRef(null);
+  
   const handleNextPage = () => {
     props.navigation.navigate('ProfileScreen');
   };
-  const handleNextPage2 = () => {
-    props.navigation.navigate('CreatePage');
+  // const handleNextPage2 = () => {
+  //   props.navigation.navigate('CreatePage');
+  // };
+
+  const showRewardedAd = () => {
+    // Logic to set shouldShowAd to true
+    setShouldShowAd(true);
   };
+  // useEffect(() => {
+  //   if (shouldShowAd) {
+  //     RewardedAds.show(); // Show the rewarded ad
+  //   }
+  // }, [shouldShowAd]);
+  useEffect(() => {
+    const nextBannerIndex = (currentBannerIndex + 1) % bannerData.length;
+
+    const scrollTimeout = setTimeout(() => {
+      if (flatListRef.current) {
+        flatListRef.current.scrollToIndex({ index: nextBannerIndex, animated: true });
+        setCurrentBannerIndex(nextBannerIndex);
+      }
+    }, 3000); // Adjust the timeout duration (milliseconds) as needed for automatic scrolling
+
+    return () => clearTimeout(scrollTimeout);
+  }, [currentBannerIndex]);
+
   return (
     <SafeAreaView style={styles.container}>
       <LinearGradient2 customStyle={styles.loginGradient}>
         <View style={styles.iconStackRow}>
-          <View style={styles.iconStack}>
-            <TextInput placeholder="" style={styles.textInput} />
-           
-            <FeatherIcon name="search" style={styles.icon2} />
-          
-          </View>
-          <Pressable style={styles.button} onPress={handleNextPage2}>
+            <Searchbar/>
+          <Pressable
+            style={styles.button}
+            onPress={() => {
+              showRewardedAd(); // Call showRewardedAd function to set shouldShowAd to true
+              setTimeout(() => {
+                props.navigation.navigate('CreatePage'); // Navigate to next page after ad is shown
+              }, 1000); // Adjust the timeout duration as needed
+            }}
+          >
+            <RewardedAds shouldShowAd={shouldShowAd} />
             <View style={styles.createRow}>
               <Text style={styles.create}>New</Text>
               <IoniconsIcon
                 name="ios-add-circle-outline"
-                style={styles.icon3}></IoniconsIcon>
+                style={styles.icon3}
+              ></IoniconsIcon>
             </View>
           </Pressable>
           <Pressable onPress={handleNextPage} style={({ pressed }) => [
@@ -73,25 +105,49 @@ const HomePage = props => {
         <Category />
       </View>
       <ScrollView style={styles.postS}>
+      <FlatList
+      ref={flatListRef}
+      style={styles.adss}
+      horizontal
+      pagingEnabled
+      data={bannerData}
+      renderItem={({ item }) => (
+        <BannerAds />
+        // You can replace this with your content for each item
+      )}
+      keyExtractor={(item) => item.toString()}
+    />
+        
         <Post source={require('../assets/pics/pic1.png')} props={props} />
-        <InterstitialAds/>
+        <InterstitialAds />
         <Post source={require('../assets/pics/pic1.png')} props={props} />
-        <RewardedAds/>
+        <Post2 source={require('../assets/pics/pic1.png')} props={props} /> 
+        <GoogleAds />
+        <Post3 source={require('../assets/pics/pic1.png')} props={props} />
+        <Post4 source={require('../assets/pics/pic1.png')} props={props} />
+        <Post source={require('../assets/pics/pic1.png')} props={props} />
+        <GoogleAds />
         <Post2 source={require('../assets/pics/pic1.png')} props={props} />
-        <GoogleAds/>
-        <Post3 source={require('../assets/pics/pic1.png')} props={props} />
-       
-        <Post4 source={require('../assets/pics/pic1.png')} props={props} />
-        <Post source={require('../assets/pics/pic1.png')} props={props} />
-        <GoogleAds/>
-        <Post2 source={require('../assets/pics/pic1.png')} props={props} />
         <Post3 source={require('../assets/pics/pic1.png')} props={props} />
         <Post4 source={require('../assets/pics/pic1.png')} props={props} />
-        <GoogleAds/>
+        <GoogleAds />
         <Post source={require('../assets/pics/pic1.png')} props={props} />
         <Post3 source={require('../assets/pics/pic1.png')} props={props} />
         <Post4 source={require('../assets/pics/pic1.png')} props={props} />
-        <GoogleAds/>
+        <GoogleAds />
+        <PostArray
+          // posts={posts}
+          // renderPostComponent={renderPostComponent}
+          navigation={props.navigation}
+        />
+
+        <GoogleAds />
+        <PostArray
+          // posts={posts}
+          // renderPostComponent={renderPostComponent}
+          navigation={props.navigation}
+        />
+
       </ScrollView>
     </SafeAreaView>
   );
@@ -102,10 +158,12 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   loginGradient: {
-  
-    height:getResponsiveValue(100,60),
-  },
 
+    height: getResponsiveValue(100, 60),
+  },
+  adss:{
+    top:15,
+  },
   Container: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -149,8 +207,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     // justifyContent: "center",
     justifyContent: 'space-between',
-    width:"100%",
-    paddingHorizontal:"2%",
+    width: "100%",
+    paddingHorizontal: "2%",
   },
   textInput: {
     flex: 1,
@@ -199,6 +257,8 @@ const styles = StyleSheet.create({
   postS: {
     flex: 0.8,
   },
+ 
+
 });
 
 export default HomePage;

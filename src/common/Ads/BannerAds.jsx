@@ -6,7 +6,7 @@ import { BannerAd, BannerAdSize, TestIds } from 'react-native-google-mobile-ads'
 
 const adUnitId = __DEV__ ? TestIds.BANNER : 'ca-app-pub-7476617068399590/2806493368';
 
-const GoogleAds = (props) => {
+const BannerAds = (props) => {
    
     return (
         <SafeAreaView style={styles.container}>
@@ -35,4 +35,4 @@ const styles = StyleSheet.create({
    
 });
 
-export default GoogleAds;
+export default BannerAds;

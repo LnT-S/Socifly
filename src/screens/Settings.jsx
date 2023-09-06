@@ -11,26 +11,30 @@ import {
 import React, { useState } from 'react';
 import global from '../styles/global';
 
-import {getResponsiveValue} from '../styles/responsive';
+import { getResponsiveValue } from '../styles/responsive';
 
 import defaultProfileImage from '../assets/images/Profile.png';
-import {BLACK, WHITE} from '../styles/colors';
+import { BLACK, WHITE } from '../styles/colors';
 import MaterialCommunityIconsIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import FeatherIcon from 'react-native-vector-icons/Feather';
-
+import DialogueBox from '../common/DialogueBox';
 const Settings = props => {
-  const handleAboutPage = () => {
-    props.navigation.navigate('AboutUsScreen');
-  };
+  // const handleAboutPage = () => {
+  //   props.navigation.navigate('AboutUsScreen');
+  // };
   const [isTextContainerPressed, setIsTextContainerPressed] = useState(false);
   const textContainerScaleValue = new Animated.Value(1);
-
+  const [isLogoutDialogVisible, setIsLogoutDialogVisible] = useState(false);
   const handleTextContainerPressIn = () => {
     setIsTextContainerPressed(true);
     Animated.spring(textContainerScaleValue, {
       toValue: 0.75, // Zoom out effect
       useNativeDriver: true,
     }).start();
+  };
+
+  const handleLogout = () => {
+    setIsLogoutDialogVisible(true);
   };
 
   const handleTextContainerPressOut = () => {
@@ -44,34 +48,48 @@ const Settings = props => {
 
   const animatedTextContainerStyles = {
     transform: [{ scale: textContainerScaleValue }],
+
+
+  }
+  const handleNextPage1 = () => {
+    props.navigation.navigate('ContactUs');
+  };
+  const handleNextPage2 = () => {
+    props.navigation.navigate('AboutUs');
+  };
+  const handleNextPage3 = () => {
+    props.navigation.navigate('PrivacyPolicy');
+  };
+  const handleNextPage4 = () => {
+    props.navigation.navigate('TermsCondition');
   };
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={styles.container} >
       <View style={styles.mainRect}>
         <View style={styles.rect1}>
           <View style={styles.innerRect1}>
             <Image source={defaultProfileImage} style={styles.profileImage} />
             <Pressable
-            onPressIn={handleTextContainerPressIn}
-            onPressOut={handleTextContainerPressOut}
-          >
-            <Animated.View
-              style={[styles.textContainer, animatedTextContainerStyles]}
+              onPressIn={handleTextContainerPressIn}
+              onPressOut={handleTextContainerPressOut}
             >
-              <Text style={styles.text1}>Your Name</Text>
-              <Text style={styles.text2}>your_email123@isEmail.com</Text>
-              <Text style={styles.text2}>+91 1234567890</Text>
+              <Animated.View
+                style={[styles.textContainer, animatedTextContainerStyles]}
+              >
+                <Text style={styles.text1}>Your Name</Text>
+                <Text style={styles.text2}>your_email123@isEmail.com</Text>
+                <Text style={styles.text2}>+91 1234567890</Text>
               </Animated.View>
             </Pressable>
-              
+
           </View>
         </View>
         <View style={styles.rect2}>
-        <Pressable  style={({ pressed }) => [
-          { opacity: pressed ? 0.6 : 0.9 },
-          styles.iconWrapper,
-          styles.row,
-        ]}>
+          <Pressable style={({ pressed }) => [
+            { opacity: pressed ? 0.6 : 0.9 },
+            styles.iconWrapper,
+            styles.row,
+          ]} onPress={handleNextPage1}>
             <MaterialCommunityIconsIcon
               name="comment-question-outline"
               style={styles.icon}></MaterialCommunityIconsIcon>
@@ -79,43 +97,59 @@ const Settings = props => {
             <Text style={styles.text3}>Contact Us</Text>
           </Pressable>
           <View style={styles.divider}></View>
-          <Pressable  style={({ pressed }) => [
+          <Pressable style={({ pressed }) => [
             { opacity: pressed ? 0.6 : 0.9 },
             styles.iconWrapper,
             styles.row,
-          ]}>
+          ]} onPress={handleNextPage2}>
             <FeatherIcon name="info" style={styles.icon}></FeatherIcon>
             <Text style={styles.text3} onPress={handleAboutPage}>About Us</Text>
           </Pressable>
           <View style={styles.divider}></View>
-          <Pressable  style={({ pressed }) => [
-            { opacity: pressed ? 0.6 : 0.9 },
-            styles.iconWrapper,
-            styles.row,
-          ]}>
-            <MaterialCommunityIconsIcon
-              name="logout"
-              style={styles.icon}></MaterialCommunityIconsIcon>
-
+          <Pressable
+            onPress={handleLogout}
+            style={({ pressed }) => [
+              { opacity: pressed ? 0.6 : 0.9 },
+              styles.iconWrapper,
+              styles.row,
+            ]}
+          >
+            <MaterialCommunityIconsIcon name="logout" style={styles.icon} />
             <Text style={styles.text3}>Logout</Text>
           </Pressable>
+
+          {isLogoutDialogVisible && (
+            <DialogueBox
+              isVisible={isLogoutDialogVisible}
+              onClose={() => setIsLogoutDialogVisible(false)}
+              textContent="Are you sure you want to logout?"
+            />
+          )}
         </View>
 
         <View style={styles.rect3}>
           <View style={styles.footer}>
-            <Pressable>
+            <Pressable style={({ pressed }) => [
+              { opacity: pressed ? 0.6 : 0.9 },
+              styles.iconWrapper,
+              styles.row,
+            ]} onPress={handleNextPage3}>
               <Text style={styles.text4}>Privacy & Policy</Text>
             </Pressable>
           </View>
           <View style={styles.vertical}></View>
           <View style={styles.footer}>
-            <Pressable>
+            <Pressable style={({ pressed }) => [
+              { opacity: pressed ? 0.6 : 0.9 },
+              styles.iconWrapper,
+              styles.row,
+            ]} onPress={handleNextPage4}>
               <Text style={styles.text4}>Terms & Condition</Text>
             </Pressable>
           </View>
         </View>
       </View>
-    </SafeAreaView>
+    </SafeAreaView >
   );
 };
 
@@ -172,7 +206,7 @@ const styles = StyleSheet.create({
     top: '5%',
     left: getResponsiveValue('20%', '10%'),
     flexDirection: 'column',
-    
+
   },
   rect2: {
     width: '90%',

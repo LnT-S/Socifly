@@ -18,3 +18,5 @@ export const POST =  "#FFDAB9";
 export const POST1 =  "#1e203b";
 
 export const ICON = "#372b41";
+
+export const POST2 ="#e6daf7";

@@ -19,6 +19,9 @@ import {getResponsiveValue} from '../styles/responsive';
 import {launchImageLibrary} from 'react-native-image-picker';
 import defaultProfileImage from '../assets/images/Profile.png';
 import SettingsScreen from './Settings';
+import { BannerAd } from 'react-native-google-mobile-ads';
+//import InterstitialAds from '../common/Ads/InterstitialAds';
+ import RewardedAds from '../common/Ads/RewardedAds';
 
 const ProfileScreen = props => {
   const [isEditing, setIsEditing] = useState(false);
@@ -26,10 +29,10 @@ const ProfileScreen = props => {
   const [email, setEmail] = useState('your-email@email.com');
   const [profileImage, setProfileImage] = useState(defaultProfileImage);
   const [phoneNumber, setPhoneNumber] = useState('9876543210');
-
-  const handleNextPage = () => {
-    props.navigation.navigate('HomePage');
-  };
+  const [shouldShowAd, setShouldShowAd] = useState(false);
+  // const handleNextPage = () => {
+  //   props.navigation.navigate('HomePage');
+  // };
   const handleNextPage2 = () => {
     props.navigation.navigate('Settings');
   };
@@ -63,6 +66,11 @@ const ProfileScreen = props => {
     toggleEdit();
   };
 
+ const showInterstitialAd = () => {
+    // Logic to set shouldShowAd to true
+    setShouldShowAd(true);
+  };
+
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -70,10 +78,18 @@ const ProfileScreen = props => {
       <SafeAreaView style={styles.container}>
         <LinearGradients customStyle={styles.loginGradient}>
           <View style={styles.header}>
-            <Pressable onPress={handleNextPage}  style={({ pressed }) => [
+          <Pressable 
+          onPress={() => {
+               showInterstitialAd(); // Call showRewardedAd function to set shouldShowAd to true
+              setTimeout(() => {
+                props.navigation.navigate('HomePage'); // Navigate to next page after ad is shown
+              }, 1000); // Adjust the timeout duration as needed
+            }}  style={({ pressed }) => [
               { opacity: pressed ? 0.8 : 1 },
               styles.iconWrapper,
             ]}>
+            <RewardedAds shouldShowAd={shouldShowAd} />
+           
               <Icon name="home" style={styles.icon}></Icon>
             </Pressable>
             <Pressable onPress={handleNextPage2}  style={({ pressed }) => [
@@ -126,7 +142,10 @@ const ProfileScreen = props => {
             <ButtonA name={'EDIT PROFILE'} onPress={toggleEdit} />
           )}
         </View>
+   
+      
       </SafeAreaView>
+
     </KeyboardAvoidingView>
   );
 };

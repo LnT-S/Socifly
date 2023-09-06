@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
         justifyContent:"center",
         alignItems:"center",
         width:"100%",
-        left: getResponsiveValue("5%","4%"),
+        left: getResponsiveValue("4%","4%"),
         // paddingHorizontal: getResponsiveValue(80, "8%"),
         // paddingVertical: getResponsiveValue(20,10),
     },

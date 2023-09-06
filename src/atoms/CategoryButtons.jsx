@@ -16,7 +16,7 @@ const CategoryButtons = ({ text }) => {
       // marginRight: getResponsiveValue(0, "1%"),
       // marginBottom: getResponsiveValue(15, "3%"),
 
-      marginHorizontal:"3%",
+      marginHorizontal:"2%",
       marginVertical:"1.5%",
 
       shadowColor: BLACK,

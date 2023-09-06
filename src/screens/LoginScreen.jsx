@@ -3,36 +3,40 @@ import { StyleSheet, View, Pressable, Text, SafeAreaView } from 'react-native';
 import LinearGradients from '../atoms/LinearGradients';
 import global from '../styles/global';
 import TextinputA from '../atoms/TextinputA';
+import TextinputB from '../atoms/TextinputB';
 import ButtonA from '../atoms/ButtonA';
-import { LINKS } from '../styles/colors';
+import { LINKS, PRIMARY } from '../styles/colors';
 import { validate2 } from '../utils/validation/validate2';
+import { getResponsiveValue } from '../styles/responsive';
+
 const LoginScreen = props => {
   const [errors, setErrors] = useState({});
   // .....
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-
+  
+  
   const handleLogin = async () => {
     console.log('handleLogin function executed');
     setErrors({});
-    
+
     // Define the formData object with correct order
     const formData1 = {
       email: username,
       password,
-   
+
     };
-    
+
     const validationErrors = validate2(formData1);
     console.log('Validation errors:', validationErrors);
     console.log('formData:', formData1);
-    
+
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
       return;
     }
-    
+
     try {
       setIsLoading(true); // Start loading
       console.log(
@@ -41,18 +45,18 @@ const LoginScreen = props => {
         // 'and password:',
         // password,
       );
-  
+
       // const userData = await login(username, password);
-  
+
       setIsLoading(false); // End loading
-  
+
       // console.log('Received user data:', userData);
-  
+
       // console.log("Login successful:", userData);
       props.navigation.navigate('HomePage');
     } catch (error) {
       setIsLoading(false); // End loading on error
-  
+
       // Handle login error
       console.error('Login error:', error);
     }
@@ -78,40 +82,42 @@ const LoginScreen = props => {
       </LinearGradients>
 
       <View style={global.aContainer}>
-      <TextinputA
+
+        <TextinputA
           style={[
             styles.input,
             errors.email ? styles.inputError : null
           ]}
 
-          placeholder="Username or Email"
+          placeholder="Username or Phone"
           value={username}
           onChangeText={(text) => {
             setUsername(text);
             setErrors({ ...errors, email: '' }); // Clear the error when typing
-        }}
+          }}
           error={errors.email}
           onChangeError={(errorText) => setErrors({ ...errors, email: errorText })}
         />
-        {errors.email && <Text style={global.error}>{errors.email}</Text>}
- 
-        
-        <TextinputA
-        style={[
-          styles.input,
-          errors.password ? styles.inputError : null
-        ]}
+        {errors.email && <Text style={[global.error, styles.errorText]}>{errors.email}</Text>}
+
+
+        <TextinputB
+          style={[
+            styles.input,
+            errors.password ? styles.inputError : null
+          ]}
           placeholder="Password"
           value={password}
           onChangeText={(text) => {
             setPassword(text);
             setErrors({ ...errors, password: '' }); // Clear the error when typing
-        }}
-          secureTextEntry={true}
+          }}
+          secureTextEntry
           error={errors.password}
           onChangeError={(errorText) => setErrors({ ...errors, password: errorText })}
         />
-        {errors.password && <Text style={global.error}>{errors.password}</Text>}
+       
+        {errors.password && <Text style={[global.error, styles.errorText1]}>{errors.password}</Text>}
 
         <ButtonA
           name={'Log In'}
@@ -143,9 +149,16 @@ const styles = StyleSheet.create({
     height: '50%',
 
   },
-  inputError: {
-    borderColor: 'red', // Border color for error state
+ 
+  errorText: {
+    textAlign: 'right', // Align the error text to the left
+    marginRight: "50%", // Add left margin to the error text for spacing
   },
+  errorText1: {
+    textAlign: 'right', // Align the error text to the left
+    marginRight: "44%",
+  },
+
   container: {
     flex: 1,
     // backgroundColor: "white",
@@ -159,17 +172,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  welcome: {
-    color: 'white',
-    fontSize: 50,
-    marginBottom: 20,
-  },
-
 
   link: {
     color: LINKS,
     textDecorationLine: 'underline',
-    fontSize: 16,
+    fontSize: getResponsiveValue(16, 12),
     marginTop: 10,
     marginBottom: 10,
   },
@@ -179,10 +186,15 @@ const styles = StyleSheet.create({
   },
   createAccount: {
     color: '#121212',
-    fontSize: 16,
+    fontSize: getResponsiveValue(16, 12),
     marginRight: 5,
   },
-  
+  togglePasswordButton: {
+    position: 'absolute',
+    right: 50,
+    top: "27%", // Adjust the top position as needed
+    
+  },
 });
 
 export default LoginScreen;

@@ -8,7 +8,7 @@ import { PRIMARY, SECONDARY } from '../styles/colors';
 const ButtonA = (props) => {
   return (
     <Pressable onPress={props.onPress} style={({ pressed }) => [
-      { opacity: pressed ? 0.9 : 1 },
+      { opacity: pressed ? 0.8 : 1 },
       styles.iconWrapper,
       styles.buttonContainer
     ]}>
@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
   },
   text: {
     color: 'white',
-    fontSize: 18,
+    fontSize: getResponsiveValue(18,16),
     textAlign: 'center',
     // paddingVertical: 10,
     paddingHorizontal:getResponsiveValue("5%" , "8%"),

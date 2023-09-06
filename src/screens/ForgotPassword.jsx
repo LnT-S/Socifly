@@ -13,7 +13,6 @@ import global from '../styles/global';
 import TextinputA from '../atoms/TextinputA';
 import ButtonA from '../atoms/ButtonA';
 import {BLACK, LINKS} from '../styles/colors';
-
 import {getResponsiveValue} from '../styles/responsive';
 import {
   isEmailValid,
@@ -26,9 +25,10 @@ import {
   const [validationError, setValidationError] = useState('');
   const [errors, setErrors] = useState({});
   
-  const handleInputValueChange = text => {
-    setValue((prev) => ({ ...prev, [field]: text }));
+  const handleInputValueChange = (field, text) => {
+   
     setErrors((prev) => ({ ...prev, [field]: '' })); 
+    setInputValue(text);
   };
 
   const handleLogin = () => {
@@ -68,7 +68,7 @@ import {
   return (
     <SafeAreaView style={styles.container}>
       <LinearGradients customStyle={styles.loginGradient}>
-        <Text style={styles.title2}>Reset Password</Text>
+        <Text style={global.title}>Reset Password</Text>
       </LinearGradients>
       <View style={global.aContainer}>
        
@@ -78,6 +78,7 @@ import {
             placeholder="Enter Email Id"
             onChangeText={handleInputValueChange}
             value={inputValue}
+            error={validationError !== ''}
           />
           
         ) : (
@@ -88,10 +89,11 @@ import {
             value={inputValue}
             keyboardType="numeric"
             maxLength={10}
+            error={validationError !== ''}
           />
         )}
         {validationError ? (
-          <Text style={global.error}>{validationError}</Text>
+          <Text style={[global.error, styles.errorText1]}>{validationError}</Text>
         ) : null}
         <ButtonA name={'Send OTP'} onPress={handleLogin} />
         <Pressable onPress={toggleInputType}>
@@ -118,12 +120,6 @@ const styles = StyleSheet.create({
   pl: {
     color: 'grey',
   },
-  title2: {
-    top: 20,
-    color: 'white',
-    fontSize: getResponsiveValue(50, 40),
-    marginBottom: 20,
-  },
   or: {
     fontSize: getResponsiveValue(18, 16),
     color: BLACK,
@@ -134,6 +130,11 @@ const styles = StyleSheet.create({
     marginTop: 10,
     textAlign: 'center',
     textDecorationLine: 'underline',
+    
+  },
+ errorText1:{
+    textAlign: 'right', // Align the error text to the left
+    marginRight: getResponsiveValue("30%", "42%"),
   },
 });
 

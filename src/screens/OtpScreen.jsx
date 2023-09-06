@@ -14,7 +14,7 @@ import {BLACK, LINKS, PRIMARY} from '../styles/colors';
 
 import {getResponsiveValue} from '../styles/responsive';
 import OTPInputView from '@twotalltotems/react-native-otp-input';
-
+// import { useOtpVerify, getHash, startOtpListener } from 'react-native-otp-verify';
 
 
 const OtpScreen = props => {
@@ -34,6 +34,9 @@ const OtpScreen = props => {
       setOtpError('OTP should be exactly 6 characters long');
     }
     // props.navigation.navigate('LoginScreen');
+
+
+    
     
   };
   return (
@@ -71,7 +74,7 @@ const OtpScreen = props => {
         />
          {otpError ? <Text style={global.error}>{otpError}</Text> : null}
 
-        <View>
+        <View style={styles.buttonV}>
           <ButtonA onPress={handleNextPage} name={'VERIFY'} />
         </View>
       </View>
@@ -93,45 +96,47 @@ const styles = StyleSheet.create({
   text: {
     color: BLACK,
   },
-  icon: {
-    color: PRIMARY,
-    fontSize: getResponsiveValue(280, 140),
-  },
+  // icon: {
+  //   color: PRIMARY,
+  //   fontSize: getResponsiveValue(100, 50),
+  // },
 
   rect1: {
-    top: getResponsiveValue('4%', '4%'),
+    top: getResponsiveValue('7%', '6%'),
     alignItems: 'center',
   },
 
   rect2: {
-    // top: getResponsiveValue('10%', '10%'),
+    top: getResponsiveValue('10%', 0),
     alignItems: 'center',
   },
   image: {
-    width: getResponsiveValue(400, 200),
-    height: getResponsiveValue(400, 200),
+    width: getResponsiveValue(200, 100),
+    height: getResponsiveValue(200, 100),
+    left: getResponsiveValue("4%","4%"), 
   },
   text1: {
     color: PRIMARY,
-    fontSize: getResponsiveValue(60, 40),
+    fontSize: getResponsiveValue(55, 35),
   },
   text2: {
     color: BLACK,
-    fontSize: getResponsiveValue(18, 13),
+    fontSize: getResponsiveValue(18, 12),
   },
   text3: {
     color: 'grey',
-    fontSize: getResponsiveValue(14, 13),
+    fontSize: getResponsiveValue(14, 12),
   },
   text4: {
     color: LINKS,
-    fontSize: getResponsiveValue(14, 13),
-    left: getResponsiveValue('8%', '8%'),
+    fontSize: getResponsiveValue(14, 12),
+    left: getResponsiveValue('8%', '5%'),
   },
   rect3: {
-    top: getResponsiveValue('10%', '10%'),
+    top: getResponsiveValue('25%', '10%'),
     alignItems: 'center',
     flexDirection: 'row',
+  
   },
   borderStyleBase: {
     width: 30,
@@ -159,6 +164,9 @@ const styles = StyleSheet.create({
     width: '80%',
     height: 200,
     left:getResponsiveValue(30,10),
+  },
+  buttonV:{
+    top: getResponsiveValue("10%",0),
   },
 });
 

@@ -165,9 +165,9 @@ const styles = StyleSheet.create({
     height:getResponsiveValue("82%","80%"),
     width:getResponsiveValue(screenWidth * 0.8 , screenWidth * 0.8),
     backgroundColor: WHITE,
-    shadowColor: BLACK,
-    marginTop:getResponsiveValue(0,10),
     marginBottom:getResponsiveValue(10,10),
+    marginTop:getResponsiveValue(0,10),
+    shadowColor: BLACK,
     shadowOffset: {
       width: 0,
       height: 10,
@@ -256,7 +256,7 @@ const styles = StyleSheet.create({
     backgroundColor:"#e3e3e6",
     borderRadius:20,
     padding:10,
- 
+    top:"2%",
   },
 
 });

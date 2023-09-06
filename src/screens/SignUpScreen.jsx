@@ -1,4 +1,4 @@
-import React, {useState, useRef, useEffect} from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import {
   StyleSheet,
   Pressable,
@@ -9,15 +9,19 @@ import {
   Dimensions,
   KeyboardAvoidingView,
   Platform,
+  
 } from 'react-native';
 import ButtonA from '../atoms/ButtonA';
 import TextinputA from '../atoms/TextinputA';
+import TextinputB from '../atoms/TextinputB';
 import LinearGradients from '../atoms/LinearGradients';
 import global from '../styles/global';
-import {FETCH} from '../services/fetch';
-import {getResponsiveValue} from '../styles/responsive';
-import {validateForm} from '../utils/validation/validateForm';
-
+import { PRIMARY } from '../styles/colors';
+import { FETCH } from '../services/fetch';
+import { getResponsiveValue } from '../styles/responsive';
+import { validateForm } from '../utils/validation/validateForm';
+import LoginScreen from './LoginScreen';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 const SignUpScreen = props => {
   const [value, setValue] = useState({
     name: '',
@@ -26,11 +30,12 @@ const SignUpScreen = props => {
     password: '',
     confirm_password: '',
   });
-  
+
   const [username, setUsername] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState({});
-
+  const [showPassword, setShowPassword] = useState(false);
+  const [showPassword1, setShowPassword1] = useState(false);
   const handleChange = (field, text) => {
     setValue((prev) => ({ ...prev, [field]: text }));
     setErrors((prev) => ({ ...prev, [field]: '' })); // Clear the error when typing
@@ -50,7 +55,7 @@ const SignUpScreen = props => {
       setIsLoading(true); // Start loading
       let formData = new FormData();
       formData.append('data', value);
-      console.log('VAlue is', {value});
+      console.log('VAlue is', { value });
       let data = await FETCH(
         'server',
         'POST',
@@ -58,9 +63,15 @@ const SignUpScreen = props => {
         '',
         value,
       );
-      console.log({data});
+      console.log({ data });
       setIsLoading(false); // End loading
-      props.navigation.navigate('LoginScreen');
+      if (data.success) {
+        // Navigate to the next page (e.g., a success page or the login page)
+        props.navigation.navigate('HomeScreen');
+      } else {
+        // Handle sign-up error, for example, show an error message
+        console.error('Sign up error:', data.message);
+      }
     } catch (error) {
       setIsLoading(false); // End loading on error
       // Handle signup error
@@ -76,7 +87,7 @@ const SignUpScreen = props => {
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      style={{flex: 1}}>
+      style={{ flex: 1 }}>
       <SafeAreaView style={styles.container}>
         <LinearGradients customStyle={styles.loginGradient}>
           <Text style={global.title}>SIGN UP</Text>
@@ -86,32 +97,32 @@ const SignUpScreen = props => {
           <ScrollView
             style={styles.scrollView}
             ref={scrollViewRef}
-            contentContainerStyle={{flexGrow: 1, justifyContent: 'center'}}
+            contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}
             keyboardShouldPersistTaps="handled">
-            
+
             <TextinputA
-            style={[
-              styles.input,
-              errors.name ? styles.inputError : null,
-            ]}
+              style={[
+                styles.input,
+                errors.name ? styles.inputError : null,
+              ]}
               placeholder="Enter Full Name"
               value={value?.name}
               onChangeText={(text) => handleChange('name', text)}
-              error={errors.fullName}
-              
+              error={errors.name}
+
             />
             {errors.name && <Text style={global.error}>{errors.name}</Text>}
-            
+
             <TextinputA
               placeholder="Enter Email Id"
               value={value?.email}
               keyboardType="email-address"
-             
+
               onChangeText={(text) => handleChange('email', text)}
               error={errors.email}
             />
             {errors.email && <Text style={global.error}>{errors.email}</Text>}
-            
+
             <TextinputA
               placeholder="Enter Phone No"
               value={value?.phone}
@@ -122,28 +133,31 @@ const SignUpScreen = props => {
             />
             {errors.phone && <Text style={global.error}>{errors.phone}</Text>}
 
-           
-            <TextinputA
+
+            <TextinputB
               placeholder="Password"
-              secureTextEntry
+              secureTextEntry={!showPassword}
               onChangeText={(text) => handleChange('password', text)}
-          error={errors.password}
-        />
+              error={errors.password}
+            />
+            
             {errors.password && (
               <Text style={global.error}>{errors.password}</Text>
             )}
 
-            
-            <TextinputA
+
+            <TextinputB
               placeholder="Confirm Password"
               value={value?.confirm_password}
-              secureTextEntry
+              secureTextEntry={!showPassword1}
               onFocus={() =>
-                scrollViewRef.current.scrollToEnd({animated: true})
+                scrollViewRef.current.scrollToEnd({ animated: true })
               }
               onChangeText={(text) => handleChange('confirm_password', text)}
-          error={errors.confirm_password}
-            />{errors.confirm_password && (
+              error={errors.confirm_password}
+            />
+           
+            {errors.confirm_password && (
               <Text style={global.error}>{errors.confirm_password}</Text>
             )}
 
@@ -184,6 +198,16 @@ const styles = StyleSheet.create({
     height: '20%',
     paddingTop: getResponsiveValue(20, 0),
   },
+  togglePasswordButton: {
+    position: 'absolute',
+    right: 15,
+    top: "51%", // Adjust the top position as needed 
+  },
+  togglePasswordButton1: {
+    position: 'absolute',
+    right: 15,
+    top: "68%", // Adjust the top position as needed 
+  }
 });
 
 export default SignUpScreen;

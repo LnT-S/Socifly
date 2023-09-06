@@ -1,9 +1,9 @@
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View,Button } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import React, { useEffect, useState,  } from 'react';
 import { AdEventType } from 'react-native-google-mobile-ads';
 import {RewardedAdEventType,  RewardedAd, TestIds } from 'react-native-google-mobile-ads';
-
+import { useNavigation } from '@react-navigation/native';
 
 const adUnitId = __DEV__ ? TestIds.REWARDED : 'ca-app-pub-7476617068399590/2806493368';
 const rewarded = RewardedAd.createForAdRequest(adUnitId, {
@@ -15,8 +15,19 @@ const rewarded = RewardedAd.createForAdRequest(adUnitId, {
   
 const RewardedAds = (props) => {
     const [loaded, setLoaded] = useState(false);
+    const navigation = useNavigation();
+
+  const pageNotFound = () => {
+    navigation.navigate('NotFound');
+  };
 
   useEffect(() => {
+    if (props.shouldShowAd) {
+      rewarded.show();
+    }else {
+      console.log("Rewarded ad is not loaded yet.");
+    }
+   
     const unsubscribeLoaded = rewarded.addAdEventListener(RewardedAdEventType.LOADED, () => {
       setLoaded(true);
     });
@@ -35,7 +46,7 @@ const RewardedAds = (props) => {
       unsubscribeLoaded();
       unsubscribeEarned();
     };
-  }, []);
+  }, [props.shouldShowAd]);
 
   // No advert ready to show yet
   const loadRewarded = () => {
@@ -75,6 +86,7 @@ const RewardedAds = (props) => {
       unsubscribeInterstitialEvents();
     };
   }, [])
+  
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.adContainer}>
@@ -84,6 +96,7 @@ const RewardedAds = (props) => {
             <Text>Show RewardedAd Ads</Text>
              
           </TouchableOpacity>
+          <Button title="Page Not Found" onPress={pageNotFound} />
             </View>
         </SafeAreaView>
     );
@@ -93,18 +106,18 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
     },
-    adContainer: {
-        alignItems: 'center',
-        justifyContent: 'center',
-        marginBottom: 10,
-    },
-    nextadd: {
-        width:'80%',
-        height: 50,
-        borderWidth: 1,
-        alignSelf:'center',
+    // adContainer: {
+    //     alignItems: 'center',
+    //     justifyContent: 'center',
+    //     marginBottom: 10,
+    // },
+    // nextadd: {
+    //     width:'80%',
+    //     height: 50,
+    //     borderWidth: 1,
+    //     alignSelf:'center',
         
-    }
+    // }
 });
 
 export default RewardedAds;
