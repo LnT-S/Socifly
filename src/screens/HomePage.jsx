@@ -66,6 +66,7 @@ const HomePage = props => {
     return () => clearTimeout(scrollTimeout);
   }, [currentBannerIndex]);
 
+
   return (
     <SafeAreaView style={styles.container}>
       <LinearGradient2 customStyle={styles.loginGradient}>

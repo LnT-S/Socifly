@@ -120,6 +120,12 @@ const styles = StyleSheet.create({
   pl: {
     color: 'grey',
   },
+  title2: {
+    top: 20,
+    color: 'white',
+    fontSize: getResponsiveValue(50, 30),
+    marginBottom: 20,
+  },
   or: {
     fontSize: getResponsiveValue(18, 16),
     color: BLACK,

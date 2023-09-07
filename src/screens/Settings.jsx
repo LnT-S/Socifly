@@ -19,9 +19,6 @@ import MaterialCommunityIconsIcon from 'react-native-vector-icons/MaterialCommun
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import DialogueBox from '../common/DialogueBox';
 const Settings = props => {
-  // const handleAboutPage = () => {
-  //   props.navigation.navigate('AboutUsScreen');
-  // };
   const [isTextContainerPressed, setIsTextContainerPressed] = useState(false);
   const textContainerScaleValue = new Animated.Value(1);
   const [isLogoutDialogVisible, setIsLogoutDialogVisible] = useState(false);
@@ -103,7 +100,7 @@ const Settings = props => {
             styles.row,
           ]} onPress={handleNextPage2}>
             <FeatherIcon name="info" style={styles.icon}></FeatherIcon>
-            <Text style={styles.text3} onPress={handleAboutPage}>About Us</Text>
+            <Text style={styles.text3} >About Us</Text>
           </Pressable>
           <View style={styles.divider}></View>
           <Pressable

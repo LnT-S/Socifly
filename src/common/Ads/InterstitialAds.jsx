@@ -32,6 +32,9 @@ const InterstitialAds = (props) => {
           () => {
             setLoaded(false);
             interstitial.load();
+            if (props.onAdClosed) {
+              props.onAdClosed(); // Call the callback to navigate to the next page
+            }
           }
         );
     

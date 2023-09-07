@@ -7,7 +7,6 @@ import {
   KeyboardAvoidingView,
 } from 'react-native';
 import Swiper from 'react-native-swiper';
-import { ColorPicker } from 'react-native-color-picker'
 import Post from '../common/Post';
 import Post1 from '../common/Post1';
 import Post2 from '../common/Post2';

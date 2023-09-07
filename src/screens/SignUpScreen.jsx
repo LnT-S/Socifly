@@ -20,8 +20,7 @@ import { PRIMARY } from '../styles/colors';
 import { FETCH } from '../services/fetch';
 import { getResponsiveValue } from '../styles/responsive';
 import { validateForm } from '../utils/validation/validateForm';
-import LoginScreen from './LoginScreen';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+
 const SignUpScreen = props => {
   const [value, setValue] = useState({
     name: '',
@@ -117,12 +116,10 @@ const SignUpScreen = props => {
               placeholder="Enter Email Id"
               value={value?.email}
               keyboardType="email-address"
-
               onChangeText={(text) => handleChange('email', text)}
               error={errors.email}
             />
             {errors.email && <Text style={global.error}>{errors.email}</Text>}
-
             <TextinputA
               placeholder="Enter Phone No"
               value={value?.phone}
