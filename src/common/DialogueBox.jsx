@@ -6,7 +6,7 @@ import {useNavigation} from '@react-navigation/native';
 const DialogueBox = ({isVisible, onClose, textContent}) => {
   const navigation = useNavigation();
   const handleOk = () => {
-    navigation.navigate('HomePage');
+    navigation.navigate('LoginScreen');
   };
 
   return (
@@ -21,11 +21,11 @@ const DialogueBox = ({isVisible, onClose, textContent}) => {
 
           <View style={styles.row}>
             <View style={styles.r1}>
-              <ButtonA onPress={handleOk} name={'Ok'} />
+              <ButtonA onPress={handleOk} name={'Yes'} />
             </View>
 
             <View style={styles.r2}>
-              <ButtonA onPress={onClose} name={'Close'} />
+              <ButtonA onPress={onClose} name={'No'} />
             </View>
           </View>
         </View>

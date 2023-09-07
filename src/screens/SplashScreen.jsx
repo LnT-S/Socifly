@@ -23,7 +23,7 @@ const SplashScreen = () => {
     
     const growingAnim = Animated.timing(scaleAnim, {
       toValue: 1,
-      duration: 3000,
+      duration: 2000,
       useNativeDriver: true,
     });
 

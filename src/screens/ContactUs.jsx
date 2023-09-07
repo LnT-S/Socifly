@@ -83,7 +83,7 @@ const ContactUs = props => {
           <View style={styles.inputC}>
           <TextInput
           multiline
-          placeholderTextColor="#888888"
+          placeholderTextColor="#8b0e68"
           numberOfLines={5}
           style={styles.input}
           placeholder="Enter Your Message"
@@ -164,6 +164,7 @@ const styles = StyleSheet.create({
     textAlignVertical: 'top',
     marginBottom: getResponsiveValue(40, 30),
     color: BLACK,
+    borderColor:PRIMARY,
     width: getResponsiveValue(500, screenWidth * 0.8),
   },
   inputC:{

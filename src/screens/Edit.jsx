@@ -7,7 +7,6 @@ import {
   KeyboardAvoidingView,
 } from 'react-native';
 import Swiper from 'react-native-swiper';
-
 import Post from '../common/Post';
 import Post1 from '../common/Post1';
 import Post2 from '../common/Post2';
@@ -28,15 +27,13 @@ const Edit = props => {
           style={styles.slider}
           dotStyle={styles.dot}
           activeDotStyle={styles.activeDot}>
-         
-
           <Post1 source={imageSource} props={props} isEditMode={true} />
           <Post2 source={imageSource} props={props} isEditMode={true} />
           <Post3 source={imageSource} props={props} isEditMode={true} />
           <Post4 source={imageSource} props={props} isEditMode={true} />
         </Swiper>
         {/* </View> */}
-
+        
         <KeyboardAvoidingView
           behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
           style={{flex: 1, bottom:  getResponsiveValue("5%","15%")}}> 

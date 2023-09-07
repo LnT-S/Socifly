@@ -10,7 +10,7 @@ const CategoryButtons = ({ text }) => {
       justifyContent: 'center',
       alignItems: 'center',
       backgroundColor: WHITE,
-      padding: getResponsiveValue(10, "2%"),
+      padding: getResponsiveValue(10, 8),
       borderRadius: 22,
       // marginLeft: getResponsiveValue(15, "5%"),
       // marginRight: getResponsiveValue(0, "1%"),

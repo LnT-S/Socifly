@@ -363,7 +363,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     padding: 8,
     position: 'absolute',
-    top: '2%',
+    top:"105%",
   },
 
 

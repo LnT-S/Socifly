@@ -98,7 +98,6 @@ const Post3 = props => {
           format: 'png',
           quality: 1,
         });
-
         // Share options with both message, URL, and image
         const shareOptions = {
           message: 'Hello, check this out! \nhttps://www.example.com/image.jpg',
@@ -106,7 +105,6 @@ const Post3 = props => {
           title: 'Share via', // Title of the share dialog
           subject: 'Share Link', // Subject of the share dialog
         };
-
         const ShareResponse = await Share.open(shareOptions);
         console.log(JSON.stringify(ShareResponse));
       } catch (error) {
@@ -357,10 +355,10 @@ const styles = StyleSheet.create({
     borderRadius:20,
     padding:8,
     position:"absolute",
-    top:"2%",
+    top:"105%",
    
  
   },
 });
 
-export default Post3;
+export default Post3

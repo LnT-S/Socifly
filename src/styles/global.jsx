@@ -1,8 +1,8 @@
-import {StyleSheet, Dimensions} from 'react-native';
-import {Colors} from 'react-native/Libraries/NewAppScreen';
-import {ERROR, WHITE} from './colors';
+import { StyleSheet, Dimensions } from 'react-native';
+import { Colors } from 'react-native/Libraries/NewAppScreen';
+import { ERROR, WHITE } from './colors';
 
-import {getResponsiveValue} from '../styles/responsive';
+import { getResponsiveValue } from '../styles/responsive';
 
 module.exports = StyleSheet.create({
   bContainer: {
@@ -30,8 +30,9 @@ module.exports = StyleSheet.create({
 
   title: {
     color: WHITE,
-    fontSize: getResponsiveValue(50,40),
+    fontSize: getResponsiveValue(50, 40),
     marginBottom: 20,
+    fontWeight: 'bold',
   },
 
   cardSection: {
@@ -45,6 +46,15 @@ module.exports = StyleSheet.create({
   },
   error: {
     color: ERROR,
-bottom:20,
+    bottom: 20,
   },
+  // textInput: {
+  //   borderWidth: 1,
+  //   borderColor: 'grey', // Default border color
+  // },
+  // textInputError: {
+  //   borderWidth: 2,
+  //   borderColor: 'red', // Border color for error state
+  // },
+
 });

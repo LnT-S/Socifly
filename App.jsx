@@ -97,6 +97,7 @@ function App() {
           component={AboutUs}
           options={{headerShown: false}}
         />
+        
       </Stack.Navigator>
     </NavigationContainer>
 

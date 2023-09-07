@@ -2,8 +2,7 @@ import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import React, { useEffect, useState,  } from 'react';
 import { InterstitialAd, AdEventType,TestIds } from 'react-native-google-mobile-ads';
-import LinearGradients from '../atoms/LinearGradients';
-import LinearGradient2 from '../atoms/LinearGradient2';
+
 
 const adUnitId2 = __DEV__ ? TestIds.INTERSTITIAL : 'ca-app-pub-7476617068399590~3695488497';
 const interstitial = InterstitialAd.createForAdRequest(adUnitId2, {
@@ -16,26 +15,59 @@ const InterstitialAds = (props) => {
         const unsubscribe = interstitial.addAdEventListener(AdEventType.LOADED, () => {
           setLoaded(true);
         });
-    
-        // Start loading the interstitial straight away
-        interstitial.load();
-    
-        // Unsubscribe from events on unmount
-        return unsubscribe;
+        interstitial.load();// Start loading the interstitial straight away
+        return unsubscribe; // Unsubscribe from events on unmount
       }, []);
+
+      const loadInterstitial = () => {
+        const unsubscribeLoaded = interstitial.addAdEventListener(
+          AdEventType.LOADED,
+          () => {
+            setLoaded(true);
+          }
+        );
     
-      // No advert ready to show yet
-      if (!loaded) {
-        return null;
+        const unsubscribeClosed = interstitial.addAdEventListener(
+          AdEventType.CLOSED,
+          () => {
+            setLoaded(false);
+            interstitial.load();
+            if (props.onAdClosed) {
+              props.onAdClosed(); // Call the callback to navigate to the next page
+            }
+          }
+        );
+    
+        interstitial.load();
+
+        return () => {
+          unsubscribeClosed();
+          unsubscribeLoaded();
+        }
       }
+      useEffect(() => {
+        const unsubscribeInterstitialEvents = loadInterstitial();
+        return () => {
+          unsubscribeInterstitialEvents();
+        };
+      }, [])
+    
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.adContainer}>
            
-          <TouchableOpacity style={styles.nextadd} onPress={() => {
+          <TouchableOpacity
+        style={styles.nextadd}
+        onPress={() => {
+          if (loaded) {
             interstitial.show();
-          }}>
-            <Text>Show Interstial Ads</Text>
+          } else {
+            // Handle the case when the ad is not loaded yet
+            console.log('Interstitial ad is not loaded yet');
+          }
+        }}
+      >
+            <Text>Free images download...</Text>
           </TouchableOpacity>
          
             </View>

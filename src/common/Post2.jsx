@@ -64,6 +64,7 @@ const Post2 = props => {
   const [likeScale] = useState(new Animated.Value(1));
   const [liked, setLiked] = useState(false);
   const [likeCount, setLikeCount] = useState(0);
+  
   const handleLike = () => {
     Animated.sequence([
       Animated.timing(likeScale, {
@@ -98,7 +99,6 @@ const Post2 = props => {
           format: 'png',
           quality: 1,
         });
-
         // Share options with both message, URL, and image
         const shareOptions = {
           message: 'Hello, check this out! \nhttps://www.example.com/image.jpg',
@@ -106,7 +106,6 @@ const Post2 = props => {
           title: 'Share via', // Title of the share dialog
           subject: 'Share Link', // Subject of the share dialog
         };
-
         const ShareResponse = await Share.open(shareOptions);
         console.log(JSON.stringify(ShareResponse));
       } catch (error) {
@@ -357,7 +356,7 @@ const styles = StyleSheet.create({
     borderRadius:20,
     padding:8,
     position:"absolute",
-    top:"2%",
+    top:"105%",
    
  
   },

@@ -13,21 +13,22 @@ import global from '../styles/global';
 import TextinputA from '../atoms/TextinputA';
 import ButtonA from '../atoms/ButtonA';
 import {BLACK, LINKS} from '../styles/colors';
-
 import {getResponsiveValue} from '../styles/responsive';
 import {
   isEmailValid,
   isPhoneNumberValid,
 } from '../utils/validation/formValidation';
 
-const ForgotPassword = props => {
+  const ForgotPassword = props => {
   const [inputValue, setInputValue] = useState('');
   const [inputType, setInputType] = useState('email'); // 'email' or 'phone'
   const [validationError, setValidationError] = useState('');
-
-  const handleInputValueChange = text => {
+  const [errors, setErrors] = useState({});
+  
+  const handleInputValueChange = (field, text) => {
+   
+    setErrors((prev) => ({ ...prev, [field]: '' })); 
     setInputValue(text);
-    setValidationError('');
   };
 
   const handleLogin = () => {
@@ -67,19 +68,19 @@ const ForgotPassword = props => {
   return (
     <SafeAreaView style={styles.container}>
       <LinearGradients customStyle={styles.loginGradient}>
-        <Text style={styles.title2}>Reset Password</Text>
+        <Text style={global.title}>Reset Password</Text>
       </LinearGradients>
       <View style={global.aContainer}>
-        {validationError ? (
-          <Text style={global.error}>{validationError}</Text>
-        ) : null}
+       
         {inputType === 'email' ? (
           <TextinputA
             style={styles.pl}
             placeholder="Enter Email Id"
             onChangeText={handleInputValueChange}
             value={inputValue}
+            error={validationError !== ''}
           />
+          
         ) : (
           <TextinputA
             style={styles.pl}
@@ -88,8 +89,12 @@ const ForgotPassword = props => {
             value={inputValue}
             keyboardType="numeric"
             maxLength={10}
+            error={validationError !== ''}
           />
         )}
+        {validationError ? (
+          <Text style={[global.error, styles.errorText1]}>{validationError}</Text>
+        ) : null}
         <ButtonA name={'Send OTP'} onPress={handleLogin} />
         <Pressable onPress={toggleInputType}>
           <Text style={styles.toggleType}>
@@ -131,6 +136,11 @@ const styles = StyleSheet.create({
     marginTop: 10,
     textAlign: 'center',
     textDecorationLine: 'underline',
+    
+  },
+ errorText1:{
+    textAlign: 'right', // Align the error text to the left
+    marginRight: getResponsiveValue("30%", "42%"),
   },
 });
 

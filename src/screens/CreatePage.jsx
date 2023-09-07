@@ -1,5 +1,5 @@
 import { StyleSheet, View, Text, Pressable, ScrollView } from 'react-native';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import LinearGradient2 from "../atoms/LinearGradient2";
 import { SafeAreaView } from 'react-native-safe-area-context';
 import EntypoIcon from "react-native-vector-icons/Entypo";
@@ -10,17 +10,29 @@ import Icon from "react-native-vector-icons/MaterialIcons";
 import Post from '../common/Post';
 import { BLACK, WHITE } from '../styles/colors';
 
-import { getResponsiveValue} from '../styles/responsive'; 
+import { getResponsiveValue } from '../styles/responsive';
 
 const CreatePage = (props) => {
+  // const [shouldShowAd, setShouldShowAd] = useState(false);
   const handleNextPage = () => {
     props.navigation.navigate('HomePage');
   };
   const handleNextPage2 = () => {
     props.navigation.navigate('Settings');
   };
+  // useEffect(() => {
+  //   // Logic to show the rewarded ad when the component mounts
+  //   setShouldShowAd(true);
+
+  //   // You might also want to set shouldShowAd to false when leaving the page
+  //   return () => {
+  //     setShouldShowAd(false);
+  //   };
+  // }, []);
   return (
     <SafeAreaView style={styles.container}>
+   
+
       <LinearGradient2 customStyle={styles.loginGradient}>
         <View style={styles.iconRow}>
           <View style={styles.iconContainer}>
@@ -73,33 +85,33 @@ const CreatePage = (props) => {
       </Pressable>
 
       <ScrollView>
-      <View style={styles.rect3}>
-        <Text style={styles.or}>OR</Text>
-        <View style={styles.icon4Row}>
-          <Icon name="wallpaper" style={styles.icon4} />
-          <Pressable>
-            <Text style={styles.selectWallpaper}>Select Wallpaper</Text>
-          </Pressable>
+        <View style={styles.rect3}>
+          <Text style={styles.or}>OR</Text>
+          <View style={styles.icon4Row}>
+            <Icon name="wallpaper" style={styles.icon4} />
+            <Pressable>
+              <Text style={styles.selectWallpaper}>Select Wallpaper</Text>
+            </Pressable>
+          </View>
         </View>
-      </View>
-     
-      <View>
 
-      <Post source={require("../assets/pics/pic2.png")} />
-      <Post source={require("../assets/pics/pic2.png")} />
-      <Post source={require("../assets/pics/pic2.png")} />
-      </View>
+        <View>
+
+          <Post source={require("../assets/pics/pic2.png")} />
+          <Post source={require("../assets/pics/pic2.png")} />
+          <Post source={require("../assets/pics/pic2.png")} />
+        </View>
       </ScrollView>
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  loginGradient:{
+  loginGradient: {
     // top:20,
-height:"8%",
-// justifyContent: "center"
-// paddingHorizontal:5,
+    height: "8%",
+    // justifyContent: "center"
+    // paddingHorizontal:5,
   },
   container: {
     flex: 1,
@@ -110,7 +122,7 @@ height:"8%",
     // paddingHorizontal: getResponsiveValue(40, 20),
     flexDirection: "row",
     alignItems: "center",
-    justifyContent:"space-around",
+    justifyContent: "space-around",
     // justifyContent: "space-between",
     width: "100%",
     marginTop: getResponsiveValue(20, 10),
@@ -121,8 +133,8 @@ height:"8%",
   },
   icon: {
     color: "#fff",
-    fontSize: getResponsiveValue(40,30),
-    left:60
+    fontSize: getResponsiveValue(40, 30),
+    left: 60
 
   },
   iconA: {
