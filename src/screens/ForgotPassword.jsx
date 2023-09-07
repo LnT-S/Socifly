@@ -13,6 +13,7 @@ import global from '../styles/global';
 import TextinputA from '../atoms/TextinputA';
 import ButtonA from '../atoms/ButtonA';
 import {BLACK, LINKS} from '../styles/colors';
+import stringsoflanguages from '../utils/ScreenStrings';
 import {getResponsiveValue} from '../styles/responsive';
 import {
   isEmailValid,
@@ -34,13 +35,13 @@ import {
   const handleLogin = () => {
     if (inputType === 'email') {
       if (!isEmailValid(inputValue)) {
-        setValidationError('Invalid email format');
+        setValidationError(stringsoflanguages.emailRequired);
         return;
       }
       sendEmailOTP(inputValue);
     } else {
       if (!isPhoneNumberValid(inputValue)) {
-        setValidationError('Invalid phone number format');
+        setValidationError(stringsoflanguages.phoneNoRequired);
         return;
       }
       sendPhoneOTP(inputValue);
@@ -68,37 +69,33 @@ import {
   return (
     <SafeAreaView style={styles.container}>
       <LinearGradients customStyle={styles.loginGradient}>
-        <Text style={global.title}>Reset Password</Text>
+        <Text style={styles.title2}>{stringsoflanguages.resetPassword}</Text>
       </LinearGradients>
       <View style={global.aContainer}>
-       
-        {inputType === 'email' ? (
-          <TextinputA
-            style={styles.pl}
-            placeholder="Enter Email Id"
-            onChangeText={handleInputValueChange}
-            value={inputValue}
-            error={validationError !== ''}
-          />
-          
-        ) : (
-          <TextinputA
-            style={styles.pl}
-            placeholder="Enter Phone Number"
-            onChangeText={handleInputValueChange}
-            value={inputValue}
-            keyboardType="numeric"
-            maxLength={10}
-            error={validationError !== ''}
-          />
-        )}
-        {validationError ? (
-          <Text style={[global.error, styles.errorText1]}>{validationError}</Text>
-        ) : null}
-        <ButtonA name={'Send OTP'} onPress={handleLogin} />
+      {inputType === 'email' ? (
+        <TextinputA
+          style={styles.pl}
+          placeholder={stringsoflanguages.enterEmailId}
+          onChangeText={handleInputValueChange}
+          value={inputValue}
+        />
+      ) : (
+        <TextinputA
+          style={styles.pl}
+          placeholder={stringsoflanguages.enterPhoneNo}
+          onChangeText={handleInputValueChange}
+          value={inputValue}
+          keyboardType="numeric"
+          maxLength={10}
+        />
+      )}
+      {validationError ? (
+        <Text style={global.error}>{validationError}</Text>
+      ) : null}
+        <ButtonA name={stringsoflanguages.sendOtp} onPress={handleLogin} />
         <Pressable onPress={toggleInputType}>
           <Text style={styles.toggleType}>
-            {inputType === 'email' ? 'Use Phone Number' : 'Use Email'}
+            {inputType === 'email' ? stringsoflanguages.usePhoneNumber : stringsoflanguages.useEmail}
           </Text>
         </Pressable>
       </View>

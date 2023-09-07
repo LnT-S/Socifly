@@ -1,8 +1,9 @@
 import {View, Text, SafeAreaView, StyleSheet, ScrollView} from 'react-native';
 import React from 'react';
-import {BLACK, WHITE} from '../styles/colors';
-import {getResponsiveValue} from '../styles/responsive';
+import {BLACK, WHITE} from '../../styles/colors';
+import {getResponsiveValue} from '../../styles/responsive';
 import Icon from "react-native-vector-icons/MaterialIcons";
+import stringsoflanguages from '../../utils/ScreenStrings';
 
 const PrivacyPolicy = (props) => {
   const handleNextPage = () => {
@@ -26,7 +27,7 @@ const PrivacyPolicy = (props) => {
     <SafeAreaView style={styles.container}>
     <View style={styles.status}>
     <Icon  onPress={handleNextPage} name="arrow-back" style={styles.icon}></Icon>
-    <Text style={styles.statusT}> Privacy & Policy</Text>
+    <Text style={styles.statusT}> {stringsoflanguages.privacyPolicy}</Text>
   </View>
     <ScrollView style={styles.scroll}>
       <View style={styles.hContainer}>

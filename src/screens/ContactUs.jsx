@@ -16,6 +16,8 @@ import ButtonA from '../atoms/ButtonA';
 import { validateForm, isNameValid, isEmailValid, isPhoneNumberValid } from '../utils/validation/validateForm';
 
 import global from '../styles/global';
+import TextinputB from '../atoms/TextinputB';
+import stringsoflanguages from '../utils/ScreenStrings';
 
 const ContactUs = props => {
     const [formData, setFormData] = useState({
@@ -46,25 +48,25 @@ const ContactUs = props => {
           onPress={handleNextPage2}
           name="arrow-back"
           style={styles.icon}/>
-        <Text style={styles.statusT}> Contact Us</Text>
+        <Text style={styles.statusT}> {stringsoflanguages.contactUs}</Text>
       </View>
 
       <ScrollView style={styles.scroll}>
        
 
         <View style={styles.inputContainer}>
-          <Text style={styles.text}>Get In Touch</Text>
+          <Text style={styles.text}>{stringsoflanguages.getInTouch}</Text>
 
           <View style={styles.inputC}>
 
-          <TextinputA placeholder="Enter Name"  onChangeText={text => setFormData({ ...formData, name: text })}
+          <TextinputA placeholder={stringsoflanguages.enterYourName} onChangeText={text => setFormData({ ...formData, name: text })}
           error={formErrors.name}/>
           {formErrors.name && <Text style={global.error}>{formErrors.name}</Text>}
           </View>
 
           <View style={styles.inputC}>
           <TextinputA
-          placeholder="Enter Phone No"
+          placeholder={stringsoflanguages.enterPhoneNo}
           keyboardType="numeric"
           maxLength={10}
           onChangeText={text => setFormData({ ...formData, phone: text })}
@@ -74,19 +76,20 @@ const ContactUs = props => {
           </View>
 
           <View style={styles.inputC}>
-          <TextinputA placeholder="Enter Email Id"  onChangeText={text => setFormData({ ...formData, email: text })}
+          <TextinputA placeholder={stringsoflanguages.enterEmailId}  onChangeText={text => setFormData({ ...formData, email: text })}
           error={formErrors.email} />
           {formErrors.email && <Text style={global.error}>{formErrors.email}</Text>}
 
           </View>
 
           <View style={styles.inputC}>
+        
           <TextInput
           multiline
-          placeholderTextColor="#8b0e68"
+          placeholderTextColor="#888888"
           numberOfLines={5}
           style={styles.input}
-          placeholder="Enter Your Message"
+          placeholder={stringsoflanguages.enterYourMessage}
           onChangeText={text => setFormData({ ...formData, message: text })}
           error={formErrors.message} 
           />
@@ -96,7 +99,7 @@ const ContactUs = props => {
           </View>
 
           <View style={styles.btn}>
-          <ButtonA name={'SUBMIT'} onPress={handleNextPage}/>
+          <ButtonA name={stringsoflanguages.submit} onPress={handleNextPage}/>
           </View>
 
       </ScrollView>

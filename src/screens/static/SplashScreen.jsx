@@ -2,13 +2,19 @@ import React, {useRef,useEffect} from 'react';
 import {StyleSheet, Image, TouchableOpacity, Animated} from 'react-native';
 import {LinearGradient} from 'react-native-linear-gradient';
 import {useNavigation, useFocusEffect} from '@react-navigation/native';
-import {getResponsiveValue} from '../styles/responsive';
+import {getResponsiveValue} from '../../styles/responsive';
+
+
+import { PRIMARY, SECONDARY } from '../../styles/colors';
+
+
 
 const SplashScreen = () => {
   const navigation = useNavigation();
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const scaleAnim = useRef(new Animated.Value(0)).current;
   const opacityAnim = useRef(new Animated.Value(0)).current;
+  
 
   const handleNextPage = () => {
     navigation.navigate('LoginScreen');
@@ -30,12 +36,12 @@ const SplashScreen = () => {
     const glowingAnim = Animated.loop(
       Animated.sequence([
         Animated.timing(opacityAnim, {
-          toValue: 1,
+          toValue: 0.1,
           duration: 1500,
           useNativeDriver: true,
         }),
         Animated.timing(opacityAnim, {
-          toValue: 0.5,
+          toValue: 1,
           duration: 1500,
           useNativeDriver: true,
         }),
@@ -51,27 +57,28 @@ const SplashScreen = () => {
     return () => {
       clearTimeout(timer);
       fadeAnim.setValue(0);
-      scaleAnim.setValue(0); // Reset the scale animation value
-      opacityAnim.setValue(0); // Reset the opacity animation value
+      scaleAnim.setValue(0); 
+      opacityAnim.setValue(0);
     };
   });
 
 
 
   return (
-    <LinearGradient colors={['#8b0e68', '#020024']} style={styles.container}>
+    <LinearGradient colors={[PRIMARY, SECONDARY]} style={styles.container}>
       <TouchableOpacity onPress={handleNextPage} activeScale={0.95}>
         <Animated.Image
-          source={require('../assets/images/Sociflylogo.png')}
+          source={require('../../assets/images/Sociflylogo.png')}
           resizeMode="contain"
           style={[
             styles.image,
             {
-              opacity: fadeAnim,
+              opacity: opacityAnim,
               transform: [{scale: scaleAnim}],
             },
           ]}
         />
+ 
       </TouchableOpacity>
     </LinearGradient>
   );

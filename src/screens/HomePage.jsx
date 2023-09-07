@@ -6,6 +6,7 @@ import {
   TextInput,
   ScrollView,
   Animated,
+  FlatList,
 } from 'react-native';
 import React, { useState, useEffect, useRef } from 'react';
 import LinearGradient2 from '../atoms/LinearGradient2';
@@ -15,20 +16,18 @@ import Category from '../common/Category';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import IoniconsIcon from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIconsIcon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { FlatList } from 'react-native';
-import Post from '../common/Post';
-import Post2 from '../common/Post2';
-import Post3 from '../common/Post3';
-import Post4 from '../common/Post4';
-import { BLACK, WHITE } from '../styles/colors';
-// import { AdMobBanner } from 'react-native-admob';
-import { getResponsiveValue } from '../styles/responsive';
+
+import {BLACK, WHITE} from '../styles/colors';
+import {getResponsiveValue} from '../styles/responsive';
+import PostArray from '../common/postArrays/PostArray';
+import stringsoflanguages from '../utils/ScreenStrings';
 import GoogleAds from '../common/Ads/GoogleAds';
-import InterstitialAds from '../common/Ads/InterstitialAds';
-import PostArray from '../common/PostArray';
-import BannerAds from '../common/Ads/BannerAds';
-import Searchbar from '../atoms/Searchbar'
 import RewardedAds from '../common/Ads/RewardedAds';
+import InterstitialAds from '../common/Ads/InterstitialAds';
+import BannerAds from '../common/Ads/BannerAds';
+
+
+
 //import RewardedInterstitialAds from '../common/RewardedInterstitialAds';
 
 const HomePage = props => {
@@ -67,11 +66,17 @@ const HomePage = props => {
   }, [currentBannerIndex]);
 
 
+  
+
   return (
     <SafeAreaView style={styles.container}>
       <LinearGradient2 customStyle={styles.loginGradient}>
         <View style={styles.iconStackRow}>
-            <Searchbar/>
+          <View style={styles.iconStack}>
+            <TextInput placeholder="" style={styles.textInput} />
+            <FeatherIcon name="search" style={styles.icon2} />
+          </View>
+           
           <Pressable
             style={styles.button}
             onPress={() => {
@@ -81,13 +86,15 @@ const HomePage = props => {
               }, 1000); // Adjust the timeout duration as needed
             }}
           >
-            <RewardedAds shouldShowAd={shouldShowAd} />
+          <RewardedAds shouldShowAd={shouldShowAd} />
             <View style={styles.createRow}>
-              <Text style={styles.create}>New</Text>
-              <IoniconsIcon
-                name="ios-add-circle-outline"
-                style={styles.icon3}
-              ></IoniconsIcon>
+              {/* <Pressable  style={styles.createRow}> */}
+                <Text style={styles.create}>{stringsoflanguages.new}</Text>
+
+                <IoniconsIcon
+                  name="ios-add-circle-outline"
+                  style={styles.icon3}></IoniconsIcon>
+              {/* </Pressable> */}
             </View>
           </Pressable>
           <Pressable onPress={handleNextPage} style={({ pressed }) => [
@@ -106,40 +113,22 @@ const HomePage = props => {
         <Category />
       </View>
       <ScrollView style={styles.postS}>
-      <FlatList
-      ref={flatListRef}
-      style={styles.adss}
-      horizontal
-      pagingEnabled
-      data={bannerData}
-      renderItem={({ item }) => (
-        <BannerAds />
-        // You can replace this with your content for each item
-      )}
-      keyExtractor={(item) => item.toString()}
-    />
-        
-        <Post source={require('../assets/pics/pic1.png')} props={props} />
-        <InterstitialAds />
-        <Post source={require('../assets/pics/pic1.png')} props={props} />
-        <Post2 source={require('../assets/pics/pic1.png')} props={props} /> 
-        <GoogleAds />
-        <Post3 source={require('../assets/pics/pic1.png')} props={props} />
-        <Post4 source={require('../assets/pics/pic1.png')} props={props} />
-        <Post source={require('../assets/pics/pic1.png')} props={props} />
-        <GoogleAds />
-        <Post2 source={require('../assets/pics/pic1.png')} props={props} />
-        <Post3 source={require('../assets/pics/pic1.png')} props={props} />
-        <Post4 source={require('../assets/pics/pic1.png')} props={props} />
-        <GoogleAds />
-        <Post source={require('../assets/pics/pic1.png')} props={props} />
-        <Post3 source={require('../assets/pics/pic1.png')} props={props} />
-        <Post4 source={require('../assets/pics/pic1.png')} props={props} />
-        <GoogleAds />
+   <FlatList 
+   ref={flatListRef}
+   style={styles.adss}
+   horizontal
+   pagingEnabled
+   data={bannerData}
+   renderItem={({item})=>(
+    <BannerAds/>
+   )}
+   keyExtractor={(item)=>item.toString()}
+   />
         <PostArray
           // posts={posts}
           // renderPostComponent={renderPostComponent}
           navigation={props.navigation}
+         
         />
 
         <GoogleAds />
@@ -147,8 +136,10 @@ const HomePage = props => {
           // posts={posts}
           // renderPostComponent={renderPostComponent}
           navigation={props.navigation}
+         
         />
 
+        <InterstitialAds/>
       </ScrollView>
     </SafeAreaView>
   );
@@ -159,11 +150,13 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   loginGradient: {
-
+    // flex: 0.12,
     height: getResponsiveValue(100, 60),
   },
+
+ 
   adss:{
-    top:15,
+    // top:15,
   },
   Container: {
     flexDirection: 'row',
@@ -196,7 +189,7 @@ const styles = StyleSheet.create({
   icon3: {
     color: WHITE,
     fontSize: getResponsiveValue(44, 29),
-    // marginLeft: getResponsiveValue('45%', '30%'),
+    // marginLeft: getResponsiveValue('68%', '18%'),
   },
   icon4: {
     color: WHITE,
@@ -208,8 +201,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     // justifyContent: "center",
     justifyContent: 'space-between',
-    width: "100%",
-    paddingHorizontal: "2%",
+    width: '100%',
+    // paddingHorizontal:"2%",
   },
   textInput: {
     flex: 1,
@@ -217,7 +210,9 @@ const styles = StyleSheet.create({
     paddingTop: 3,
     paddingBottom: 3,
     marginRight: 8,
-    paddingLeft: 10,
+    paddingLeft: '10%',
+    paddingRight: getResponsiveValue('15%', '20%'),
+    // paddingHorizontal:"11%",
     height: getResponsiveValue(50, 34),
     borderWidth: getResponsiveValue(3, 2),
     borderColor: WHITE,
@@ -225,7 +220,7 @@ const styles = StyleSheet.create({
     color: WHITE,
   },
   create: {
-    marginLeft: getResponsiveValue(8, '7%'),
+    marginLeft: getResponsiveValue('7%', '7%'),
 
     color: WHITE,
     fontSize: getResponsiveValue(20, 16),

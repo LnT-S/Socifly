@@ -7,14 +7,16 @@ import {
   Pressable,
 } from 'react-native';
 import React from 'react';
-import {BLACK, PRIMARY, WHITE} from '../styles/colors';
-import {getResponsiveValue} from '../styles/responsive';
+import {BLACK, PRIMARY, WHITE} from '../../styles/colors';
+import {getResponsiveValue} from '../../styles/responsive';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {Image} from 'react-native-animatable';
-import LinearGradients from '../atoms/LinearGradients';
+import LinearGradients from '../../atoms/LinearGradients';
 import MaterialCommunityIconsIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import EntypoIcon from 'react-native-vector-icons/Entypo';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
+import stringsoflanguages from '../../utils/ScreenStrings';
+
 import { Linking } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
@@ -59,42 +61,42 @@ const AboutUs = props => {
           name="arrow-back"
           style={styles.iconM}></Icon>
 
-        <Text style={styles.statusT}> About Us</Text>
+        <Text style={styles.statusT}>{stringsoflanguages.aboutUs}</Text>
       </View>
       <ScrollView style={styles.scroll}>
         <View style={styles.mainContainer}>
           <LinearGradients customStyle={styles.loginGradient}>
             <Image
               style={styles.image}
-              source={require('../assets/images/Sociflylogo.png')}
+              source={require('../../assets/images/Sociflylogo.png')}
             />
           </LinearGradients>
 
           <View>
-            <Text style={styles.text}>Make Your Daily</Text>
+            <Text style={styles.text}>{stringsoflanguages.heading1}</Text>
           </View>
           <View>
-            <Text style={styles.text2}>Unique Status On Socifly</Text>
+            <Text style={styles.text2}>{stringsoflanguages.heading2}</Text>
           </View>
           <View style={styles.infoContainer}>
             <View style={styles.listItemContainer}>
               <View style={styles.bullet} />
-              <Text style={styles.listItem}>Fresh Quotes Everyday</Text>
+              <Text style={styles.listItem}>{stringsoflanguages.point1}</Text>
             </View>
 
             <View style={styles.listItemContainer}>
               <View style={styles.bullet} />
-              <Text style={styles.listItem}>Download Easily</Text>
+              <Text style={styles.listItem}>{stringsoflanguages.point2}</Text>
             </View>
 
             <View style={styles.listItemContainer}>
               <View style={styles.bullet} />
-              <Text style={styles.listItem}>Quick Share & Download</Text>
+              <Text style={styles.listItem}>{stringsoflanguages.point3}</Text>
             </View>
 
             <View style={styles.listItemContainer}>
               <View style={styles.bullet} />
-              <Text style={styles.listItem}>Like Your Favourites</Text>
+              <Text style={styles.listItem}>{stringsoflanguages.point4}</Text>
             </View>
             <GestureHandlerRootView>
             <View style={styles.imageContainer2}>
@@ -102,14 +104,14 @@ const AboutUs = props => {
               <Image
                 style={styles.image2}
                 resizeMode="contain"
-                source={require('../assets/images/googlePlay.png')}
+                source={require('../../assets/images/googlePlay.png')}
               />
               </TouchableOpacity>
               <TouchableOpacity onPress={openLink1}>
               <Image
                 resizeMode="contain"
                 style={styles.image3}
-                source={require('../assets/images/appstore.png')}
+                source={require('../../assets/images/appstore.png')}
               />
               </TouchableOpacity>
             </View>
@@ -122,13 +124,13 @@ const AboutUs = props => {
             <View style={styles.rect3}>
               <View style={styles.footer}>
                 <Pressable onPress={handleNextPage}>
-                  <Text style={styles.text4}>Privacy & Policy</Text>
+                  <Text style={styles.text4}>{stringsoflanguages.privacyPolicy}</Text>
                 </Pressable>
               </View>
               <View style={styles.vertical}></View>
               <View style={styles.footer}>
                 <Pressable onPress={handleNextPage1}>
-                  <Text style={styles.text4}>Terms & Condition</Text>
+                  <Text style={styles.text4}>{stringsoflanguages.termsCondition}</Text>
                 </Pressable>
               </View>
             </View>

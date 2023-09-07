@@ -1,13 +1,13 @@
 import React, { useState, useEffect, useRef,  Component} from 'react';
 import { StyleSheet, View, Text, Pressable, Image, Animated,Alert, } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { BLACK, PRIMARY, SECONDARY, WHITE } from '../styles/colors';
+import { BLACK, PRIMARY, SECONDARY, WHITE } from '../../styles/colors';
 import MaterialCommunityIconsIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import FeatherIcon from "react-native-vector-icons/Feather";
 import EntypoIcon from "react-native-vector-icons/Entypo";
-import IconButton from '../atoms/IconButton';
-import { getResponsiveValue, screenWidth } from '../styles/responsive'; 
-import defaultProfileImage from '../assets/images/Profile2.png';
+import IconButton from '../../atoms/IconButton';
+import { getResponsiveValue, screenWidth } from '../../styles/responsive'; 
+import defaultProfileImage from '../../assets/images/Profile2.png';
 import Share from 'react-native-share';
 import { captureRef } from 'react-native-view-shot';
 import RNFS from 'react-native-fs';
@@ -106,7 +106,7 @@ const Post = (props) => {
       }
     }
   };
-  
+  const textColorStyle = { color: props.textColor || BLACK };
 
 
   return (
@@ -117,7 +117,7 @@ const Post = (props) => {
           <Image source={props?.source} resizeMode="contain" style={styles.image} />
         </View>
         <Image source={defaultProfileImage} style={styles.profileImage} />
-        <Text style={styles.Name}>User Name</Text>
+        <Text style={[styles.Name, textColorStyle]}>User Name</Text>
         <Text style={styles.Name2}>+91 9405789152</Text>
         <Text style={styles.Name2}>user123email@email.com</Text>
         </View>

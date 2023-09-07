@@ -9,24 +9,25 @@ import {
   Alert,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {BLACK, PRIMARY, SECONDARY, WHITE} from '../styles/colors';
+import {BLACK, PRIMARY, SECONDARY, WHITE,POST1} from '../../styles/colors';
 import MaterialCommunityIconsIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import EntypoIcon from 'react-native-vector-icons/Entypo';
-import IconButton from '../atoms/IconButton';
-import {getResponsiveValue, screenWidth} from '../styles/responsive';
-import defaultProfileImage from '../assets/images/Profile2.png';
+import IconButton from '../../atoms/IconButton';
+import {getResponsiveValue, screenWidth} from '../../styles/responsive';
+import defaultProfileImage from '../../assets/images/profile3.png';
 import Share from 'react-native-share';
 import {captureRef} from 'react-native-view-shot';
 import RNFS from 'react-native-fs';
-
+import Icon2 from "react-native-vector-icons/FontAwesome";
 import { TapGestureHandler, State ,GestureHandlerRootView } from 'react-native-gesture-handler';
+import stringsoflanguages from '../../utils/ScreenStrings';
 
-
-const Post2 = props => {
+const Post4 = props => {
   const [downloaded, setDownloaded] = useState(false);
   const cardRef = useRef(null); // Create a ref for the card view
   const doubleTapRef = useRef(null);
+  const [likedMessageVisible, setLikedMessageVisible] = useState(false);
 
   const handleDownload = async () => {
     if (cardRef.current) {
@@ -64,7 +65,6 @@ const Post2 = props => {
   const [likeScale] = useState(new Animated.Value(1));
   const [liked, setLiked] = useState(false);
   const [likeCount, setLikeCount] = useState(0);
-  
   const handleLike = () => {
     Animated.sequence([
       Animated.timing(likeScale, {
@@ -83,6 +83,11 @@ const Post2 = props => {
       setLikeCount(likeCount - 1);
     } else {
       setLikeCount(likeCount + 1);
+      // Show the liked message
+      setLikedMessageVisible(true);
+      setTimeout(() => {
+        setLikedMessageVisible(false);
+      }, 1000); // Hide the message after 2 seconds
     }
     setLiked(!liked);
   };
@@ -134,6 +139,11 @@ const Post2 = props => {
       setLikeCount(likeCount - 1);
     } else {
       setLikeCount(likeCount + 1);
+      // Show the liked message
+      setLikedMessageVisible(true);
+      setTimeout(() => {
+        setLikedMessageVisible(false);
+      }, 1000); // Hide the message after 2 seconds
     }
     setLiked(!liked);
   };
@@ -145,7 +155,7 @@ const Post2 = props => {
 
   const formattedDate = `${day}/${month}/${year}`;
 
-
+  const textColorStyle = { color: props.textColor || WHITE };
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
@@ -165,6 +175,7 @@ const Post2 = props => {
   
       <View ref={cardRef} style={styles.cardContainer2}>
   
+      <Image style={styles.backGround} resizeMode="cover"  source={require('../../assets/images/bg4.jpg')}/>
   
         <View style={styles.cardContainer}>
           <Image
@@ -177,15 +188,30 @@ const Post2 = props => {
 
 
         <View style={styles.profileContainer}>
-     
-          <Image source={defaultProfileImage} style={styles.profileImage} />
+        {/* <View style={styles.profileImageBg} /> */}
+        <View style={styles.diamondContainer}>
+                <View style={styles.diamondMask}>
+                  <Image source={defaultProfileImage} style={styles.profileImage} />
+                </View>
+              </View>
 
           <View style={styles.infoContainer}>
             <Text style={styles.date}>{formattedDate}</Text>
-            <Text style={styles.name}>User Name</Text>
+            <Text  style={[styles.name, textColorStyle]}>{props.userName}</Text>
             <View style={styles.horizontal}/>
-            <Text style={styles.info}>+91 9405789152</Text>
-            <Text style={styles.info}>user123email@email.com</Text>
+            
+            <View style={styles.infoC}>
+                  <Icon2 name="phone" style={styles.iconPhone} />
+                  <Text style={[styles.info, textColorStyle]}>
+                    +91 9405789152
+                  </Text>
+                </View>
+                <View style={styles.infoC}>
+                  <EntypoIcon name="email" style={styles.iconPhone} />
+                  <Text style={[styles.info, textColorStyle]}>
+                    user123email@email.com
+                  </Text>
+                </View>
           </View>
         </View>
       </View>
@@ -218,8 +244,11 @@ const Post2 = props => {
         </View>
       </View>
       {downloaded && (
-        <Text style={styles.downloadedText}>Image downloaded!</Text>
+        <Text style={styles.downloadedText}>{stringsoflanguages.imageDownloaded}</Text>
       )}
+        {likedMessageVisible && (
+          <Text style={styles.likedText}>{stringsoflanguages.liked}</Text>
+        )}
     </SafeAreaView>
 
     </GestureHandlerRootView>
@@ -246,17 +275,24 @@ const styles = StyleSheet.create({
   },
   cardContainer: {
     paddingHorizontal: '3%',
-    backgroundColor: PRIMARY,
+    // backgroundColor: PRIMARY,
   
     width: '100%',
     aspectRatio: 308 / 346,
   },
   cardContainer2: {
 
-    backgroundColor: PRIMARY,
+    // backgroundColor: PRIMARY,
 
     width: '80%',
 
+  },
+  backGround:{
+    position:"absolute",
+width:"100%",
+height:"100%",
+resizeMode:"cover",
+// top:"80%",
   },
   image: {
     width: '100%',
@@ -266,7 +302,7 @@ const styles = StyleSheet.create({
 
   },
   profileContainer: {
-    backgroundColor: PRIMARY,
+    // backgroundColor: PRIMARY,
     width: '80%',
     height: '7%',
 
@@ -275,14 +311,54 @@ const styles = StyleSheet.create({
     paddingHorizontal: '1%',
 
   },
+  diamondContainer: {
+    width: getResponsiveValue(160, 80),
+    height: getResponsiveValue(160, 80),
+    position: 'absolute',
+    bottom: '50%',
+    left: '10%',
+    
+  },
+  diamondMask: {
+    width: getResponsiveValue(160, 80),
+    height: getResponsiveValue(160, 80),
+    backgroundColor: 'transparent',
+    position: 'absolute',
+    transform: [{ rotate: '45deg' }],
+    overflow: 'hidden',
+  },
   profileImage: {
-    width: getResponsiveValue(180, 80),
-    height: getResponsiveValue(180, 80),
-    borderRadius: getResponsiveValue(120, 60),
+    width: getResponsiveValue(160, 80),
+    height: getResponsiveValue(160, 80),
+    borderRadius: getResponsiveValue(10, 5),
     backgroundColor: WHITE,
     position: 'absolute',
-    bottom: '10%',
-    left: '10%',
+    // bottom: '10%',
+    // left: '10%',
+    // borderColor:WHITE,
+    // borderWidth:getResponsiveValue(4,2),
+    transform: [{ rotate: '-45deg' }]
+  },
+  profileImageBg:{
+       width: getResponsiveValue(140, 60),
+    height: getResponsiveValue(140, 60),
+    borderRadius: getResponsiveValue(10, 5),
+    backgroundColor: "#fff",
+    position: 'absolute',
+    // bottom: '10%',
+    // left: '10%',
+    // zIndex:2,
+    borderColor:WHITE,
+    borderWidth:getResponsiveValue(4,2),
+    transform: [{ rotate: '-45deg' }],
+    shadowColor: "#11011a",
+    shadowOffset: {
+      width: 0,
+      height: 10,
+    },
+    elevation: 30,
+    shadowOpacity: 1,
+    shadowRadius: 10,
   },
   infoContainer: {
     position: 'absolute',
@@ -293,30 +369,60 @@ const styles = StyleSheet.create({
     fontSize: getResponsiveValue(12, 7),
     color: WHITE,
     fontWeight: 'bold',
+    textShadowColor: "#0000006e",
+    textShadowOffset: { width: 1, height: 1 } ,
+    textShadowRadius: getResponsiveValue(4,2) ,
+    // padding:"1%",
+    // paddingHorizontal:"2%",
     // position:"relative",
-    top: getResponsiveValue('13%', '23%'),
-    left: getResponsiveValue('128%', '120%'),
+  
+    top: getResponsiveValue('8%', -2),
+    left: getResponsiveValue('120%', 120),
+    // top: getResponsiveValue('8%', '1%'),
+    // left: getResponsiveValue('125%', '115%'),
   },
   name: {
     fontSize: getResponsiveValue(20, 12),
     color: WHITE,
     fontWeight: 'bold',
     top: getResponsiveValue('20%', '30%'),
-    left:getResponsiveValue("40%","40%")
+    left:getResponsiveValue("40%","40%"),
+    textShadowColor: "#000000",
+    textShadowOffset: { width: 1, height: 1 } ,
+    textShadowRadius: getResponsiveValue(4,2) ,
   },
   horizontal: {
-    backgroundColor:WHITE,
+    backgroundColor:"#0bf4e1",
     
      height:getResponsiveValue(2,1),
      width:"100%",
      top: getResponsiveValue('20%', '30%'),
      left: getResponsiveValue('40%', '40%'),
    },
-  info: {
+   info: {
     fontSize: getResponsiveValue(12, 8),
-    color: WHITE,
-    top: getResponsiveValue('20%', '30%'),
-    left:getResponsiveValue("40%","40%")
+    color: BLACK,
+    marginLeft: getResponsiveValue(10, 5),
+    fontWeight: 'bold',
+    textShadowColor: '#000000',
+    textShadowOffset: {width: 1, height: 1},
+    textShadowRadius: getResponsiveValue(2, 1),
+  },
+
+  infoC: {
+    flexDirection: 'row',
+
+    top: getResponsiveValue('15%', '15%'),
+    left: getResponsiveValue('70%', '70%'),
+  },
+  iconPhone: {
+    fontSize: getResponsiveValue(20, 10),
+    color:"#0bf4e1",
+    // top: getResponsiveValue('20%', '30%'),
+    // left: getResponsiveValue('40%', '40%'),
+    textShadowColor: '#000000',
+    textShadowOffset: {width: 1, height: 1},
+    textShadowRadius: getResponsiveValue(2, 1),
   },
 
   toolbar: {
@@ -360,6 +466,18 @@ const styles = StyleSheet.create({
    
  
   },
-});
 
-export default Post2;
+    likedText: {
+    color: 'rgba(235,124,148,1)', // You can adjust the color as needed
+    fontSize: getResponsiveValue(16, 12),
+    fontWeight:"bold",
+    // marginRight: getResponsiveValue(10, 5),
+    backgroundColor: WHITE,
+    borderRadius: 20,
+    padding: 8,
+    position: 'absolute',
+    top: '60%',
+  },
+});
+export default Post4;
+

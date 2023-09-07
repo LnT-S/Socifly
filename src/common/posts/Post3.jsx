@@ -9,24 +9,25 @@ import {
   Alert,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {BLACK, POST2, PRIMARY, SECONDARY, WHITE} from '../styles/colors';
+import {BLACK, PRIMARY, SECONDARY, WHITE,POST} from '../../styles/colors';
 import MaterialCommunityIconsIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import EntypoIcon from 'react-native-vector-icons/Entypo';
-import IconButton from '../atoms/IconButton';
-import {getResponsiveValue, screenWidth} from '../styles/responsive';
-import defaultProfileImage from '../assets/images/Profile2.png';
+import IconButton from '../../atoms/IconButton';
+import {getResponsiveValue, screenWidth} from '../../styles/responsive';
+import defaultProfileImage from '../../assets/images/profile3.png';
 import Share from 'react-native-share';
 import {captureRef} from 'react-native-view-shot';
 import RNFS from 'react-native-fs';
-
+import Icon2 from "react-native-vector-icons/FontAwesome";
 import { TapGestureHandler, State ,GestureHandlerRootView } from 'react-native-gesture-handler';
+import stringsoflanguages from '../../utils/ScreenStrings';
 
-
-const BirthdayPost = props => {
+const Post3 = props => {
   const [downloaded, setDownloaded] = useState(false);
   const cardRef = useRef(null); // Create a ref for the card view
   const doubleTapRef = useRef(null);
+  const [likedMessageVisible, setLikedMessageVisible] = useState(false);
 
   const handleDownload = async () => {
     if (cardRef.current) {
@@ -82,6 +83,11 @@ const BirthdayPost = props => {
       setLikeCount(likeCount - 1);
     } else {
       setLikeCount(likeCount + 1);
+      // Show the liked message
+      setLikedMessageVisible(true);
+      setTimeout(() => {
+        setLikedMessageVisible(false);
+      }, 1000); // Hide the message after 2 seconds
     }
     setLiked(!liked);
   };
@@ -98,7 +104,6 @@ const BirthdayPost = props => {
           format: 'png',
           quality: 1,
         });
-
         // Share options with both message, URL, and image
         const shareOptions = {
           message: 'Hello, check this out! \nhttps://www.example.com/image.jpg',
@@ -106,7 +111,6 @@ const BirthdayPost = props => {
           title: 'Share via', // Title of the share dialog
           subject: 'Share Link', // Subject of the share dialog
         };
-
         const ShareResponse = await Share.open(shareOptions);
         console.log(JSON.stringify(ShareResponse));
       } catch (error) {
@@ -135,6 +139,11 @@ const BirthdayPost = props => {
       setLikeCount(likeCount - 1);
     } else {
       setLikeCount(likeCount + 1);
+      // Show the liked message
+      setLikedMessageVisible(true);
+      setTimeout(() => {
+        setLikedMessageVisible(false);
+      }, 1000); // Hide the message after 2 seconds
     }
     setLiked(!liked);
   };
@@ -145,7 +154,7 @@ const BirthdayPost = props => {
   const year = currentDate.getFullYear();
 
   const formattedDate = `${day}/${month}/${year}`;
-
+  const textColorStyle = { color: props.textColor || WHITE };
 
 
   return (
@@ -166,29 +175,41 @@ const BirthdayPost = props => {
   
       <View ref={cardRef} style={styles.cardContainer2}>
   
-  
+      <Image style={styles.backGround} resizeMode="cover"  source={require('../../assets/images/bg4.png')}/>
         <View style={styles.cardContainer}>
           <Image
             source={props?.source}
             resizeMode="contain"
             style={styles.image}
           />
-          <Image source={defaultProfileImage} style={styles.profileImage2} />
-          <Image source={require("../assets/images/name.png")} style={styles.nameB} />
-          <Text style={styles.nameC}>Name</Text>
         </View>
 
 
 
         <View style={styles.profileContainer}>
-      
+     
+          <View style={styles.profileImageBg} />
+
+          
+          
           <Image source={defaultProfileImage} style={styles.profileImage} />
+
           <View style={styles.infoContainer}>
             <Text style={styles.date}>{formattedDate}</Text>
-            <Text style={styles.name}>User Name</Text>
+            <Text  style={[styles.name, textColorStyle]}>{props.userName}</Text>
             <View style={styles.horizontal}/>
-            <Text style={styles.info}>+91 9405789152</Text>
-            <Text style={styles.info}>user123email@email.com</Text>
+            <View style={styles.infoC}>
+                  <Icon2 name="phone" style={styles.iconPhone} />
+                  <Text style={[styles.info, textColorStyle]}>
+                    +91 9405789152
+                  </Text>
+                </View>
+                <View style={styles.infoC}>
+                  <EntypoIcon name="email" style={styles.iconPhone} />
+                  <Text style={[styles.info, textColorStyle]}>
+                    user123email@email.com
+                  </Text>
+                </View>
           </View>
         </View>
       </View>
@@ -221,8 +242,11 @@ const BirthdayPost = props => {
         </View>
       </View>
       {downloaded && (
-        <Text style={styles.downloadedText}>Image downloaded!</Text>
+        <Text style={styles.downloadedText}>{stringsoflanguages.imageDownloaded}</Text>
       )}
+        {likedMessageVisible && (
+          <Text style={styles.likedText}>{stringsoflanguages.liked}</Text>
+        )}
     </SafeAreaView>
 
     </GestureHandlerRootView>
@@ -231,12 +255,11 @@ const BirthdayPost = props => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flex:1,
     alignItems: 'center',
     marginTop: '7%',
     marginBottom: '10%',
-    // marginBottom: "12%",
-    // backgroundColor: WHITE,
+
     width: '100%',
     height: '15%',
     shadowColor: BLACK,
@@ -249,109 +272,130 @@ const styles = StyleSheet.create({
     shadowRadius: 10,
   },
   cardContainer: {
-    // paddingHorizontal: '3%',
-    backgroundColor: POST2,
-      alignItems:"center",
+    paddingHorizontal: '3%',
+    // backgroundColor: POST,
+  
     width: '100%',
-    aspectRatio: 308 / 370,
+    aspectRatio: 308 / 346,
   },
   cardContainer2: {
-    // paddindVertical: "2%",
-    // paddingHorizontal: '3%',
-    backgroundColor: POST2,
-    //   alignItems:"center"
+
+    // backgroundColor: POST,
+
     width: '80%',
-    // aspectRatio: 308 / 346,
+
+  },
+  backGround:{
+    position:"absolute",
+width:"100%",
+height:"100%",
+resizeMode:"cover",
+// top:"80%",
   },
   image: {
     width: '100%',
     height: '100%',
     position: 'relative',
-    bottom: '5%',
-    // paddingBottom:"20%"
+    bottom: '4%',
+
   },
-  horizontal: {
-    backgroundColor:BLACK,
-    
-     height:getResponsiveValue(2,1),
-     width:"100%",
-     top: getResponsiveValue('20%', '30%'),
-     left: getResponsiveValue('40%', '40%'),
-   },
   profileContainer: {
-    backgroundColor: POST2,
+    // backgroundColor: POST,
     width: '80%',
     height: '7%',
-    // backgroundColor:WHITE,
+
     flexDirection: 'row',
     justifyContent: 'space-around',
     paddingHorizontal: '1%',
-    // position:"absolute",
-    // top:getResponsiveValue("65%","65%"),
-    // bottom:
+
   },
   profileImage: {
-    width: getResponsiveValue(180, 80),
-    height: getResponsiveValue(180, 80),
-    borderRadius: getResponsiveValue(120, 60),
+    width: getResponsiveValue(160, 80),
+    height: getResponsiveValue(160, 80),
+    borderRadius: getResponsiveValue(20, 10),
     backgroundColor: WHITE,
     position: 'absolute',
     bottom: '10%',
     left: '10%',
+    borderColor:BLACK,
+    borderWidth:getResponsiveValue(2,1),
+    transform: [{ rotate: '-5deg' }]
   },
-  profileImage2: {
-    width: getResponsiveValue(270, 120),
-    height: getResponsiveValue(270, 120),
-    borderRadius: getResponsiveValue(160, 60),
-    backgroundColor: WHITE,
-    position: 'absolute',
-
-    top: getResponsiveValue('7%','6%'),
-    // left: '29%',
-  },
-  nameB:{
-    width: getResponsiveValue(340, 140),
-    height: getResponsiveValue(140, 60),
-    // backgroundColor: BLACK,
-    position: 'absolute',
-    // bottom:'200%',
-    top: getResponsiveValue('32%','32%'),
-    // left:getResponsiveValue('10%','20%'),
-  },
-  nameC: {
-    fontSize: getResponsiveValue(20, 10),
-    color: WHITE,
-    fontWeight: 'bold',
-      //  backgroundColor: BLACK,
-       position: 'absolute',
-    top: getResponsiveValue('34.5%','34.5%'),
-
-  },
+  profileImageBg:{
+    
+      width: getResponsiveValue(170, 85),
+      height: getResponsiveValue(170, 85),
+      borderRadius: getResponsiveValue(20, 10),
+      backgroundColor: "#0e531f",
+      position: 'absolute',
+      bottom: '10%',
+      left: '10%',
+      // borderColor:BLACK,
+      // borderWidth:getResponsiveValue(4,2),
+      transform: [{ rotate: '-5deg' }]
+    },
+  
   infoContainer: {
     position: 'absolute',
     bottom: '100%',
     right: '10%',
   },
   date: {
-    fontSize: getResponsiveValue(12, 8),
+    fontSize: getResponsiveValue(12, 7),
     color: WHITE,
     fontWeight: 'bold',
     // position:"relative",
-    top: getResponsiveValue('15%', '25%'),
-    left: getResponsiveValue('120%', '110%'),
+    top: getResponsiveValue('8%', -2),
+    left: getResponsiveValue('120%', 120),
+    textShadowColor: "#0000006e",
+    textShadowOffset: { width: 1, height: 1 } ,
+    textShadowRadius: getResponsiveValue(4,2) ,
+    // padding:"1%",
+    // paddingHorizontal:"2%",
   },
   name: {
-    fontSize: getResponsiveValue(24, 15),
+    fontSize: getResponsiveValue(20, 12),
     color: BLACK,
     fontWeight: 'bold',
     top: getResponsiveValue('20%', '30%'),
-    left: getResponsiveValue('40%', '40%'),
+    left:getResponsiveValue("40%","40%"),
+    textShadowColor: '#05050567',
+    textShadowOffset: { width: 1, height: 1 } ,
+    textShadowRadius: getResponsiveValue(4,2) ,
+  
   },
-  info: {
-    fontSize: getResponsiveValue(13, 9),
+  horizontal: {
+    backgroundColor:"#f01c1c",
+    
+     height:getResponsiveValue(2,1),
+     width:"100%",
+     top: getResponsiveValue('20%', '30%'),
+     left: getResponsiveValue('40%', '40%'),
+   },
+   info: {
+    fontSize: getResponsiveValue(12, 8),
     color: BLACK,
-    top: getResponsiveValue('20%', '30%'),
-    left: getResponsiveValue('40%', '40%'),
+    marginLeft: getResponsiveValue(10, 5),
+    fontWeight: 'bold',
+    textShadowColor: '#05050567',
+    textShadowOffset: {width: 1, height: 1},
+    textShadowRadius: getResponsiveValue(2, 1),
+  },
+
+  infoC: {
+    flexDirection: 'row',
+
+    top: getResponsiveValue('15%', '15%'),
+    left: getResponsiveValue('70%', '70%'),
+  },
+  iconPhone: {
+    fontSize: getResponsiveValue(20, 10),
+    color: "#f01c1c",
+    // top: getResponsiveValue('20%', '30%'),
+    // left: getResponsiveValue('40%', '40%'),
+    textShadowColor: '#05050567',
+    textShadowOffset: {width: 1, height: 1},
+    textShadowRadius: getResponsiveValue(2, 1),
   },
 
   toolbar: {
@@ -362,9 +406,7 @@ const styles = StyleSheet.create({
     paddingVertical: '2%',
     backgroundColor: WHITE,
     width: '80%',
-    // position: 'relative',
-    // top:"7%"
-    // bottom:getResponsiveValue("1.5%","0.5%"),
+  
   },
   iconGroup: {
     flexDirection: 'row',
@@ -382,20 +424,31 @@ const styles = StyleSheet.create({
     fontSize: getResponsiveValue(50, 25),
   },
   likedIcon: {
-    color: 'rgba(235,124,148,1)', // Customize the color when liked
+    color: "rgba(235,124,148,1)", 
   },
 
   downloadedText: {
-    color: 'green', // You can adjust the color as needed
+    color: 'green',
     fontSize: getResponsiveValue(16, 12),
+ 
+    backgroundColor:WHITE,
+    borderRadius:20,
+    padding:8,
+    position:"absolute",
+    top:"2%", 
+  },
+  likedText: {
+    color: 'rgba(235,124,148,1)', // You can adjust the color as needed
+    fontSize: getResponsiveValue(16, 12),
+    fontWeight:"bold",
     // marginRight: getResponsiveValue(10, 5),
     backgroundColor: WHITE,
     borderRadius: 20,
     padding: 8,
     position: 'absolute',
-    top: '2%',
+    top: '60%',
   },
 
 });
 
-export default BirthdayPost;
+export default Post3
