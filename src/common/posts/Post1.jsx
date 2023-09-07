@@ -19,7 +19,7 @@ import defaultProfileImage from '../../assets/images/profile3.png';
 import Share from 'react-native-share';
 import {captureRef} from 'react-native-view-shot';
 import RNFS from 'react-native-fs';
-
+import Icon2 from "react-native-vector-icons/FontAwesome";
 import {
   TapGestureHandler,
   State,
@@ -180,7 +180,7 @@ const Post1 = props => {
             <Image
               style={styles.backGround}
               resizeMode="cover"
-              source={require('../../assets/images/bg6.jpeg')}
+              source={require('../../assets/images/bg7.jpg')}
             />
             <View style={styles.cardContainer}>
               <Image
@@ -201,7 +201,7 @@ const Post1 = props => {
                 <View style={styles.horizontal} />
 
                 <View style={styles.infoC}>
-                  <EntypoIcon name="phone" style={styles.iconPhone} />
+                  <Icon2 name="phone" style={styles.iconPhone} />
                   <Text style={[styles.info, textColorStyle]}>
                     +91 9405789152
                   </Text>
@@ -314,8 +314,8 @@ const styles = StyleSheet.create({
     // bottom:
   },
   profileImage: {
-    width: getResponsiveValue(160, 60),
-    height: getResponsiveValue(160, 60),
+    width: getResponsiveValue(160, 80),
+    height: getResponsiveValue(160, 80),
     borderRadius: getResponsiveValue(20, 10),
     borderColor: BLACK,
     borderWidth: getResponsiveValue(2, 1),
@@ -363,8 +363,9 @@ const styles = StyleSheet.create({
     fontSize: getResponsiveValue(12, 8),
     color: BLACK,
     marginLeft: getResponsiveValue(10, 5),
-
+    fontWeight: 'bold',
     textShadowColor: '#05050567',
+    // textShadowColor: '#05050567',
     textShadowOffset: {width: 1, height: 1},
     textShadowRadius: getResponsiveValue(2, 1),
   },
@@ -424,7 +425,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     padding: 8,
     position: 'absolute',
-    top: '2%',
+    top:"105%",
   },
   likedText: {
     color: 'rgba(235,124,148,1)', // You can adjust the color as needed

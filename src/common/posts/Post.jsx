@@ -15,7 +15,7 @@ import RNFS from 'react-native-fs';
 const Post = (props) => {
   const [downloaded, setDownloaded] = useState(false);
   const cardRef = useRef(null); // Create a ref for the card view
-
+  const [showInterstitial, setShowInterstitial] = useState(true);
   const handleDownload = async () => {
   if (cardRef.current) {
     try {
@@ -132,13 +132,13 @@ const Post = (props) => {
           </Pressable>
           <View style={styles.iconGroup}>
             <IconButton onPress={onShare}>
-              <FeatherIcon name="share-2" style={styles.icon2} />
+              <FeatherIcon name="share-2" style={[styles.icon2, styles.touchableIcon]} />
             </IconButton>
             <IconButton  onPress={handleDownload}>
-              <FeatherIcon name="download" style={styles.icon2} />
+              <FeatherIcon name="download" style={[styles.icon2, styles.touchableIcon]} />
             </IconButton>
             <IconButton onPress={handleNextPage}>
-              <EntypoIcon name="edit" style={styles.icon2} />
+              <EntypoIcon name="edit" style={[styles.icon2, styles.touchableIcon]} />
             </IconButton>
           </View>
         </View>
@@ -158,9 +158,12 @@ const styles = StyleSheet.create({
   
  
   },
+  touchableIcon: {
+    padding: 7,
+  },
   cardContainer: {
     height:getResponsiveValue("82%","80%"),
-    width:getResponsiveValue("screenWidth * 0.8 ", screenWidth * 0.8),
+    width:getResponsiveValue(screenWidth * 0.8 , screenWidth * 0.8),
     backgroundColor: WHITE,
     marginBottom:getResponsiveValue(10,10),
     marginTop:getResponsiveValue(0,10),
@@ -253,7 +256,7 @@ const styles = StyleSheet.create({
     backgroundColor:"#e3e3e6",
     borderRadius:20,
     padding:10,
- 
+    top:"2%",
   },
 
 });

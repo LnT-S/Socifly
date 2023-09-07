@@ -83,11 +83,12 @@ const ContactUs = props => {
           </View>
 
           <View style={styles.inputC}>
-          <TextinputB
-          // multiline
+        
+          <TextInput
+          multiline
           placeholderTextColor="#888888"
-          // numberOfLines={5} 
-          // style={styles.input}
+          numberOfLines={5}
+          style={styles.input}
           placeholder={stringsoflanguages.enterYourMessage}
           onChangeText={text => setFormData({ ...formData, message: text })}
           error={formErrors.message} 
@@ -166,6 +167,7 @@ const styles = StyleSheet.create({
     textAlignVertical: 'top',
     marginBottom: getResponsiveValue(40, 30),
     color: BLACK,
+    borderColor:PRIMARY,
     width: getResponsiveValue(500, screenWidth * 0.8),
   },
   inputC:{

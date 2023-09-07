@@ -25,7 +25,7 @@ import {
   State,
   GestureHandlerRootView,
 } from 'react-native-gesture-handler';
-
+import Icon2 from "react-native-vector-icons/FontAwesome";
 import {launchImageLibrary} from 'react-native-image-picker';
 
 const ImagePost4 = props => {
@@ -211,7 +211,7 @@ const ImagePost4 = props => {
                 <Text style={[styles.name,textColorStyle2]}>{props.userName}</Text>
                 <View style={styles.horizontal} />
                 <View style={styles.infoC}>
-                  <EntypoIcon name="phone" style={styles.iconPhone} />
+                  <Icon2 name="phone" style={styles.iconPhone} />
                   <Text style={[styles.info, textColorStyle2]}>
                     +91 9405789152
                   </Text>
@@ -331,24 +331,24 @@ resizeMode:"cover",
     // bottom:
   },
   diamondContainer: {
-    width: getResponsiveValue(140, 60),
-    height: getResponsiveValue(140, 60),
+    width: getResponsiveValue(160, 80),
+    height: getResponsiveValue(160, 80),
     position: 'absolute',
     bottom: '50%',
     left: '10%',
     
   },
   diamondMask: {
-    width: getResponsiveValue(140, 60),
-    height: getResponsiveValue(140, 60),
+    width: getResponsiveValue(160, 80),
+    height: getResponsiveValue(160, 80),
     backgroundColor: 'transparent',
     position: 'absolute',
     transform: [{ rotate: '45deg' }],
     overflow: 'hidden',
   },
   profileImage: {
-    width: getResponsiveValue(140, 60),
-    height: getResponsiveValue(140, 60),
+    width: getResponsiveValue(160, 80),
+    height: getResponsiveValue(160, 80),
     borderRadius: getResponsiveValue(10, 5),
     backgroundColor: WHITE,
     position: 'absolute',
@@ -445,6 +445,7 @@ resizeMode:"cover",
   info: {
     fontSize: getResponsiveValue(12, 8),
     color: BLACK,
+    fontWeight: 'bold',
     // top: getResponsiveValue('20%', '30%'),
     // left: getResponsiveValue('40%', '40%'),
     marginLeft: getResponsiveValue(10, 5),
@@ -462,6 +463,7 @@ resizeMode:"cover",
   iconPhone: {
     fontSize: getResponsiveValue(20, 10),
     color: "#0bf4e1",
+   
     // top: getResponsiveValue('20%', '30%'),
     // left: getResponsiveValue('40%', '40%'),
     textShadowColor: '#000000',

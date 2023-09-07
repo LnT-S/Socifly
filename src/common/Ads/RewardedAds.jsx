@@ -1,9 +1,9 @@
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View,Button } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import React, { useEffect, useState,  } from 'react';
 import { AdEventType } from 'react-native-google-mobile-ads';
 import {RewardedAdEventType,  RewardedAd, TestIds } from 'react-native-google-mobile-ads';
-
+import { useNavigation } from '@react-navigation/native';
 
 const adUnitId = __DEV__ ? TestIds.REWARDED : 'ca-app-pub-7476617068399590/2806493368';
 const rewarded = RewardedAd.createForAdRequest(adUnitId, {
@@ -15,6 +15,11 @@ const rewarded = RewardedAd.createForAdRequest(adUnitId, {
   
 const RewardedAds = (props) => {
     const [loaded, setLoaded] = useState(false);
+    const navigation = useNavigation();
+
+  const pageNotFound = () => {
+    navigation.navigate('NotFound');
+  };
 
   useEffect(() => {
     if (props.shouldShowAd) {
@@ -91,6 +96,7 @@ const RewardedAds = (props) => {
             <Text>Show RewardedAd Ads</Text>
              
           </TouchableOpacity>
+          <Button title="Page Not Found" onPress={pageNotFound} />
             </View>
         </SafeAreaView>
     );

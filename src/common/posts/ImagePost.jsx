@@ -21,7 +21,7 @@ import Share from 'react-native-share';
 import {captureRef} from 'react-native-view-shot';
 import RNFS from 'react-native-fs';
 import stringsoflanguages from '../../utils/ScreenStrings';
-
+import Icon2 from "react-native-vector-icons/FontAwesome";
 
 import {
   TapGestureHandler,
@@ -185,7 +185,7 @@ const ImagePost = props => {
           numberOfTaps={2} // Detect double tap
         >
           <View ref={cardRef} style={styles.cardContainer2}>
-          <Image style={styles.backGround} resizeMode="cover"  source={require('../../assets/images/bg6.jpeg')}/>
+          <Image style={styles.backGround} resizeMode="cover"  source={require('../../assets/images/bg7.jpg')}/>
             <View style={styles.cardContainer}>
               <Image
                 source={
@@ -209,7 +209,7 @@ const ImagePost = props => {
                 <Text style={[styles.name,textColorStyle2]}>{props.userName}</Text>
                 <View style={styles.horizontal} />
                 <View style={styles.infoC}>
-                  <EntypoIcon name="phone" style={styles.iconPhone} />
+                  <Icon2 name="phone" style={styles.iconPhone} />
                   <Text style={[styles.info, textColorStyle2]}>
                     +91 9405789152
                   </Text>
@@ -341,8 +341,8 @@ resizeMode:"cover",
     // bottom:
   },
   profileImage: {
-    width: getResponsiveValue(160, 60),
-    height: getResponsiveValue(160, 60),
+    width: getResponsiveValue(160, 80),
+    height: getResponsiveValue(160, 80),
     borderRadius: getResponsiveValue(20, 10),
     borderColor:BLACK,
     backgroundColor: WHITE,
@@ -418,6 +418,7 @@ resizeMode:"cover",
     color: BLACK,
     // top: getResponsiveValue('20%', '30%'),
     // left: getResponsiveValue('40%', '40%'),
+    fontWeight: 'bold',
     marginLeft: getResponsiveValue(10, 5),
     textShadowColor: '#05050567',
     textShadowOffset: { width: 1, height: 1 } ,

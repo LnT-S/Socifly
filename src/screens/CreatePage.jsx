@@ -1,5 +1,5 @@
 import { StyleSheet, View, Text, Pressable, ScrollView } from 'react-native';
-import React,{useState} from 'react';
+import React, { useState, useEffect } from 'react';
 import LinearGradient2 from "../atoms/LinearGradient2";
 import { SafeAreaView } from 'react-native-safe-area-context';
 import EntypoIcon from "react-native-vector-icons/Entypo";
@@ -16,6 +16,7 @@ import Icon from "react-native-vector-icons/Entypo";
 import stringsoflanguages from '../utils/ScreenStrings';
 
 const CreatePage = (props) => {
+  // const [shouldShowAd, setShouldShowAd] = useState(false);
   const handleNextPage = () => {
     props.navigation.navigate('HomePage');
   };
@@ -29,6 +30,8 @@ const CreatePage = (props) => {
   const [inputValue, setInputValue] = useState("");
   return (
     <SafeAreaView style={styles.container}>
+   
+
       <LinearGradient2 customStyle={styles.loginGradient}>
         <View style={styles.iconRow}>
           <View style={styles.iconContainer}>
@@ -108,11 +111,11 @@ const CreatePage = (props) => {
 }
 
 const styles = StyleSheet.create({
-  loginGradient:{
+  loginGradient: {
     // top:20,
-height:"8%",
-// justifyContent: "center"
-// paddingHorizontal:5,
+    height: "8%",
+    // justifyContent: "center"
+    // paddingHorizontal:5,
   },
   container: {
     flex: 1,

@@ -7,24 +7,68 @@ import {
   TextInput,
   
   Image,
+  Animated,
 } from 'react-native';
 
-import global from '../../styles/global';
 
-import {getResponsiveValue} from '../../styles/responsive';
+
 
 import defaultProfileImage from '../../assets/images/Profile.png';
+
+
 import {BLACK, WHITE} from '../../styles/colors';
+
+
+import Icon from "react-native-vector-icons/FontAwesome";
+
+import stringsoflanguages from '../../utils/ScreenStrings';
+
+import Icon2 from 'react-native-vector-icons/MaterialIcons';
+
+import { useNavigation } from '@react-navigation/native';
+
+
+
+import React, { useState } from 'react';
+
+
+import { getResponsiveValue } from '../../styles/responsive';
+
+
 import MaterialCommunityIconsIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import FeatherIcon from 'react-native-vector-icons/Feather';
-import { ScrollView } from 'react-native-gesture-handler';
-import Icon from "react-native-vector-icons/FontAwesome";
-import stringsoflanguages from '../../utils/ScreenStrings';
-import Icon2 from 'react-native-vector-icons/MaterialIcons';
-import { useNavigation } from '@react-navigation/native';
-import { ColorPicker } from 'react-native-color-picker';
+import DialogueBox from '../../common/DialogueBox';
 const Settings = props => {
   const navigation = useNavigation();
+  const [isTextContainerPressed, setIsTextContainerPressed] = useState(false);
+  const textContainerScaleValue = new Animated.Value(1);
+  const [isLogoutDialogVisible, setIsLogoutDialogVisible] = useState(false);
+  const handleTextContainerPressIn = () => {
+    setIsTextContainerPressed(true);
+    Animated.spring(textContainerScaleValue, {
+      toValue: 0.75, // Zoom out effect
+      useNativeDriver: true,
+    }).start();
+  };
+
+  const handleLogout = () => {
+    setIsLogoutDialogVisible(true);
+  };
+
+  const handleTextContainerPressOut = () => {
+    setIsTextContainerPressed(false);
+    Animated.spring(textContainerScaleValue, {
+      toValue: 2, // Zoom in effect
+      useNativeDriver: true,
+    }).start();
+    // ... Your navigation logic here
+  };
+
+  const animatedTextContainerStyles = {
+    transform: [{ scale: textContainerScaleValue }],
+
+
+  }
   const handleNextPage1 = () => {
     props.navigation.navigate('ContactUs');
   };
@@ -61,11 +105,21 @@ const Settings = props => {
         <View style={styles.rect1}>
           <View style={styles.innerRect1}>
             <Image source={defaultProfileImage} style={styles.profileImage} />
-            <View style={styles.textContainer}>
+            <Pressable
+              onPressIn={handleTextContainerPressIn}
+              onPressOut={handleTextContainerPressOut}
+            >
+              <Animated.View
+                style={[styles.textContainer, animatedTextContainerStyles]}
+              >
+               <View style={styles.textContainer}>
               <Text style={styles.text1}>Your Name</Text>
               <Text style={styles.text2}>your_email123@isEmail.com</Text>
               <Text style={styles.text2}>+91 1234567890</Text>
             </View>
+              </Animated.View>
+            </Pressable>
+
           </View>
         </View>
 
@@ -108,6 +162,7 @@ const Settings = props => {
           </Pressable>
           <View style={styles.divider}></View>
           <Pressable
+           onPress={handleLogout}
             style={({pressed}) => [
               {opacity: pressed ? 0.6 : 0.9},
               styles.iconWrapper,
@@ -119,6 +174,14 @@ const Settings = props => {
 
             <Text style={styles.text3}>{stringsoflanguages.logout}</Text>
           </Pressable>
+
+          {isLogoutDialogVisible && (
+            <DialogueBox
+              isVisible={isLogoutDialogVisible}
+              onClose={() => setIsLogoutDialogVisible(false)}
+              textContent="Are you sure you want to logout?"
+            />
+          )}
         </View>
 
         <View style={styles.rect3}>
@@ -153,6 +216,11 @@ const Settings = props => {
 };
 
 const styles = StyleSheet.create({
+  textContainer: {
+    top: '5%',
+    left: getResponsiveValue('20%', '10%'),
+    flexDirection: 'column',
+  },
   container: {
     flex: 1,
   },
@@ -229,6 +297,7 @@ const styles = StyleSheet.create({
     top: '5%',
     left: getResponsiveValue('20%', '10%'),
     flexDirection: 'column',
+
   },
   rect2: {
     width: '90%',

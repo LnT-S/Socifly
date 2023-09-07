@@ -14,6 +14,7 @@ import MaterialCommunityIconsIcon from 'react-native-vector-icons/MaterialCommun
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import EntypoIcon from 'react-native-vector-icons/Entypo';
 import IconButton from '../../atoms/IconButton';
+import Icon2 from "react-native-vector-icons/FontAwesome";
 import {getResponsiveValue, screenWidth} from '../../styles/responsive';
 import defaultProfileImage from '../../assets/images/profile3.png';
 import Share from 'react-native-share';
@@ -200,7 +201,7 @@ const BirthdayPost = props => {
       style={styles.profileImage2}
     />
               <Image
-                source={require('../../assets/images/name.png')}
+                source={require('../../assets/images/name2.png')}
                 style={styles.nameB}
               />
                <Text style={[styles.nameC,textColorStyle]}>{props.name}</Text>
@@ -215,14 +216,14 @@ const BirthdayPost = props => {
                 <Text style={[styles.name,textColorStyle2]}>{props.userName}</Text>
                 <View style={styles.horizontal} />
                 <View style={styles.infoC}>
-                  <EntypoIcon name="phone" style={styles.iconPhone} />
-                  <Text style={[styles.info, textColorStyle]}>
+                  <Icon2 name="phone" style={styles.iconPhone} />
+                  <Text style={[styles.info, textColorStyle2]}>
                     +91 9405789152
                   </Text>
                 </View>
                 <View style={styles.infoC}>
                   <EntypoIcon name="email" style={styles.iconPhone} />
-                  <Text style={[styles.info, textColorStyle]}>
+                  <Text style={[styles.info, textColorStyle2]}>
                     user123email@email.com
                   </Text>
                 </View>
@@ -359,16 +360,16 @@ top:"40%",
     position: 'absolute',
     borderColor:WHITE,
     borderWidth:getResponsiveValue(4,2),
-    top: getResponsiveValue('7%', '8%'),
+    top: getResponsiveValue('8%', '8%'),
     // left: '29%',
   },
   nameB: {
-    width: getResponsiveValue(340, 140),
-    height: getResponsiveValue(140, 60),
+    width: getResponsiveValue(380, 180),
+    height: getResponsiveValue(180, 80),
     // backgroundColor: BLACK,
     position: 'absolute',
     // bottom:'200%',
-    top: getResponsiveValue('32%', '32%'),
+    top: getResponsiveValue('29%', '29%'),
     // left:getResponsiveValue('10%','20%'),
   },
   nameC: {
@@ -377,7 +378,7 @@ top:"40%",
     fontWeight: 'bold',
     //  backgroundColor: BLACK,
     position: 'absolute',
-    top: getResponsiveValue('34.5%', '34.5%'),
+    top: getResponsiveValue('35%', '35%'),
   },
   infoContainer: {
     position: 'absolute',
@@ -423,7 +424,7 @@ top:"40%",
     fontSize: getResponsiveValue(12, 8),
     color: BLACK,
     marginLeft: getResponsiveValue(10, 5),
-
+ fontWeight: 'bold',
     textShadowColor: '#05050567',
     textShadowOffset: {width: 1, height: 1},
     textShadowRadius: getResponsiveValue(2, 1),
@@ -433,7 +434,7 @@ top:"40%",
     flexDirection: 'row',
 
     top: getResponsiveValue('10%', '10%'),
-    left: getResponsiveValue('20%', '35%'),
+    left: getResponsiveValue('20%', '40%'),
   },
   iconPhone: {
     fontSize: getResponsiveValue(20, 10),
@@ -443,7 +444,9 @@ top:"40%",
     textShadowColor: '#05050567',
     textShadowOffset: {width: 1, height: 1},
     textShadowRadius: getResponsiveValue(2, 1),
+    // transform: [{ rotate: '90deg' }],
   },
+
   toolbar: {
     flexDirection: 'row',
     justifyContent: 'space-between',

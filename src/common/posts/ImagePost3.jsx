@@ -25,7 +25,7 @@ import {
   State,
   GestureHandlerRootView,
 } from 'react-native-gesture-handler';
-
+import Icon2 from "react-native-vector-icons/FontAwesome";
 import {launchImageLibrary} from 'react-native-image-picker';
 
 const ImagePost3 = props => {
@@ -207,7 +207,7 @@ const ImagePost3 = props => {
                 <Text style={[styles.name,textColorStyle2]}>{props.userName}</Text>
                 <View style={styles.horizontal} />
                 <View style={styles.infoC}>
-                  <EntypoIcon name="phone" style={styles.iconPhone} />
+                  <Icon2 name="phone" style={styles.iconPhone} />
                   <Text style={[styles.info, textColorStyle2]}>
                     +91 9405789152
                   </Text>
@@ -329,8 +329,8 @@ zIndex:-1,
     // bottom:
   },
   profileImage: {
-    width: getResponsiveValue(160, 60),
-    height: getResponsiveValue(160, 60),
+    width: getResponsiveValue(160, 80),
+    height: getResponsiveValue(160, 80),
     borderRadius: getResponsiveValue(20, 10),
     backgroundColor: WHITE,
     position: 'absolute',
@@ -342,8 +342,8 @@ zIndex:-1,
   },
   profileImageBg:{
     
-    width: getResponsiveValue(170, 65),
-    height: getResponsiveValue(170, 65),
+    width: getResponsiveValue(170, 85),
+    height: getResponsiveValue(170, 85),
     borderRadius: getResponsiveValue(20, 10),
     backgroundColor: "#0e531f",
     position: 'absolute',
@@ -416,6 +416,7 @@ zIndex:-1,
   info: {
     fontSize: getResponsiveValue(12, 8),
     color: BLACK,
+    fontWeight: 'bold',
     // top: getResponsiveValue('20%', '30%'),
     // left: getResponsiveValue('40%', '40%'),
     marginLeft: getResponsiveValue(10, 5),

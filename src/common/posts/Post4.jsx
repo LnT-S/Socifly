@@ -19,7 +19,7 @@ import defaultProfileImage from '../../assets/images/profile3.png';
 import Share from 'react-native-share';
 import {captureRef} from 'react-native-view-shot';
 import RNFS from 'react-native-fs';
-
+import Icon2 from "react-native-vector-icons/FontAwesome";
 import { TapGestureHandler, State ,GestureHandlerRootView } from 'react-native-gesture-handler';
 import stringsoflanguages from '../../utils/ScreenStrings';
 
@@ -104,7 +104,6 @@ const Post4 = props => {
           format: 'png',
           quality: 1,
         });
-
         // Share options with both message, URL, and image
         const shareOptions = {
           message: 'Hello, check this out! \nhttps://www.example.com/image.jpg',
@@ -112,7 +111,6 @@ const Post4 = props => {
           title: 'Share via', // Title of the share dialog
           subject: 'Share Link', // Subject of the share dialog
         };
-
         const ShareResponse = await Share.open(shareOptions);
         console.log(JSON.stringify(ShareResponse));
       } catch (error) {
@@ -203,7 +201,7 @@ const Post4 = props => {
             <View style={styles.horizontal}/>
             
             <View style={styles.infoC}>
-                  <EntypoIcon name="phone" style={styles.iconPhone} />
+                  <Icon2 name="phone" style={styles.iconPhone} />
                   <Text style={[styles.info, textColorStyle]}>
                     +91 9405789152
                   </Text>
@@ -314,24 +312,24 @@ resizeMode:"cover",
 
   },
   diamondContainer: {
-    width: getResponsiveValue(140, 60),
-    height: getResponsiveValue(140, 60),
+    width: getResponsiveValue(160, 80),
+    height: getResponsiveValue(160, 80),
     position: 'absolute',
     bottom: '50%',
     left: '10%',
     
   },
   diamondMask: {
-    width: getResponsiveValue(140, 60),
-    height: getResponsiveValue(140, 60),
+    width: getResponsiveValue(160, 80),
+    height: getResponsiveValue(160, 80),
     backgroundColor: 'transparent',
     position: 'absolute',
     transform: [{ rotate: '45deg' }],
     overflow: 'hidden',
   },
   profileImage: {
-    width: getResponsiveValue(140, 60),
-    height: getResponsiveValue(140, 60),
+    width: getResponsiveValue(160, 80),
+    height: getResponsiveValue(160, 80),
     borderRadius: getResponsiveValue(10, 5),
     backgroundColor: WHITE,
     position: 'absolute',
@@ -405,7 +403,7 @@ resizeMode:"cover",
     fontSize: getResponsiveValue(12, 8),
     color: BLACK,
     marginLeft: getResponsiveValue(10, 5),
-
+    fontWeight: 'bold',
     textShadowColor: '#000000',
     textShadowOffset: {width: 1, height: 1},
     textShadowRadius: getResponsiveValue(2, 1),
@@ -464,7 +462,7 @@ resizeMode:"cover",
     borderRadius:20,
     padding:8,
     position:"absolute",
-    top:"2%",
+    top:"105%",
    
  
   },

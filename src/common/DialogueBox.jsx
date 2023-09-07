@@ -2,11 +2,12 @@ import React, {useState} from 'react';
 import {View, Text, Modal, TouchableOpacity, StyleSheet} from 'react-native';
 import ButtonA from '../atoms/ButtonA';
 import {useNavigation} from '@react-navigation/native';
+import { BLACK } from '../styles/colors';
 
 const DialogueBox = ({isVisible, onClose, textContent}) => {
   const navigation = useNavigation();
   const handleOk = () => {
-    navigation.navigate('HomePage');
+    navigation.navigate('LoginScreen');
   };
 
   return (
@@ -21,11 +22,11 @@ const DialogueBox = ({isVisible, onClose, textContent}) => {
 
           <View style={styles.row}>
             <View style={styles.r1}>
-              <ButtonA onPress={handleOk} name={'Ok'} />
+              <ButtonA onPress={handleOk} name={'Yes'} />
             </View>
 
             <View style={styles.r2}>
-              <ButtonA onPress={onClose} name={'Close'} />
+              <ButtonA onPress={onClose} name={'No'} />
             </View>
           </View>
         </View>
@@ -53,6 +54,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     marginBottom: 20,
     fontWeight: 'bold',
+    color:BLACK,
   },
 
   row: {

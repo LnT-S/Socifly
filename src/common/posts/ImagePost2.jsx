@@ -25,7 +25,7 @@ import {
   State,
   GestureHandlerRootView,
 } from 'react-native-gesture-handler';
-
+import Icon2 from "react-native-vector-icons/FontAwesome";
 import {launchImageLibrary} from 'react-native-image-picker';
 
 const ImagePost2 = props => {
@@ -205,7 +205,7 @@ const ImagePost2 = props => {
                 <Text style={[styles.name,textColorStyle2]}>{props.userName}</Text>
                 <View style={styles.horizontal} />
                 <View style={styles.infoC}>
-                  <EntypoIcon name="phone" style={styles.iconPhone} />
+                  <Icon2 name="phone" style={styles.iconPhone} />
                   <Text style={[styles.info, textColorStyle2]}>
                     +91 9405789152
                   </Text>
@@ -391,6 +391,7 @@ zIndex:-1,
   info: {
     fontSize: getResponsiveValue(12, 8),
     color: BLACK,
+    fontWeight: 'bold',
     // top: getResponsiveValue('20%', '30%'),
     // left: getResponsiveValue('40%', '40%'),
     marginLeft: getResponsiveValue(10, 5),

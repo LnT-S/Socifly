@@ -28,6 +28,9 @@ import { useProfile } from '../context/ProfileContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import stringsoflanguages from '../utils/ScreenStrings';
 import { WHITE } from '../styles/colors';
+//import InterstitialAds from '../common/Ads/InterstitialAds';
+ import RewardedAds from '../common/Ads/RewardedAds';
+
 
 
 const ProfileScreen = props => {
@@ -43,9 +46,9 @@ const ProfileScreen = props => {
   const [dataLoaded, setDataLoaded] = useState(false);
 
 
-  const handleNextPage = () => {
-    props.navigation.navigate('HomePage');
-  };
+  // const handleNextPage = () => {
+  //   props.navigation.navigate('HomePage');
+  // };
   const handleNextPage2 = () => {
     props.navigation.navigate('Settings');
   };
@@ -144,6 +147,8 @@ const ProfileScreen = props => {
     loadProfileData();
   }, []);
 
+ 
+
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -151,10 +156,18 @@ const ProfileScreen = props => {
       <SafeAreaView style={styles.container}>
         <LinearGradients customStyle={styles.loginGradient}>
           <View style={styles.header}>
-          <Pressable onPress={handleNextPage}  style={({ pressed }) => [
+          <Pressable 
+          onPress={() => {
+               
+              setTimeout(() => {
+                props.navigation.navigate('HomePage'); // Navigate to next page after ad is shown
+              }, 1000); // Adjust the timeout duration as needed
+            }}  style={({ pressed }) => [
               { opacity: pressed ? 0.8 : 1 },
               styles.iconWrapper,
             ]}>
+            
+           
               <Icon name="home" style={styles.icon}></Icon>
             </Pressable>
             <Pressable onPress={handleNextPage2}  style={({ pressed }) => [
@@ -221,7 +234,7 @@ const ProfileScreen = props => {
           )}
         </View>
    
-
+      
       </SafeAreaView>
 
     </KeyboardAvoidingView>
@@ -229,6 +242,14 @@ const ProfileScreen = props => {
 };
 
 const styles = StyleSheet.create({
+
+  iconWrapper: {
+    paddingHorizontal: 10,
+  },
+  icon: {
+    color: 'white',
+    fontSize: getResponsiveValue(40, 30),
+  },
   loginGradient: {
     flex: getResponsiveValue(2, 1),
     justifyContent: 'center',

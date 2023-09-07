@@ -1,8 +1,9 @@
-import React, {useState} from 'react';
-import {StyleSheet, View, Pressable, Text, SafeAreaView} from 'react-native';
+import React, { useState } from 'react';
+import { StyleSheet, View, Pressable, Text, SafeAreaView } from 'react-native';
 import LinearGradients from '../atoms/LinearGradients';
 import global from '../styles/global';
 import TextinputA from '../atoms/TextinputA';
+import TextinputB from '../atoms/TextinputB';
 import ButtonA from '../atoms/ButtonA';
 import {BLACK, LINKS} from '../styles/colors';
 
@@ -12,7 +13,7 @@ import {getResponsiveValue} from '../styles/responsive';
 
 // import stringsoflanguages from '../utils/ScreenStrings'
 import stringsoflanguages from '../utils/ScreenStrings';
-import TextinputB from '../atoms/TextinputB';
+
 import { validate2 } from '../utils/validation/validate2';
 const LoginScreen = props => {
   const [errors, setErrors] = useState({});
@@ -68,9 +69,9 @@ const LoginScreen = props => {
 
   // ..............
 
-  const handleHome = () => {
-    props.navigation.navigate('HomePage');
-  };
+  // const handleHome = () => {
+  //   props.navigation.navigate('HomePage');
+  // };
   const handleNextPage = () => {
     props.navigation.navigate('ForgotPassword');
   };
@@ -158,8 +159,18 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     height: '50%',
-    
+
   },
+ 
+  errorText: {
+    textAlign: 'right', // Align the error text to the left
+    marginRight: "50%", // Add left margin to the error text for spacing
+  },
+  errorText1: {
+    textAlign: 'right', // Align the error text to the left
+    marginRight: "44%",
+  },
+
   container: {
     flex: 1,
     // backgroundColor: "white",
@@ -173,7 +184,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-
 
   link: {
     color: LINKS,
@@ -189,7 +199,7 @@ const styles = StyleSheet.create({
   },
   createAccount: {
     color: '#121212',
-    fontSize:  getResponsiveValue(16,12),
+    fontSize: getResponsiveValue(16, 12),
     marginRight: 5,
   },
   lang:{

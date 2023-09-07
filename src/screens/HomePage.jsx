@@ -5,10 +5,12 @@ import {
   Pressable,
   TextInput,
   ScrollView,
+  Animated,
+  FlatList,
 } from 'react-native';
-import React,{useState} from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import LinearGradient2 from '../atoms/LinearGradient2';
-import {SafeAreaView} from 'react-native-safe-area-context';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import Category from '../common/Category';
 // import EntypoIcon from 'react-native-vector-icons/Entypo';
 import FeatherIcon from 'react-native-vector-icons/Feather';
@@ -24,20 +26,46 @@ import RewardedAds from '../common/Ads/RewardedAds';
 import InterstitialAds from '../common/Ads/InterstitialAds';
 import BannerAds from '../common/Ads/BannerAds';
 
+
+
+//import RewardedInterstitialAds from '../common/RewardedInterstitialAds';
+
 const HomePage = props => {
+  const [shouldShowAd, setShouldShowAd] = useState(false);
+  const bannerData = [1, 2, 3];
+  const [currentBannerIndex, setCurrentBannerIndex] = useState(0);
+  const flatListRef = useRef(null);
+  
   const handleNextPage = () => {
     props.navigation.navigate('ProfileScreen');
   };
+  // const handleNextPage2 = () => {
+  //   props.navigation.navigate('CreatePage');
+  // };
 
-  const handleNextPage2 = () => {
-    props.navigation.navigate('CreatePage');
-  };
-
-  const [shouldShowAd, setShouldShowAd] = useState(false);
   const showRewardedAd = () => {
     // Logic to set shouldShowAd to true
     setShouldShowAd(true);
   };
+  // useEffect(() => {
+  //   if (shouldShowAd) {
+  //     RewardedAds.show(); // Show the rewarded ad
+  //   }
+  // }, [shouldShowAd]);
+  useEffect(() => {
+    const nextBannerIndex = (currentBannerIndex + 1) % bannerData.length;
+
+    const scrollTimeout = setTimeout(() => {
+      if (flatListRef.current) {
+        flatListRef.current.scrollToIndex({ index: nextBannerIndex, animated: true });
+        setCurrentBannerIndex(nextBannerIndex);
+      }
+    }, 3000); // Adjust the timeout duration (milliseconds) as needed for automatic scrolling
+
+    return () => clearTimeout(scrollTimeout);
+  }, [currentBannerIndex]);
+
+
   
 
   return (
@@ -48,6 +76,7 @@ const HomePage = props => {
             <TextInput placeholder="" style={styles.textInput} />
             <FeatherIcon name="search" style={styles.icon2} />
           </View>
+           
           <Pressable
             style={styles.button}
             onPress={() => {
@@ -68,17 +97,33 @@ const HomePage = props => {
               {/* </Pressable> */}
             </View>
           </Pressable>
-          <MaterialCommunityIconsIcon
-            name="account-settings"
-            style={styles.icon4}
-            onPress={handleNextPage}></MaterialCommunityIconsIcon>
+          <Pressable onPress={handleNextPage} style={({ pressed }) => [
+            { opacity: pressed ? 0.8 : 1 },
+            styles.iconWrapper,
+          ]}>
+            <MaterialCommunityIconsIcon
+              name="account-settings"
+              style={styles.icon4}
+            ></MaterialCommunityIconsIcon>
+          </Pressable>
+
         </View>
       </LinearGradient2>
       <View style={styles.cardSection}>
         <Category />
       </View>
       <ScrollView style={styles.postS}>
-      <BannerAds/>
+   <FlatList 
+   ref={flatListRef}
+   style={styles.adss}
+   horizontal
+   pagingEnabled
+   data={bannerData}
+   renderItem={({item})=>(
+    <BannerAds/>
+   )}
+   keyExtractor={(item)=>item.toString()}
+   />
         <PostArray
           // posts={posts}
           // renderPostComponent={renderPostComponent}
@@ -109,6 +154,10 @@ const styles = StyleSheet.create({
     height: getResponsiveValue(100, 60),
   },
 
+ 
+  adss:{
+    // top:15,
+  },
   Container: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -204,6 +253,8 @@ const styles = StyleSheet.create({
   postS: {
     flex: 0.8,
   },
+ 
+
 });
 
 export default HomePage;

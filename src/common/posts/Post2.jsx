@@ -20,7 +20,7 @@ import defaultProfileImage from '../../assets/images/profile3.png';
 import Share from 'react-native-share';
 import {captureRef} from 'react-native-view-shot';
 import RNFS from 'react-native-fs';
-
+import Icon2 from "react-native-vector-icons/FontAwesome";
 import { TapGestureHandler, State ,GestureHandlerRootView } from 'react-native-gesture-handler';
 import stringsoflanguages from '../../utils/ScreenStrings';
 import LinearGradient from 'react-native-linear-gradient';
@@ -67,6 +67,7 @@ const Post2 = props => {
   const [likeScale] = useState(new Animated.Value(1));
   const [liked, setLiked] = useState(false);
   const [likeCount, setLikeCount] = useState(0);
+  
   const handleLike = () => {
     Animated.sequence([
       Animated.timing(likeScale, {
@@ -106,7 +107,6 @@ const Post2 = props => {
           format: 'png',
           quality: 1,
         });
-
         // Share options with both message, URL, and image
         const shareOptions = {
           message: 'Hello, check this out! \nhttps://www.example.com/image.jpg',
@@ -114,7 +114,6 @@ const Post2 = props => {
           title: 'Share via', // Title of the share dialog
           subject: 'Share Link', // Subject of the share dialog
         };
-
         const ShareResponse = await Share.open(shareOptions);
         console.log(JSON.stringify(ShareResponse));
       } catch (error) {
@@ -201,7 +200,7 @@ const Post2 = props => {
             <View style={styles.horizontal}/>
           
             <View style={styles.infoC}>
-                  <EntypoIcon name="phone" style={styles.iconPhone} />
+                  <Icon2 name="phone" style={styles.iconPhone} />
                   <Text style={[styles.info, textColorStyle]}>
                     +91 9405789152
                   </Text>
@@ -366,6 +365,7 @@ resizeMode:"cover",
     textShadowColor: "#000000",
     textShadowOffset: { width: 1, height: 1 } ,
     textShadowRadius: getResponsiveValue(4,2) ,
+    fontWeight: 'bold',
   },
   infoC: {
     flexDirection: 'row',
@@ -420,7 +420,7 @@ resizeMode:"cover",
     borderRadius:20,
     padding:8,
     position:"absolute",
-    top:"2%",
+    top:"105%",
    
  
   },

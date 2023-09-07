@@ -17,11 +17,42 @@ import EntypoIcon from 'react-native-vector-icons/Entypo';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import stringsoflanguages from '../../utils/ScreenStrings';
 
+import { Linking } from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 const AboutUs = props => {
   const handleNextPage = () => {
-    props.navigation.navigate('Settings');
+    props.navigation.navigate('PrivacyPolicy');
   };
 
+  const handleNextPage1 = () => {
+    props.navigation.navigate('TermsCondition');
+  };
+  const openLink = () => {
+    const url = 'https://play.google.com/';  // Replace with your desired URL
+    Linking.openURL(url)
+      .then((supported) => {
+        if (!supported) {
+          console.error('Cannot open URL');
+        } else {
+          console.log('URL opened successfully');
+        }
+      })
+      .catch((err) => console.error('An error occurred', err));
+  };
+
+  const openLink1 = () => {
+    const url = 'https://www.apple.com/';  // Replace with your desired URL
+    Linking.openURL(url)
+      .then((supported) => {
+        if (!supported) {
+          console.error('Cannot open URL');
+        } else {
+          console.log('URL opened successfully');
+        }
+      })
+      .catch((err) => console.error('An error occurred', err));
+  };
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.status}>
@@ -67,19 +98,24 @@ const AboutUs = props => {
               <View style={styles.bullet} />
               <Text style={styles.listItem}>{stringsoflanguages.point4}</Text>
             </View>
-
+            <GestureHandlerRootView>
             <View style={styles.imageContainer2}>
+              <TouchableOpacity onPress={openLink}>
               <Image
                 style={styles.image2}
                 resizeMode="contain"
                 source={require('../../assets/images/googlePlay.png')}
               />
+              </TouchableOpacity>
+              <TouchableOpacity onPress={openLink1}>
               <Image
                 resizeMode="contain"
                 style={styles.image3}
                 source={require('../../assets/images/appstore.png')}
               />
+              </TouchableOpacity>
             </View>
+            </GestureHandlerRootView>
             <View style={styles.iconContainer}>
               <MaterialCommunityIconsIcon name="gmail" style={styles.icon2} />
               <EntypoIcon name="facebook" style={styles.icon} />
@@ -93,7 +129,7 @@ const AboutUs = props => {
               </View>
               <View style={styles.vertical}></View>
               <View style={styles.footer}>
-                <Pressable onPress={handleNextPage}>
+                <Pressable onPress={handleNextPage1}>
                   <Text style={styles.text4}>{stringsoflanguages.termsCondition}</Text>
                 </Pressable>
               </View>

@@ -20,14 +20,16 @@ import {
   isPhoneNumberValid,
 } from '../utils/validation/formValidation';
 
-const ForgotPassword = props => {
+  const ForgotPassword = props => {
   const [inputValue, setInputValue] = useState('');
   const [inputType, setInputType] = useState('email'); // 'email' or 'phone'
   const [validationError, setValidationError] = useState('');
-
-  const handleInputValueChange = text => {
+  const [errors, setErrors] = useState({});
+  
+  const handleInputValueChange = (field, text) => {
+   
+    setErrors((prev) => ({ ...prev, [field]: '' })); 
     setInputValue(text);
-    setValidationError('');
   };
 
   const handleLogin = () => {
@@ -131,6 +133,11 @@ const styles = StyleSheet.create({
     marginTop: 10,
     textAlign: 'center',
     textDecorationLine: 'underline',
+    
+  },
+ errorText1:{
+    textAlign: 'right', // Align the error text to the left
+    marginRight: getResponsiveValue("30%", "42%"),
   },
 });
 

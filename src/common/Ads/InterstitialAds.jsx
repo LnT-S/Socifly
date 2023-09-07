@@ -2,8 +2,6 @@ import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import React, { useEffect, useState,  } from 'react';
 import { InterstitialAd, AdEventType,TestIds } from 'react-native-google-mobile-ads';
-import LinearGradients from '../../atoms/LinearGradients';
-import LinearGradient2 from '../../atoms/LinearGradient2';
 
 const adUnitId2 = __DEV__ ? TestIds.INTERSTITIAL : 'ca-app-pub-7476617068399590~3695488497';
 const interstitial = InterstitialAd.createForAdRequest(adUnitId2, {
@@ -33,6 +31,9 @@ const InterstitialAds = (props) => {
           () => {
             setLoaded(false);
             interstitial.load();
+            if (props.onAdClosed) {
+              props.onAdClosed(); // Call the callback to navigate to the next page
+            }
           }
         );
     
