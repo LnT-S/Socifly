@@ -39,8 +39,9 @@ const SignUpScreen = props => {
   const scrollViewRef = useRef(null);
 
   const handleSignUp = async () => {
+    console.log('LOG : Submiiting Form')
     const validationErrors = validateForm(value);
-
+    console.log('LOG : Validation Status',value)
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors); // Set the validation errors in state
       return;
