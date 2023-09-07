@@ -14,20 +14,34 @@ import ButtonA from '../atoms/ButtonA';
 import LinearGradients from '../atoms/LinearGradients';
 import global from '../styles/global';
 import Icon from 'react-native-vector-icons/Entypo';
+import Icon2 from "react-native-vector-icons/FontAwesome";
 import MaterialIconsIcon from 'react-native-vector-icons/MaterialIcons';
 import {getResponsiveValue} from '../styles/responsive';
-import {launchImageLibrary} from 'react-native-image-picker';
-import defaultProfileImage from '../assets/images/Profile.png';
-import SettingsScreen from './Settings';
+// import {launchImageLibrary} from 'react-native-image-picker';
+// import { openCropper } from 'react-native-image-crop-picker';
+import ImagePicker from 'react-native-image-crop-picker';
 
+import defaultProfileImage from '../assets/images/Profile.png';
+// import SettingsScreen from './Settings';
+import { useProfile } from '../context/ProfileContext'; 
+
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import stringsoflanguages from '../utils/ScreenStrings';
+import { WHITE } from '../styles/colors';
 
 
 const ProfileScreen = props => {
+  const { profileState, dispatch } = useProfile();
   const [isEditing, setIsEditing] = useState(false);
-  const [name, setName] = useState('Your Name');
-  const [email, setEmail] = useState('your-email@email.com');
-  const [profileImage, setProfileImage] = useState(defaultProfileImage);
-  const [phoneNumber, setPhoneNumber] = useState('9876543210');
+  const [name, setName] = useState(profileState.name || 'User Name');
+  const [email, setEmail] = useState(profileState.email || 'user@email.com');
+  const [phoneNumber, setPhoneNumber] = useState(profileState.phoneNumber || '1234567890');
+  const [selectedProfileImage, setSelectedProfileImage] = useState(
+    profileState.profileImage
+  );
+
+  const [dataLoaded, setDataLoaded] = useState(false);
+
 
   const handleNextPage = () => {
     props.navigation.navigate('HomePage');
@@ -35,35 +49,100 @@ const ProfileScreen = props => {
   const handleNextPage2 = () => {
     props.navigation.navigate('Settings');
   };
-  const selectImage = () => {
-    console.log('Selecting image...');
-    const options = {
-      mediaType: 'photo', // Specify media type: 'photo' or 'video'
-      maxWidth: 500, // Maximum width of the image
-      maxHeight: 500, // Maximum height of the image
-      quality: 1, // Image quality: 0 to 1
-      includeBase64: false, // Set to true if you want to get base64 data
-    };
 
-    launchImageLibrary(options, response => {
-      if (response.assets && response.assets.length > 0) {
-        const selectedImage = response.assets[0];
-        const source = {uri: selectedImage.uri};
-        setProfileImage(source);
+  const selectImage = async () => {
+    if (isEditing) {
+      const options = {
+        mediaType: 'photo', // Specify media type: 'photo' or 'video'
+        maxWidth: 500, // Maximum width of the image
+        maxHeight: 500, // Maximum height of the image
+        quality: 1, // Image quality: 0 to 1
+        includeBase64: false, // Set to true if you want to get base64 data
+      };
+  
+      try {
+        const response = await ImagePicker.openPicker({
+          ...options,
+          cropping: true,
+          width: 300,
+          height: 300,
+        });
+  
+        if (response) {
+          setSelectedProfileImage(response.path);
+  
+          // Save image URI to AsyncStorage
+          await AsyncStorage.setItem('profileImageURI', response.path);
+        }
+      } catch (error) {
+        console.log('Error cropping image:', error);
       }
-    });
+    }
   };
+  
 
   const toggleEdit = () => {
     setIsEditing(!isEditing);
   };
 
-  const saveChanges = () => {
-    if (isEditing) {
-    }
 
+
+
+
+  const saveChanges = async () => {
+    if (isEditing) {
+      dispatch({
+        type: 'UPDATE_NAME',
+        payload: name,
+      });
+      dispatch({
+        type: 'UPDATE_EMAIL',
+        payload: email,
+      });
+      dispatch({
+        type: 'UPDATE_PHONE',
+        payload: phoneNumber,
+      });
+  
+      // Save updated profile data to AsyncStorage
+      try {
+        await AsyncStorage.setItem('profileName', name);
+        await AsyncStorage.setItem('profileEmail', email);
+        await AsyncStorage.setItem('profilePhoneNumber', phoneNumber);
+        await AsyncStorage.setItem('profileImage', selectedProfileImage);
+      } catch (error) {
+        console.log('Error saving profile data:', error);
+      }
+    }
+  
     toggleEdit();
   };
+  
+
+
+  
+
+  useEffect(() => {
+    const loadProfileData = async () => {
+      try {
+        const storedName = await AsyncStorage.getItem('profileName');
+        const storedEmail = await AsyncStorage.getItem('profileEmail');
+        const storedPhoneNumber = await AsyncStorage.getItem('profilePhoneNumber');
+        const storedProfileImage = await AsyncStorage.getItem('profileImage');
+
+        setName(storedName || name);
+        setEmail(storedEmail || email);
+        setPhoneNumber(storedPhoneNumber || phoneNumber);
+        setSelectedProfileImage(storedProfileImage || null);
+
+        setDataLoaded(true);
+      } catch (error) {
+        console.log('Error loading profile data:', error);
+      }
+    };
+
+    loadProfileData();
+  }, []);
 
   return (
     <KeyboardAvoidingView
@@ -86,18 +165,31 @@ const ProfileScreen = props => {
             </Pressable>
           </View>
           <View style={styles.middleContainer}>
+    
             <Pressable onPress={selectImage}>
-              <Image source={profileImage} style={styles.profileImage} />
+              <Image
+                source={
+                  selectedProfileImage
+                    ? { uri: selectedProfileImage }
+                    : defaultProfileImage
+                }
+                style={styles.profileImage}
+              />
+              {isEditing ?(<Icon2 name="edit" style={styles.iconF} />):("")}
+
+
             </Pressable>
+        
 
             {isEditing ? (
               <TextInput
                 style={styles.editableField}
                 value={name}
                 onChangeText={setName}
+                placeholder={name ? '' : 'User Name'}
               />
             ) : (
-              <Text style={styles.yourName}>{name}</Text>
+              <Text   placeholder={'User Name'}  style={styles.yourName}>{name}</Text>
             )}
             {isEditing ? (
               <TextInput
@@ -123,9 +215,9 @@ const ProfileScreen = props => {
         </LinearGradients>
         <View style={global.dContainer}>
           {isEditing ? (
-            <ButtonA name={'SAVE'} onPress={saveChanges} />
+            <ButtonA name={stringsoflanguages.save} onPress={saveChanges} />
           ) : (
-            <ButtonA name={'EDIT PROFILE'} onPress={toggleEdit} />
+            <ButtonA name={stringsoflanguages.editProfile} onPress={toggleEdit} />
           )}
         </View>
    
@@ -159,7 +251,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
   },
   icon: {
-    color: 'white',
+    color: WHITE,
     fontSize: getResponsiveValue(40, 30),
   },
   middleContainer: {
@@ -169,18 +261,26 @@ const styles = StyleSheet.create({
     marginTop: getResponsiveValue(0, 10),
   },
   icon3: {
-    color: '#fff',
+    color: WHITE,
     fontSize: getResponsiveValue(240, 120),
   },
+  iconF:{
+    color: WHITE,
+    fontSize: getResponsiveValue(50, 30),
+    position:"absolute",
+    left:getResponsiveValue("22%","25%"),
+    top:getResponsiveValue("70%","60%"),
+
+  },
   yourName: {
-    color: '#fff',
+    color: WHITE,
     fontSize: getResponsiveValue(30, 24),
     marginTop: 10,
     fontWeight: 'bold',
     marginBottom: getResponsiveValue(5, 5),
   },
   yourEmail: {
-    color: '#fff',
+    color: WHITE,
     fontSize: getResponsiveValue(20, 16),
     marginBottom: getResponsiveValue(10, 5),
   },
@@ -189,20 +289,23 @@ const styles = StyleSheet.create({
     height: getResponsiveValue(240, 120),
     borderRadius: getResponsiveValue(120, 60),
     marginBottom: getResponsiveValue(15, 15),
+    borderColor:WHITE,
+    borderWidth:getResponsiveValue(4,2),
   },
   editableField: {
-    color: '#fff',
+    color: WHITE,
     fontSize: getResponsiveValue(20, 16),
     // marginTop: getResponsiveValue(0, 0),
-    marginBottom: getResponsiveValue(5, 5),
+    // marginBottom: getResponsiveValue(5, 5),
     fontWeight: 'bold',
-    borderBottomColor: 'white',
+    borderBottomColor: WHITE,
     borderBottomWidth: 1,
     width: '80%',
     textAlign: 'center',
     position: 'relative',
-    bottom: getResponsiveValue(40, 30),
+    bottom: getResponsiveValue(5, 5),
   },
 });
 
 export default ProfileScreen;
+

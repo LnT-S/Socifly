@@ -15,7 +15,7 @@ import {BLACK, LINKS, PRIMARY} from '../styles/colors';
 import {getResponsiveValue} from '../styles/responsive';
 import OTPInputView from '@twotalltotems/react-native-otp-input';
 // import { useOtpVerify, getHash, startOtpListener } from 'react-native-otp-verify';
-
+import stringsoflanguages from '../utils/ScreenStrings';
 
 const OtpScreen = props => {
   const [otp, setOtp] = useState('');
@@ -31,7 +31,7 @@ const OtpScreen = props => {
     if (otp.length === 6) {
       props.navigation.navigate('LoginScreen');
     } else  {
-      setOtpError('OTP should be exactly 6 characters long');
+      setOtpError(stringsoflanguages.otpError);
     }
     // props.navigation.navigate('LoginScreen');
 
@@ -50,10 +50,10 @@ const OtpScreen = props => {
           />
         </View>
         <View>
-          <Text style={styles.text1}>Verification</Text>
+          <Text style={styles.text1}>{stringsoflanguages.verification}</Text>
         </View>
         <View>
-          <Text style={styles.text2}>Enter the OTP you have received</Text>
+          <Text style={styles.text2}>{stringsoflanguages.enterOtpReceived}</Text>
         </View>
       </View>
 
@@ -75,13 +75,13 @@ const OtpScreen = props => {
          {otpError ? <Text style={global.error}>{otpError}</Text> : null}
 
         <View style={styles.buttonV}>
-          <ButtonA onPress={handleNextPage} name={'VERIFY'} />
+          <ButtonA onPress={handleNextPage} name={stringsoflanguages.verify} />
         </View>
       </View>
       <View style={styles.rect3}>
-        <Text style={styles.text3}>Didnt received the verification OTP?</Text>
+        <Text style={styles.text3}>{stringsoflanguages.didntReceivedOtp}</Text>
         <Pressable>
-          <Text style={styles.text4}>Resend again</Text>
+          <Text style={styles.text4}>{stringsoflanguages.resendAgain}</Text>
         </Pressable>
       </View>
     </SafeAreaView>
