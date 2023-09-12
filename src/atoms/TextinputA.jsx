@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import {Text , StyleSheet, View, TextInput } from "react-native";
 import { BLACK } from "../styles/colors";
@@ -24,22 +25,20 @@ const TextinputA = (props) => {
     return (
         <View>
        
-         <TextInput placeholder = { props.placeholder }
-            placeholderTextColor = "#888888"
-            onFocus={handleFocus}
-            onBlur={handleBlur}
-            // secureTextEntry = { props.secureTextEntry }
-            // keyboardType = { props.keyboardType }
-            // maxLength = { props.maxLength }
-            {...props }
-            
-            value = { props.value }
-            style={[
-                styles.input,
-                isFocused ? null : error ? styles.inputError : null,
-            ]}
-            onChangeText={handleChangeText} // Call the onChangeText function with the new value
-        />
+       <TextInput
+  placeholder={props.placeholder}
+  placeholderTextColor="#888888"
+  onFocus={handleFocus}
+  onBlur={handleBlur}
+  {...props}
+  value={props.value}
+  style={[
+    styles.input,
+    isFocused ? null : props.error ? styles.inputError : null,
+  ]}
+  onChangeText={handleChangeText}
+/>
+
        
         </View>
     );

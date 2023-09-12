@@ -17,9 +17,9 @@ const EditPostArray = ({ navigation }) => {
 
   const posts = [
     { id: 1, type: 'ImagePost', source: require('../../assets/pics/iPic1.jpeg') },
-    { id: 2, type: 'ImagePost2', source: require('../../assets/pics/iPic2.jpeg') },
-    { id: 3, type: 'ImagePost3', source: require('../../assets/pics/iPic3.jpeg') },
-    { id: 4, type: 'ImagePost4', source: require('../../assets/pics/iPic4.jpeg') },
+    { id: 2, type: 'ImagePost2', source: require('../../assets/pics/iPic5.png') },
+    { id: 3, type: 'ImagePost3', source: require('../../assets/pics/iPic4.jpeg') },
+    { id: 4, type: 'ImagePost4', source: require('../../assets/pics/iPic3.jpeg') },
     
     // Add more posts as needed
   ];

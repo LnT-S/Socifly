@@ -14,7 +14,7 @@ const TextinputC = (props) => {
          
             style={styles.input}
             {...props }
-            
+           
          
         />
        

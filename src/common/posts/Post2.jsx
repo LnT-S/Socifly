@@ -25,13 +25,22 @@ import { TapGestureHandler, State ,GestureHandlerRootView } from 'react-native-g
 import stringsoflanguages from '../../utils/ScreenStrings';
 import LinearGradient from 'react-native-linear-gradient';
 
+import RewardedAds from '../../common/Ads/RewardedAds'; //ads
+
 const Post2 = props => {
   const [downloaded, setDownloaded] = useState(false);
   const cardRef = useRef(null); // Create a ref for the card view
   const doubleTapRef = useRef(null);
   const [likedMessageVisible, setLikedMessageVisible] = useState(false);
 
+  const [shouldShowAd, setShouldShowAd] = useState(false); //ads
+  const [downloadClicked, setDownloadClicked] = useState(false);
+
+
   const handleDownload = async () => {
+    setDownloadClicked(true);
+    // setShouldShowAd(true);  //ads
+
     if (cardRef.current) {
       try {
         const uri = await captureRef(cardRef, {
@@ -47,17 +56,29 @@ const Post2 = props => {
         // Save the image to the directory
         const filePath = `${dir}/${fileName}`;
         await RNFS.copyFile(uri, filePath);
-
+    
         console.log('Image saved:', filePath);
         setDownloaded(true);
         setTimeout(() => {
           setDownloaded(false);
         }, 3000);
+
+        setShouldShowAd(true);
       } catch (error) {
         console.error('Error capturing view:', error);
+   
       }
     }
   };
+
+  const handleDownloadAfterAd = async () => {
+    // Trigger your download logic here
+    // This function will be called when the ad is shown
+    // You can use this function to download the image for Post2
+    setShouldShowAd(false);
+
+   
+  }
 
   const handleNextPage = () => {
     console.log('Pressing posts navigation');
@@ -109,7 +130,7 @@ const Post2 = props => {
         });
         // Share options with both message, URL, and image
         const shareOptions = {
-          message: 'Hello, check this out! \nhttps://www.example.com/image.jpg',
+          message: '',
           url: uri, // Use the captured image URI
           title: 'Share via', // Title of the share dialog
           subject: 'Share Link', // Subject of the share dialog
@@ -189,13 +210,16 @@ const Post2 = props => {
         </View>
 
 
-
         <View style={styles.profileContainer}>
      
           <Image source={defaultProfileImage} style={styles.profileImage} />
+          
 
           <View style={styles.infoContainer}>
-            <Text style={styles.date}>{formattedDate}</Text>
+          <View style={styles.dateC}>
+        <Text style={styles.date}>{formattedDate}</Text>
+        </View>
+          
             <Text  style={[styles.name, textColorStyle]}>{props.userName}</Text>
             <View style={styles.horizontal}/>
           
@@ -232,6 +256,10 @@ const Post2 = props => {
           <IconButton onPress={onShare}>
             <FeatherIcon name="share-2" style={styles.icon2} />
           </IconButton>
+
+         
+          
+
           <IconButton onPress={handleDownload}>
             <FeatherIcon name="download" style={styles.icon2} />
           </IconButton>
@@ -248,6 +276,9 @@ const Post2 = props => {
         {likedMessageVisible && (
           <Text style={styles.likedText}>{stringsoflanguages.liked}</Text>
         )}
+        {shouldShowAd && downloadClicked && (
+              <RewardedAds  shouldShowAd={shouldShowAd} onAdShown={handleDownloadAfterAd} />
+            )}
     </SafeAreaView>
 
     </GestureHandlerRootView>
@@ -327,24 +358,28 @@ resizeMode:"cover",
     right: '10%',
   },
   date: {
-    fontSize: getResponsiveValue(12, 7),
+    fontSize: getResponsiveValue(14, 9),
     color: WHITE,
     fontWeight: 'bold',
     textShadowColor: "#0000006e",
     textShadowOffset: { width: 1, height: 1 } ,
     textShadowRadius: getResponsiveValue(4,2) ,
-    padding:"1%",
-    paddingHorizontal:"2%",
-    // position:"relative",
-  
-    top: getResponsiveValue('8%', -2),
-    left: getResponsiveValue('120%', 120),
+    paddingHorizontal:"4%",
+    paddingVertical:"2%",
+    backgroundColor:"#731bbcca",
+    borderRadius: getResponsiveValue(20,10),
+  },
+  dateC:{
+    position:"absolute",
+alignItems:"center",
+ bottom: getResponsiveValue('100%', "90%"),
+ left: getResponsiveValue('100%', "90%"),
   },
   name: {
-    fontSize: getResponsiveValue(20, 12),
+    fontSize: getResponsiveValue(20, 13),
     color: WHITE,
     fontWeight: 'bold',
-    top: getResponsiveValue('20%', '30%'),
+    top: getResponsiveValue('20%', '32%'),
     left:getResponsiveValue("40%","40%"),
     textShadowColor: "#000000",
     textShadowOffset: { width: 1, height: 1 } ,
@@ -359,7 +394,7 @@ resizeMode:"cover",
      left: getResponsiveValue('40%', '40%'),
    },
   info: {
-    fontSize: getResponsiveValue(12, 8),
+    fontSize: getResponsiveValue(12, 9),
     color: WHITE,
     marginLeft: getResponsiveValue(10, 5),
     textShadowColor: "#000000",
@@ -370,12 +405,12 @@ resizeMode:"cover",
   infoC: {
     flexDirection: 'row',
 
-    top: getResponsiveValue('15%', '15%'),
-    left: getResponsiveValue('70%', '70%'),
+    top: getResponsiveValue('10%', '12%'),
+    left: getResponsiveValue('100%', '105%'),
   },
   iconPhone: {
-    fontSize: getResponsiveValue(20, 10),
-    color: "#e8ad23",
+    fontSize: getResponsiveValue(23, 10),
+    color: WHITE,
     // top: getResponsiveValue('20%', '30%'),
     // left: getResponsiveValue('40%', '40%'),
     textShadowColor: '#000000',

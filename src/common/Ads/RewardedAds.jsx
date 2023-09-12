@@ -93,10 +93,10 @@ const RewardedAds = (props) => {
           <TouchableOpacity style={styles.nextadd} onPress={() => {
             rewarded.show();
           }}>
-            <Text>Show RewardedAd Ads</Text>
+            {/* <Text>Show RewardedAd Ads</Text> */}
              
           </TouchableOpacity>
-          <Button title="Page Not Found" onPress={pageNotFound} />
+          {/* <Button title="Page Not Found" onPress={pageNotFound} /> */}
             </View>
         </SafeAreaView>
     );

@@ -14,14 +14,16 @@ const strings = new LocalizedStrings({
     enterEmailId: 'Enter Email Id',
     enterPhoneNo: 'Enter Phone No',
     confirmPassword: 'Confirm Password',
+    newPassword: 'New Password',
+    enterNewPassword:'Enter New Password',
     resetPassword: 'Reset Password',
     sendOtp: 'Send OTP',
     usePhoneNumber: 'Use Phone Number',
     useEmail: 'Use Email',
     verification: 'Verification',
-    enterOtpReceived: 'Enter the OTP you have received',
+    enterOtpReceived: 'Resend OTP in',
     verify: 'VERIFY',
-    didntReceivedOtp: 'Didnt received the verification OTP?',
+    didntReceivedOtp: 'Didn\'t receive OTP?',
     resendAgain: 'Resend again',
     otpError: "'OTP should be exactly 6 characters long",
     new: 'NEW',
@@ -62,7 +64,9 @@ const strings = new LocalizedStrings({
     settings: 'Settings',
     changeTextColor: 'Change Text Color',
     changeInfoColor: 'Change Info Color',
-    changeNameColor:'Change Name Color',
+    changeNameColor: 'Change Name Color',
+    enterBirthdate: 'Enter Birthdate',
+    birthdateRequired: 'Please select your birthdate',
     //category
     goodMorning: 'Good Morning',
     goodNight: 'Good Night',
@@ -75,11 +79,29 @@ const strings = new LocalizedStrings({
 
     // about us section
     heading1: 'Make Your Daily',
-    heading2: 'Unique Status On Socifly',
-    point1: 'Fresh Quotes Everyday',
-    point2: 'Download Easily',
-    point3: 'Quick Share & Download',
-    point4: 'Like Your Favourites',
+    heading2: 'Special Status On Socifly',
+    dearUsers: 'Dear Users,',
+    sociflyApp: '‘SOCIFLY APP’',
+    point1:
+      'Have a warm and helpful greeting from me. I am Dhiraj Gajendra Navlakhe the owner of this ',
+    point2:
+      '. I have completed advanced diploma in graphic designing and animation from IMR College Jalgaon, Maharashtra.',
+    point3:
+      'After that I am working as a freelance graphic designer from last 11 years. I am working with leading publication houses and advertising agencies from India, UK, US and Australia. Some of my clients are as follows.',
+    point4:
+      'Now I am starting this new app for all of you so that all of you can send your wishes to your friends, relatives and customers in very special way to create a new bonding with all of them.',
+    point5: 'Kindly use the',
+    point6: 'and give your love and likes to it.',
+    point7: 'Also share the app and rate this app on Play Store.',
+    point8: 'Have a nice day.',
+    point9: 'Thank you',
+
+    place1: 'Youkiyoto Publishing (Canada)',
+    place2: 'Shildcrest Publishing (London, UK)',
+    place3: 'Atmosphere Press (Austin, USA)',
+    place4: 'Zorba Books (Gurgaon, India)',
+    place5: 'Varada Prakashan (Pune, India)',
+    place6: 'Youtbook (Chennai, India)',
   },
   hi: {
     welcome: 'आपका स्वागत है',
@@ -95,6 +117,8 @@ const strings = new LocalizedStrings({
     enterEmailId: 'ईमेल आईडी दर्ज करें',
     enterPhoneNo: 'फ़ोन नंबर दर्ज करें',
     confirmPassword: 'पासवर्ड की पुष्टि करें',
+    newPassword: 'नया पासवर्ड',
+    enterNewPassword: 'नया पासवर्ड दर्ज करें',
     resetPassword: 'पासवर्ड रीसेट करें',
     sendOtp: 'OTP भेजें',
     usePhoneNumber: 'फ़ोन नंबर का उपयोग करें',
@@ -102,7 +126,7 @@ const strings = new LocalizedStrings({
     verification: 'सत्यापन',
     enterOtpReceived: 'आपको प्राप्त हुए OTP दर्ज करें',
     verify: 'सत्यापित करें',
-    didntReceivedOtp: 'सत्यापन OTP प्राप्त नहीं हुआ?',
+    didntReceivedOtp: 'OTP प्राप्त नहीं हुआ?',
     resendAgain: 'फिर से भेजें',
     otpError: 'OTP बिल्कुल 6 अक्षरों का होना चाहिए',
     new: 'नया',
@@ -141,10 +165,12 @@ const strings = new LocalizedStrings({
     enterYourMessage: 'अपना संदेश दर्ज करें',
     submit: 'सबमिट करें',
     settings: 'सेटिंग्स',
-    
+
     changeTextColor: 'शब्दों का रंग बदलें',
     changeNameColor: 'नाम का रंग बदलें',
     changeInfoColor: 'जानकारी का रंग बदलें',
+    enterBirthdate: 'जन्म तारीख दर्ज करें',
+    birthdateRequired: 'कृपया अपनी जन्म तारीख का चयन करें',
     //category
     goodMorning: 'शुभ प्रभात',
     goodNight: 'शुभ रात्रि',
@@ -158,10 +184,28 @@ const strings = new LocalizedStrings({
     // about us section
     heading1: 'रोज़ाना बनाएं',
     heading2: 'अपनी अनूठी स्थिति SOCIFLY पर',
-    point1: 'रोज़ाना नए उद्धरण',
-    point2: 'आसानी से डाउनलोड करें',
-    point3: 'तेजी से साझा करें और डाउनलोड करें',
-    point4: 'अपने पसंदीदा को पसंद करें',
+    dearUsers: 'Dear Users,',
+    sociflyApp: '‘SOCIFLY APP’',
+    point1:
+      'Have a warm and helpful greeting from me. I am Dhiraj Gajendra Navlakhe the owner of this ',
+    point2:
+      '. I have completed advanced diploma in graphic designing and animation from IMR College Jalgaon, Maharashtra.',
+    point3:
+      'After that I am working as a freelance graphic designer from last 11 years. I am working with leading publication houses and advertising agencies from India, UK, US and Australia. Some of my clients are as follows.',
+    point4:
+      'Now I am starting this new app for all of you so that all of you can send your wishes to your friends, relatives and customers in very special way to create a new bonding with all of them.',
+    point5: 'Kindly use the',
+    point6: 'and give your love and likes to it.',
+    point7: 'Also share the app and rate this app on Play Store.',
+    point8: 'Have a nice day.',
+    point9: 'Thank you',
+
+    place1: 'Youkiyoto Publishing (Canada)',
+    place2: 'Shildcrest Publishing (London, UK)',
+    place3: 'Atmosphere Press (Austin, USA)',
+    place4: 'Zorba Books (Gurgaon, India)',
+    place5: 'Varada Prakashan (Pune, India)',
+    place6: 'Youtbook (Chennai, India)',
   },
   ma: {
     welcome: 'आपले स्वागत आहे',
@@ -177,6 +221,8 @@ const strings = new LocalizedStrings({
     enterEmailId: 'ईमेल आयडी प्रविष्ट करा',
     enterPhoneNo: 'फोन नंबर प्रविष्ट करा',
     confirmPassword: 'पासवर्ड पुष्टीकरण करा',
+    newPassword: 'नवीन पासवर्ड',
+    enterNewPassword: 'नवीन पासवर्ड प्रविष्ट करा',
     resetPassword: 'पासवर्ड रीसेट करा',
     sendOtp: 'OTP पाठवा',
     usePhoneNumber: 'फोन नंबर वापरा',
@@ -184,7 +230,7 @@ const strings = new LocalizedStrings({
     verification: 'सत्यापन',
     enterOtpReceived: 'आपल्याला प्राप्त झालेला OTP प्रविष्ट करा',
     verify: 'सत्यापित करा',
-    didntReceivedOtp: 'सत्यापन OTP प्राप्त झालेला नाही का?',
+    didntReceivedOtp: 'OTP प्राप्त झालेला नाही का?',
     resendAgain: 'पुन्हा पाठवा',
     otpError: 'OTP संपूर्णपणे 6 अक्षरांचा असावा',
     new: 'नविन',
@@ -223,10 +269,12 @@ const strings = new LocalizedStrings({
     enterYourMessage: 'तुमचं संदेश प्रविष्ट करा',
     submit: 'सबमिट करा',
     settings: 'सेटिंग्स',
-    
+
     changeTextColor: 'शब्दांचा रंग बदला',
     changeNameColor: 'नावाचा रंग बदला',
     changeInfoColor: 'माहितीचा रंग बदला',
+    enterBirthdate: 'जन्म तारीख प्रविष्ट करा',
+    birthdateRequired: 'कृपया आपली जन्म तारीख निवडा',
     //category
     goodMorning: 'सुप्रभात',
     goodNight: 'शुभ रात्री',
@@ -240,10 +288,29 @@ const strings = new LocalizedStrings({
     // about us section
     heading1: 'तुमचं दैनंदिन',
     heading2: 'अनूठी स्थिती SOCIFLY वर बनवा',
-    point1: 'प्रतिदिन ताज्या उध्दरणा',
-    point2: 'सोबत डाउनलोड करा',
-    point3: 'जलद सामायिक करा आणि डाउनलोड करा',
-    point4: 'आपल्या आवडत्या गोष्टीला आवडणारे आहे',
+    dearUsers: 'प्रिय वापरकार्यांनो,',
+    sociflyApp: '‘SOCIFLY APP’',
+    point1:
+      'माझ्याकडून तुमचं हार्दिक आणि सहाय्यक स्वागत आहे. माझं नाव धीरज गजेंद्र नवलखे आहे, ह्या ',
+    point2:
+      ' च्या मालक आहे. माझ्याकडून महाराष्ट्राच्या जळगावमधील आय.एम.आर. कॉलेजमधील ग्राफिक डिझायनिंग आणि ऍनिमेशनच्या सर्वोत्कृष्ट डिप्लोमा पूर्ण केलेला आहे.',
+    point3:
+      'त्यानंतर, माझ्याकडून पुढील 11 वर्षे एक स्वतंत्र ग्राफिक डिझायनर म्हणून काम करण्याची गोष्ट आहे. मी भारत, यूके, यूएस, आणि ऑस्ट्रेलियासह प्रमुख प्रकाशन प्रमाणित करणार्या घराण्याशी आणि जाहिराती ग्रुपसह काम करीत आहे. माझ्या काही ग्राहकांची यादी खालीलप्रमाणे आहे.',
+    point4:
+      'आता माझ्याकडून हे नवे ऍप्लिकेशन आपल्याला सर्वांसाठी सुखद आणि विशेषपणे तुमच्या मित्रांना, नातेवाईकांना, आणि ग्राहकांना आपल्याला त्यांच्या साथीसोबत एक नवीन जोडण्याच्या खास दारीसाठी आहे.',
+    point5: ' कृपया ',
+    point6: 'वापरा आणि त्याला आपल्याचं प्रेम आणि आवश्यकता आहे, हे द्या.',
+    point7:
+      'इ. त्याच्या अॅपवर दिलेल्या व्यक्तिगत म्हणजे तुमच्याला तुमच्या विनमूल्य मित्रांसोबत सुखद क्षण अनुभवायला हवं आणि आवश्यकता असल्यास त्याच्या अॅपवर रेट किंवा सामायिक करा.',
+    point8: 'तुमच्याला आश्वासन आहे.',
+    point9: 'धन्यवाद',
+
+    place1: 'यूकियोटो प्रकाशन (कॅनडा)',
+    place2: 'शिल्डक्रेस्ट प्रकाशन (लंडन, यूके)',
+    place3: 'अँट्मॉस्फिअर प्रेस (ऑस्टिन, यूएस)',
+    place4: 'झोर्बा बुक्स (गुडगाव, भारत) ',
+    place5: 'वरद प्रकाशन (पुणे, भारत) ',
+    place6: 'यौटबुक (चेन्नई, भारत)',
   },
 });
 

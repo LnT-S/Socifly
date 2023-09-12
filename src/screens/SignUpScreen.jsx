@@ -20,6 +20,7 @@ import {FETCH} from '../services/fetch';
 import {getResponsiveValue} from '../styles/responsive';
 import {validateForm} from '../utils/validation/validateForm';
 import stringsoflanguages from '../utils/ScreenStrings';
+import DateTimePicker from '@react-native-community/datetimepicker'; 
 
 
 const SignUpScreen = props => {
@@ -29,6 +30,7 @@ const SignUpScreen = props => {
     phone: '',
     password: '',
     confirm_password: '',
+    birthdate: '', 
   });
 
   const [username, setUsername] = useState('');
@@ -36,10 +38,34 @@ const SignUpScreen = props => {
   const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = useState(false);
   const [showPassword1, setShowPassword1] = useState(false);
+  const [showDatePicker, setShowDatePicker] = useState(false);
   const handleChange = (field, text) => {
     setValue((prev) => ({ ...prev, [field]: text }));
     setErrors((prev) => ({ ...prev, [field]: '' })); // Clear the error when typing
   };
+
+  const handleDateChange = (event, selectedDate) => {
+    setShowDatePicker(false); // Hide the date picker
+    if (selectedDate) {
+      const formattedDate = selectedDate.toISOString().split('T')[0]; // Format the selected date as needed
+      handleChange('birthdate', formattedDate); // Update the 'birthdate' field in your state
+    }
+  };
+
+  const renderDatePicker = () => {
+    if (showDatePicker) {
+      return (
+        <DateTimePicker
+          value={value.birthdate ? new Date(value.birthdate) : new Date()} // Set the initial date value
+          mode="date"
+          display="calendar"
+          onChange={handleDateChange}
+        />
+      );
+    }
+    return null;
+  };
+  
 
   const scrollViewRef = useRef(null);
 
@@ -133,6 +159,23 @@ const SignUpScreen = props => {
               error={errors.phone}
             />
             {errors.phone && <Text style={global.error}>{errors.phone}</Text>}
+            <Pressable
+              onPress={() => setShowDatePicker(true)} // Show the date picker when pressed
+            >
+              <TextinputA
+                placeholder={stringsoflanguages.enterBirthdate}
+                value={value?.birthdate}
+                editable={false} // Disable manual input
+                error={errors.birthdate}
+              />
+            </Pressable>
+
+            {errors.birthdate && (
+              <Text style={global.error}>{errors.birthdate}</Text>
+            )}
+
+            {/* Render the date picker */}
+            {renderDatePicker()}
 
            
             <TextinputB

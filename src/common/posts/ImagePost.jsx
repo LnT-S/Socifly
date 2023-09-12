@@ -117,7 +117,7 @@ const ImagePost = props => {
 
         // Share options with both message, URL, and image
         const shareOptions = {
-          message: 'Hello, check this out! \nhttps://www.example.com/image.jpg',
+          message: '',
           url: uri, // Use the captured image URI
           title: 'Share via', // Title of the share dialog
           subject: 'Share Link', // Subject of the share dialog
@@ -205,7 +205,9 @@ const ImagePost = props => {
             <View style={styles.profileContainer}>
               <Image source={defaultProfileImage} style={styles.profileImage} />
               <View style={styles.infoContainer}>
-                <Text style={[styles.date,textColorStyle]}>{formattedDate}</Text>
+              <View style={styles.dateC}>
+        <Text style={styles.date}>{formattedDate}</Text>
+        </View>
                 <Text style={[styles.name,textColorStyle2]}>{props.userName}</Text>
                 <View style={styles.horizontal} />
                 <View style={styles.infoC}>
@@ -391,49 +393,55 @@ resizeMode:"cover",
     right: '10%',
   },
   date: {
-    fontSize: getResponsiveValue(12, 8),
-    color: BLACK,
+    fontSize: getResponsiveValue(14, 9),
+    color: WHITE,
     fontWeight: 'bold',
-    // position:"relative",
-    top: getResponsiveValue('1%', 0),
-    left: getResponsiveValue('120%', '100%'),
     textShadowColor: "#0000006e",
     textShadowOffset: { width: 1, height: 1 } ,
     textShadowRadius: getResponsiveValue(4,2) ,
-    padding:"1%",
-    paddingHorizontal:"2%",
+    paddingHorizontal:"4%",
+    paddingVertical:"2%",
+    backgroundColor:"#ee6516c8",
+    borderRadius: getResponsiveValue(20,10),
+  },
+  dateC:{
+    position:"absolute",
+alignItems:"center",
+ bottom: getResponsiveValue('100%', "90%"),
+ left: getResponsiveValue('100%', "90%"),
   },
   name: {
-    fontSize: getResponsiveValue(20, 12),
+    fontSize: getResponsiveValue(20, 13),
     color: BLACK,
     fontWeight: 'bold',
+    // position:"absolute",
+    width:"100%",
     top: getResponsiveValue('20%', '30%'),
     left: getResponsiveValue('40%', '40%'),
     textShadowColor: '#05050567',
-    textShadowOffset: { width: 1, height: 1 } ,
-    textShadowRadius: getResponsiveValue(4,2) ,
+    textShadowOffset: {width: 1, height: 1},
+    textShadowRadius: getResponsiveValue(4, 2),
   },
   info: {
-    fontSize: getResponsiveValue(12, 8),
-    color: BLACK,
-    // top: getResponsiveValue('20%', '30%'),
-    // left: getResponsiveValue('40%', '40%'),
-    fontWeight: 'bold',
+    fontSize: getResponsiveValue(12, 9),
+    color: WHITE,
     marginLeft: getResponsiveValue(10, 5),
+    fontWeight: 'bold',
     textShadowColor: '#05050567',
-    textShadowOffset: { width: 1, height: 1 } ,
-    textShadowRadius: getResponsiveValue(2,1) ,
+    // textShadowColor: '#05050567',
+    textShadowOffset: {width: 1, height: 1},
+    textShadowRadius: getResponsiveValue(2, 1),
   },
-  
+
   infoC: {
     flexDirection: 'row',
 
-    top: getResponsiveValue('15%', '15%'),
-    left: getResponsiveValue('70%', '70%'),
+    top: getResponsiveValue('10%', '12%'),
+    left: getResponsiveValue('100%', '105%'),
   },
   iconPhone: {
     fontSize: getResponsiveValue(20, 10),
-    color: "yellow",
+    color: WHITE,
     // top: getResponsiveValue('20%', '30%'),
     // left: getResponsiveValue('40%', '40%'),
     textShadowColor: '#05050567',

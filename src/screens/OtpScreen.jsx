@@ -1,4 +1,5 @@
-import React, {useState} from 'react';
+import React, { useState, useEffect } from 'react';
+
 import {
   StyleSheet,
   View,
@@ -20,6 +21,11 @@ import stringsoflanguages from '../utils/ScreenStrings';
 const OtpScreen = props => {
   const [otp, setOtp] = useState('');
   const [otpError, setOtpError] = useState('');
+
+  const [timer, setTimer] = useState(120); // Initial value of 120 seconds
+const [isTimerRunning, setIsTimerRunning] = useState(false);
+
+  
   const handleOtpChange = text => {
     setOtp(text);
     setOtpError('');
@@ -29,16 +35,42 @@ const OtpScreen = props => {
 
 
     if (otp.length === 6) {
-      props.navigation.navigate('LoginScreen');
+      props.navigation.navigate('NewPassword');
     } else  {
       setOtpError(stringsoflanguages.otpError);
-    }
-    // props.navigation.navigate('LoginScreen');
-
-
-    
+    } 
     
   };
+
+  const startTimer = () => {
+    setTimer(120); // Reset the timer to 120 seconds
+    setIsTimerRunning(true);
+  
+    const intervalId = setInterval(() => {
+      setTimer(prevTimer => {
+        if (prevTimer === 0) {
+          setIsTimerRunning(false);
+          clearInterval(intervalId);
+          return 0;
+        }
+        return prevTimer - 1;
+      });
+    }, 1000); // Decrease the timer every second (1000 milliseconds)
+  };
+
+  useEffect(() => {
+    startTimer();
+  }, []);
+
+  const handleResend = () => {
+    if (!isTimerRunning) {
+      startTimer();
+      // Add logic here to resend the OTP
+    }
+  };
+  
+  
+  
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.rect1}>
@@ -79,11 +111,16 @@ const OtpScreen = props => {
         </View>
       </View>
       <View style={styles.rect3}>
-        <Text style={styles.text3}>{stringsoflanguages.didntReceivedOtp}</Text>
-        <Pressable>
-          <Text style={styles.text4}>{stringsoflanguages.resendAgain}</Text>
-        </Pressable>
-      </View>
+      <Text style={styles.text3}>
+        {isTimerRunning ? `${stringsoflanguages.enterOtpReceived} ${timer} seconds.` : stringsoflanguages.didntReceivedOtp}
+      </Text>
+      <Pressable onPress={handleResend}>
+        <Text style={styles.text4}>
+          {isTimerRunning ? '' : stringsoflanguages.resendAgain}
+        </Text>
+      </Pressable>
+    </View>
+    
     </SafeAreaView>
   );
 };
@@ -171,3 +208,4 @@ const styles = StyleSheet.create({
 });
 
 export default OtpScreen;
+
