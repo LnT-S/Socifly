@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState , useEffect, useContext} from 'react';
 import {
   StyleSheet,
   View,
@@ -11,34 +11,63 @@ import global from '../styles/global';
 import TextinputA from '../atoms/TextinputA';
 import ButtonA from '../atoms/ButtonA';
 import {BLACK, LINKS, PRIMARY} from '../styles/colors';
-
 import {getResponsiveValue} from '../styles/responsive';
 import OTPInputView from '@twotalltotems/react-native-otp-input';
 // import { useOtpVerify, getHash, startOtpListener } from 'react-native-otp-verify';
 import stringsoflanguages from '../utils/ScreenStrings';
+import { useLocal } from '../context/ProfileContext';
+import { FETCH } from '../services/fetch';
+import CustomModal from '../atoms/CustomModal';
 
-const OtpScreen = props => {
+const OtpScreen = (props) => {
+  const {localState, localDispatch} = useLocal()
   const [otp, setOtp] = useState('');
   const [otpError, setOtpError] = useState('');
-  const handleOtpChange = text => {
+  const [showModal, setShowModal] = useState(false)
+  const [modal, setModal] = useState({
+    visible : false,
+    message : '',
+    navigationPage : '',
+    onClose : null
+  })
+
+  const handleOtpChange = (text) => {
     setOtp(text);
+    localDispatch({
+      type : 'OTP',
+      payload : text
+    })
     setOtpError('');
   };
 
-  const handleNextPage = () => {
-
-
+  const handleNextPage = async() => {
     if (otp.length === 6) {
-      props.navigation.navigate('LoginScreen');
+      const {data,status}= await FETCH(
+        'POST',
+        '/auth/verify-reset-password-otp',
+        localState.userId,
+        {otp}
+      )
+      if(status===200){
+        console.log('Move TO New Password Enter Screen')
+        // props.navigation.navigate('LoginScreen');
+      }else{
+        let a = setModal({
+          visible : true,
+          message : data.message,
+          navigationPage : 'SignUpScreen',
+          onClose : ()=>{setShowModal(false)}
+        })
+        setShowModal(true)
+      }
     } else  {
       setOtpError(stringsoflanguages.otpError);
     }
     // props.navigation.navigate('LoginScreen');
-
-
-    
-    
   };
+  useEffect(() => {
+    console.log('local',localState)
+  });
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.rect1}>
@@ -73,6 +102,8 @@ const OtpScreen = props => {
           onCodeChanged={handleOtpChange}
         />
          {otpError ? <Text style={global.error}>{otpError}</Text> : null}
+
+         {showModal?<CustomModal visible={modal.visible} message={modal.message} navigationPage={modal.navigationPage} onClose={modal.onClose} />:''}
 
         <View style={styles.buttonV}>
           <ButtonA onPress={handleNextPage} name={stringsoflanguages.verify} />

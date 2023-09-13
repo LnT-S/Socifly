@@ -25,12 +25,27 @@ import GoogleAds from '../common/Ads/GoogleAds';
 import RewardedAds from '../common/Ads/RewardedAds';
 import InterstitialAds from '../common/Ads/InterstitialAds';
 import BannerAds from '../common/Ads/BannerAds';
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useNavigation} from '@react-navigation/native';
 
 
 //import RewardedInterstitialAds from '../common/RewardedInterstitialAds';
 
 const HomePage = props => {
+  const navigation = useNavigation();
+  useEffect(()=>{
+    async function token(){
+      let token = await AsyncStorage.getItem('token')
+      if(token){
+        console.log('LOG : Token Found')
+      }else{
+        console.log('LOG : Token not found')
+        navigation.navigate('LoginScreen')
+      }
+    }
+    token()
+  },[])
+
   const [shouldShowAd, setShouldShowAd] = useState(false);
   const bannerData = [1, 2, 3];
   const [currentBannerIndex, setCurrentBannerIndex] = useState(0);

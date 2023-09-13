@@ -1,6 +1,6 @@
 {
     "development": {
-        "server": "localhost:8000/v1"
+        "server" : "http://10.0.2.2:8000/v1"
     },
     "staging": {
         "server": ""

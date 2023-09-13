@@ -3,19 +3,19 @@
 import config from "./config.json";
 
 // const env:string = process.env['APP_ENV'] as string;
-const env:string = "development";
+const env: string = "development";
 
-interface CONFIG{
-    server : string,
+interface CONFIG {
+    server: string,
 }
-var envData : CONFIG;
-if(env === "development")
+var envData: CONFIG;
+if (env === "development")
     envData = config.development;
-else if(env === "staging")
+else if (env === "staging")
     envData = config.staging;
-else if(env === "production")
+else if (env === "production")
     envData = config.production;
+else
+    envData = config.development;
 
-envData = config.development;
-
-export const {server} = envData;
+export default envData;

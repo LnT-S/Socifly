@@ -20,11 +20,9 @@ import {getResponsiveValue} from '../styles/responsive';
 // import {launchImageLibrary} from 'react-native-image-picker';
 // import { openCropper } from 'react-native-image-crop-picker';
 import ImagePicker from 'react-native-image-crop-picker';
-
 import defaultProfileImage from '../assets/images/Profile.png';
 // import SettingsScreen from './Settings';
 import { useProfile } from '../context/ProfileContext'; 
-
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import stringsoflanguages from '../utils/ScreenStrings';
 import { WHITE } from '../styles/colors';
@@ -88,10 +86,6 @@ const ProfileScreen = props => {
     setIsEditing(!isEditing);
   };
 
-
-
-
-
   const saveChanges = async () => {
     if (isEditing) {
       dispatch({
@@ -108,23 +102,10 @@ const ProfileScreen = props => {
       });
   
       // Save updated profile data to AsyncStorage
-      try {
-        await AsyncStorage.setItem('profileName', name);
-        await AsyncStorage.setItem('profileEmail', email);
-        await AsyncStorage.setItem('profilePhoneNumber', phoneNumber);
-        await AsyncStorage.setItem('profileImage', selectedProfileImage);
-      } catch (error) {
-        console.log('Error saving profile data:', error);
-      }
     }
-  
     toggleEdit();
   };
   
-
-
-  
-
   useEffect(() => {
     const loadProfileData = async () => {
       try {

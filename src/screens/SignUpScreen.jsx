@@ -20,7 +20,8 @@ import {FETCH} from '../services/fetch';
 import {getResponsiveValue} from '../styles/responsive';
 import {validateForm} from '../utils/validation/validateForm';
 import stringsoflanguages from '../utils/ScreenStrings';
-
+import CustomModal from '../atoms/CustomModal';
+import DialogueBox from '../common/DialogueBox';
 
 const SignUpScreen = props => {
   const [value, setValue] = useState({
@@ -36,6 +37,13 @@ const SignUpScreen = props => {
   const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = useState(false);
   const [showPassword1, setShowPassword1] = useState(false);
+  const [showModal, setShowModal] = useState(false)
+  const [modal, setModal] = useState({
+    visible : false,
+    message : '',
+    navigationPage : '',
+    onClose : null
+  })
   const handleChange = (field, text) => {
     setValue((prev) => ({ ...prev, [field]: text }));
     setErrors((prev) => ({ ...prev, [field]: '' })); // Clear the error when typing
@@ -46,36 +54,43 @@ const SignUpScreen = props => {
   const handleSignUp = async () => {
     console.log('LOG : Submiiting Form')
     const validationErrors = validateForm(value);
-    console.log('LOG : Validation Status',value)
-    if (Object.keys(validationErrors).length > 0) {
-      setErrors(validationErrors); // Set the validation errors in state
-      return;
-    }
+    console.log('LOG : Validation Status',validationErrors)
+    // if (Object.keys(validationErrors).length > 0) {
+    //   setErrors(validationErrors); // Set the validation errors in state
+    //   return;
+    // }
 
     try {
       setIsLoading(true); // Start loading
       let formData = new FormData();
       formData.append('data', value);
       console.log('VAlue is', { value });
-      let data = await FETCH(
-        'server',
+      let {status , data} = await FETCH(
         'POST',
-        'http://192.168.1.32:8000/v1/auth/signup',//localhost:8000/v1/auth/signup
+        '/auth/signup',
         '',
         value,
       );
-      console.log({ data });
       setIsLoading(false); // End loading
-      if (data.success) {
-        // Navigate to the next page (e.g., a success page or the login page)
-        props.navigation.navigate('HomeScreen');
-      } else {
-        // Handle sign-up error, for example, show an error message
-        console.error('Sign up error:', data.message);
+      if(status!==400 && status!==500){
+        console.log('LOG : Status is not 400');
+        setModal({
+          visible : true,
+          message : data.message,
+          navigationPage : 'LoginScreen'
+        })
+        setShowModal(true)
+      }else{
+        let a = setModal({
+          visible : true,
+          message : data.message,
+          navigationPage : 'SignUpScreen',
+          onClose : ()=>{setShowModal(false)}
+        })
+        setShowModal(true)
       }
     } catch (error) {
       setIsLoading(false); // End loading on error
-      // Handle signup error
       console.error('Sign up error:', error);
     }
   };
@@ -100,6 +115,8 @@ const SignUpScreen = props => {
             ref={scrollViewRef}
             contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}
             keyboardShouldPersistTaps="handled">
+
+            {showModal?<CustomModal visible={modal.visible} message={modal.message} navigationPage={modal.navigationPage} onClose={modal.onClose} />:''}
 
             <TextinputA
             // style={[

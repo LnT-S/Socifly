@@ -4,12 +4,14 @@ import ButtonA from '../atoms/ButtonA';
 import {useNavigation} from '@react-navigation/native';
 import { BLACK } from '../styles/colors';
 
-const DialogueBox = ({isVisible, onClose, textContent}) => {
+const DialogueBox = ({isVisible, textContent,handleYes, handleNo , navigationPage}) => {
   const navigation = useNavigation();
-  const handleOk = () => {
-    navigation.navigate('LoginScreen');
+  function handleOk(){
+    navigation.navigate(navigationPage);
   };
-
+  function onClose(){
+    navigation.navigate(navigationPage);
+  }
   return (
     <Modal
       visible={isVisible}
@@ -22,11 +24,11 @@ const DialogueBox = ({isVisible, onClose, textContent}) => {
 
           <View style={styles.row}>
             <View style={styles.r1}>
-              <ButtonA onPress={handleOk} name={'Yes'} />
+              <ButtonA onPress={handleYes || handleOk} name={'Yes'} />
             </View>
 
             <View style={styles.r2}>
-              <ButtonA onPress={onClose} name={'No'} />
+              <ButtonA onPress={handleNo || onClose} name={'No'} />
             </View>
           </View>
         </View>

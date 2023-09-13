@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, Pressable, Text, SafeAreaView } from 'react-native';
 import LinearGradients from '../atoms/LinearGradients';
 import global from '../styles/global';
@@ -6,31 +6,36 @@ import TextinputA from '../atoms/TextinputA';
 import TextinputB from '../atoms/TextinputB';
 import ButtonA from '../atoms/ButtonA';
 import {BLACK, LINKS} from '../styles/colors';
-
-// import { isEmailValid } from "../utils/validation/formValidation";
-
 import {getResponsiveValue} from '../styles/responsive';
-
-// import stringsoflanguages from '../utils/ScreenStrings'
 import stringsoflanguages from '../utils/ScreenStrings';
-
 import { validate2 } from '../utils/validation/validate2';
+import {FETCH} from '../services/fetch';
+import CustomModal from '../atoms/CustomModal';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useNavigation} from '@react-navigation/native';
+
 const LoginScreen = props => {
+  const navigation = useNavigation();
   const [errors, setErrors] = useState({});
   // .....
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  
-  const handleLogin = async () => {
-    console.log('handleLogin function executed');
-    setErrors({});
+  const [showModal, setShowModal] = useState(false)
+  const [modal, setModal] = useState({
+    visible : false,
+    message : '',
+    navigationPage : '',
+    onClose : null
+  })
 
+  const handleLogin = async () => {
+    console.log('LOG : Login Launched');
+    setErrors({});
     // Define the formData object with correct order
     const formData1 = {
       email: username,
       password,
-
     };
 
     const validationErrors = validate2(formData1);
@@ -44,21 +49,37 @@ const LoginScreen = props => {
 
     try {
       setIsLoading(true); // Start loading
-      console.log(
-        'Sending login request with username:',
-        username,
-        // 'and password:',
-        // password,
+      console.log('VAlue is', { formData1 });
+
+      let {status , data} = await FETCH(
+        'POST',
+        '/auth/create-session',
+        '',
+        formData1,
       );
-
-      // const userData = await login(username, password);
-
-      setIsLoading(false); // End loading
-
-      // console.log('Received user data:', userData);
-
-      // console.log("Login successful:", userData);
-      props.navigation.navigate('HomePage');
+      if(status!==400 && status!==500){
+        console.log('LOG : Status is not 400');
+        if(data.data.token){
+          console.log('LOG : Token is Found')
+          await AsyncStorage.setItem('token' , data.data.token)
+        }
+        let a = setModal({
+          visible : true,
+          message : data.message,
+          navigationPage : 'HomePage'
+        })
+        setShowModal(true)
+        setTimeout(()=>{setShowModal(false);navigation.navigate('HomePage');},2000)
+      }else{
+        let a = setModal({
+          visible : true,
+          message : data.message,
+          navigationPage : 'SignUpScreen',
+          onClose : ()=>{setShowModal(false)}
+        })
+        setShowModal(true)
+      }
+      
     } catch (error) {
       setIsLoading(false); // End loading on error
 
@@ -84,6 +105,22 @@ const LoginScreen = props => {
 
   };
 
+
+  useEffect(()=>{
+    let logs = async ()=>{
+      let token = await AsyncStorage.getItem('token')
+      if(token){
+        console.log('Token Exists Redirecting to the home page');
+        props.navigation.navigate('HomePage')
+      }else{
+        console.log('TOken Not Found Enter your Details')
+        setUsername('')
+        setPassword('')
+      }
+    }
+    logs()
+  },[])
+
   return (
     <SafeAreaView style={styles.container}>
       <LinearGradients customStyle={styles.loginGradient}>
@@ -91,6 +128,9 @@ const LoginScreen = props => {
       </LinearGradients>
 
       <View style={global.aContainer}>
+
+      {showModal?<CustomModal visible={modal.visible} message={modal.message} navigationPage={modal.navigationPage} onClose={modal.onClose} />:''}
+
       <TextinputA
           style={[
             styles.input,

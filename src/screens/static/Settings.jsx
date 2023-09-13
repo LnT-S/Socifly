@@ -5,44 +5,29 @@ import {
   Text,
   Pressable,
   TextInput,
-  
   Image,
   Animated,
 } from 'react-native';
-
-
-
-
 import defaultProfileImage from '../../assets/images/Profile.png';
-
-
-import {BLACK, WHITE} from '../../styles/colors';
-
-
+import { BLACK, WHITE } from '../../styles/colors';
 import Icon from "react-native-vector-icons/FontAwesome";
-
 import stringsoflanguages from '../../utils/ScreenStrings';
-
 import Icon2 from 'react-native-vector-icons/MaterialIcons';
-
 import { useNavigation } from '@react-navigation/native';
-
-
-
 import React, { useState } from 'react';
-
-
 import { getResponsiveValue } from '../../styles/responsive';
-
-
 import MaterialCommunityIconsIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import DialogueBox from '../../common/DialogueBox';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+
 const Settings = props => {
   const navigation = useNavigation();
   const [isTextContainerPressed, setIsTextContainerPressed] = useState(false);
   const textContainerScaleValue = new Animated.Value(1);
   const [isLogoutDialogVisible, setIsLogoutDialogVisible] = useState(false);
+
   const handleTextContainerPressIn = () => {
     setIsTextContainerPressed(true);
     Animated.spring(textContainerScaleValue, {
@@ -51,8 +36,14 @@ const Settings = props => {
     }).start();
   };
 
-  const handleLogout = () => {
-    setIsLogoutDialogVisible(true);
+  function handleLogout(){
+    setIsLogoutDialogVisible(true)
+  }
+
+  const handleYesForLogout = async () => {
+    AsyncStorage.removeItem('token')
+    navigation.navigate('LoginScreen')
+    setIsLogoutDialogVisible(false);
   };
 
   const handleTextContainerPressOut = () => {
@@ -92,14 +83,14 @@ const Settings = props => {
   return (
     <SafeAreaView style={styles.container}>
 
-<View style={styles.status}>
+      <View style={styles.status}>
         <Icon2
           onPress={handleNextPage}
           name="arrow-back"
           style={styles.icon2}></Icon2>
         <Text style={styles.statusT}> {stringsoflanguages.settings}</Text>
       </View>
- 
+
 
       <View style={styles.mainRect}>
         <View style={styles.rect1}>
@@ -112,22 +103,22 @@ const Settings = props => {
               <Animated.View
                 style={[styles.textContainer, animatedTextContainerStyles]}
               >
-               <View style={styles.textContainer}>
-              <Text style={styles.text1}>Your Name</Text>
-              <Text style={styles.text2}>your_email123@isEmail.com</Text>
-              <Text style={styles.text2}>+91 1234567890</Text>
-            </View>
+                <View style={styles.textContainer}>
+                  <Text style={styles.text1}>Your Name</Text>
+                  <Text style={styles.text2}>your_email123@isEmail.com</Text>
+                  <Text style={styles.text2}>+91 1234567890</Text>
+                </View>
               </Animated.View>
             </Pressable>
 
           </View>
         </View>
 
-       
+
         <View style={styles.rect2}>
           <Pressable
-            style={({pressed}) => [
-              {opacity: pressed ? 0.6 : 0.9},
+            style={({ pressed }) => [
+              { opacity: pressed ? 0.6 : 0.9 },
               styles.iconWrapper,
               styles.row,
             ]}
@@ -140,8 +131,8 @@ const Settings = props => {
           </Pressable>
           <View style={styles.divider}></View>
           <Pressable
-            style={({pressed}) => [
-              {opacity: pressed ? 0.6 : 0.9},
+            style={({ pressed }) => [
+              { opacity: pressed ? 0.6 : 0.9 },
               styles.iconWrapper,
               styles.row,
             ]}
@@ -151,8 +142,8 @@ const Settings = props => {
           </Pressable>
           <View style={styles.divider}></View>
           <Pressable
-            style={({pressed}) => [
-              {opacity: pressed ? 0.6 : 0.9},
+            style={({ pressed }) => [
+              { opacity: pressed ? 0.6 : 0.9 },
               styles.iconWrapper,
               styles.row,
             ]}
@@ -162,9 +153,9 @@ const Settings = props => {
           </Pressable>
           <View style={styles.divider}></View>
           <Pressable
-           onPress={handleLogout}
-            style={({pressed}) => [
-              {opacity: pressed ? 0.6 : 0.9},
+            onPress={handleLogout}
+            style={({ pressed }) => [
+              { opacity: pressed ? 0.6 : 0.9 },
               styles.iconWrapper,
               styles.row,
             ]}>
@@ -178,7 +169,8 @@ const Settings = props => {
           {isLogoutDialogVisible && (
             <DialogueBox
               isVisible={isLogoutDialogVisible}
-              onClose={() => setIsLogoutDialogVisible(false)}
+              handleYes={handleYesForLogout}
+              handleNo = {()=>{setIsLogoutDialogVisible(false)}}
               textContent="Are you sure you want to logout?"
             />
           )}
@@ -187,8 +179,8 @@ const Settings = props => {
         <View style={styles.rect3}>
           <View style={styles.footer}>
             <Pressable
-              style={({pressed}) => [
-                {opacity: pressed ? 0.6 : 0.9},
+              style={({ pressed }) => [
+                { opacity: pressed ? 0.6 : 0.9 },
                 styles.iconWrapper,
                 styles.row,
               ]}
@@ -199,8 +191,8 @@ const Settings = props => {
           <View style={styles.vertical}></View>
           <View style={styles.footer}>
             <Pressable
-              style={({pressed}) => [
-                {opacity: pressed ? 0.6 : 0.9},
+              style={({ pressed }) => [
+                { opacity: pressed ? 0.6 : 0.9 },
                 styles.iconWrapper,
                 styles.row,
               ]}
@@ -243,8 +235,8 @@ const styles = StyleSheet.create({
 
   statusT: {
     color: BLACK,
-     left: getResponsiveValue(30, 20),
-     top: getResponsiveValue(20, 14),
+    left: getResponsiveValue(30, 20),
+    top: getResponsiveValue(20, 14),
   },
   icon2: {
     color: BLACK,

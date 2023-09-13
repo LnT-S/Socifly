@@ -19,7 +19,7 @@ import AboutUs from './src/screens/static/AboutUs.jsx';
 import BirthdayEdit from './src/screens/editScreens/BIrthdayEdit.jsx';
 // import { store } from './src/store';
 // import { Provider } from 'react-redux';
-import {ProfileProvider} from './src/context/ProfileContext.jsx';
+import {ProfileProvider , Loca} from './src/context/ProfileContext.jsx';
 import NewEdit from './src/screens/editScreens/NewEdit.jsx';
 import ChangeLanguage from './src/screens/static/ChangeLanguage.jsx';
 import AsyncStorage from '@react-native-async-storage/async-storage';
