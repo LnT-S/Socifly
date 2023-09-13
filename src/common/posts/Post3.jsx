@@ -175,7 +175,7 @@ const Post3 = props => {
   
       <View ref={cardRef} style={styles.cardContainer2}>
   
-      <Image style={styles.backGround} resizeMode="cover"  source={require('../../assets/images/bg4.png')}/>
+      <Image style={styles.backGround} resizeMode="cover"  source={require('../../assets/images/bg3.png')}/>
         <View style={styles.cardContainer}>
           <Image
             source={props?.source}
