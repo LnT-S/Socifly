@@ -1,4 +1,5 @@
-import React, {useState} from 'react';
+import React, { useState, useEffect } from 'react';
+
 import {
   StyleSheet,
   View,
@@ -15,11 +16,16 @@ import {BLACK, LINKS, PRIMARY} from '../styles/colors';
 import {getResponsiveValue} from '../styles/responsive';
 import OTPInputView from '@twotalltotems/react-native-otp-input';
 // import { useOtpVerify, getHash, startOtpListener } from 'react-native-otp-verify';
-
+import stringsoflanguages from '../utils/ScreenStrings';
 
 const OtpScreen = props => {
   const [otp, setOtp] = useState('');
   const [otpError, setOtpError] = useState('');
+
+  const [timer, setTimer] = useState(120); // Initial value of 120 seconds
+const [isTimerRunning, setIsTimerRunning] = useState(false);
+
+  
   const handleOtpChange = text => {
     setOtp(text);
     setOtpError('');
@@ -29,16 +35,42 @@ const OtpScreen = props => {
 
 
     if (otp.length === 6) {
-      props.navigation.navigate('LoginScreen');
+      props.navigation.navigate('NewPassword');
     } else  {
-      setOtpError('OTP should be exactly 6 characters long');
-    }
-    // props.navigation.navigate('LoginScreen');
-
-
-    
+      setOtpError(stringsoflanguages.otpError);
+    } 
     
   };
+
+  const startTimer = () => {
+    setTimer(120); // Reset the timer to 120 seconds
+    setIsTimerRunning(true);
+  
+    const intervalId = setInterval(() => {
+      setTimer(prevTimer => {
+        if (prevTimer === 0) {
+          setIsTimerRunning(false);
+          clearInterval(intervalId);
+          return 0;
+        }
+        return prevTimer - 1;
+      });
+    }, 1000); // Decrease the timer every second (1000 milliseconds)
+  };
+
+  useEffect(() => {
+    startTimer();
+  }, []);
+
+  const handleResend = () => {
+    if (!isTimerRunning) {
+      startTimer();
+      // Add logic here to resend the OTP
+    }
+  };
+  
+  
+  
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.rect1}>
@@ -50,10 +82,10 @@ const OtpScreen = props => {
           />
         </View>
         <View>
-          <Text style={styles.text1}>Verification</Text>
+          <Text style={styles.text1}>{stringsoflanguages.verification}</Text>
         </View>
         <View>
-          <Text style={styles.text2}>Enter the OTP you have received</Text>
+          <Text style={styles.text2}>{stringsoflanguages.enterOtpReceived}</Text>
         </View>
       </View>
 
@@ -75,15 +107,20 @@ const OtpScreen = props => {
          {otpError ? <Text style={global.error}>{otpError}</Text> : null}
 
         <View style={styles.buttonV}>
-          <ButtonA onPress={handleNextPage} name={'VERIFY'} />
+          <ButtonA onPress={handleNextPage} name={stringsoflanguages.verify} />
         </View>
       </View>
       <View style={styles.rect3}>
-        <Text style={styles.text3}>Didnt received the verification OTP?</Text>
-        <Pressable>
-          <Text style={styles.text4}>Resend again</Text>
-        </Pressable>
-      </View>
+      <Text style={styles.text3}>
+        {isTimerRunning ? `${stringsoflanguages.enterOtpReceived} ${timer} seconds.` : stringsoflanguages.didntReceivedOtp}
+      </Text>
+      <Pressable onPress={handleResend}>
+        <Text style={styles.text4}>
+          {isTimerRunning ? '' : stringsoflanguages.resendAgain}
+        </Text>
+      </Pressable>
+    </View>
+    
     </SafeAreaView>
   );
 };
@@ -171,3 +208,4 @@ const styles = StyleSheet.create({
 });
 
 export default OtpScreen;
+

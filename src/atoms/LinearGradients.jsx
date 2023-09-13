@@ -14,7 +14,7 @@ const LinearGradients = ({children, customStyle }) => {
 const styles = StyleSheet.create({
   backgroundGradient: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: 'center', 
     alignItems: 'center',
   },
 });

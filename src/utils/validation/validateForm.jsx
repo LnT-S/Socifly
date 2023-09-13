@@ -4,41 +4,45 @@ import {
   isPhoneNumberValid,
   isPasswordMatch,
 } from '../validation/formValidation';
+import stringsoflanguages from '../ScreenStrings';
+
 
 export const validateForm = formData => {
   const errors = {};
 
   if (!formData.name?.trim()) {
-    errors.name = 'Full Name is required';
+    errors.name = stringsoflanguages.fullNameRequired;
   } else if (!isNameValid(formData.name)) {
-    errors.name = 'Full Name can only contain letters and spaces';
+    errors.name = stringsoflanguages.fullNameError;
   }
 
   if (!formData.email?.trim()) {
-    errors.email = 'Email is required';
+    errors.email = stringsoflanguages.emailRequired;
   } else if (!isEmailValid(formData.email)) {
-    errors.email = 'Invalid email format';
+    errors.email =stringsoflanguages.emailError;
   }
 
   if (!formData.phone?.trim()) {
-    errors.phone = 'Phone Number is required';
+    errors.phone = stringsoflanguages.phoneNoRequired;
   } else if (!isPhoneNumberValid(formData.phone)) {
-    errors.phone = 'Invalid phone number format';
+    errors.phone = stringsoflanguages.phoneNoError;
   }
 
   if (!formData.password?.trim()) {
-    errors.password = 'Password is required';
+    errors.password =stringsoflanguages.passwordRequired;
   }
   if (!formData.message?.trim()) {
-    errors.message = 'Message is required';
+    errors.message = stringsoflanguages.messageRequired;
   }
 
   if (!formData.confirm_password?.trim()) {
-    errors.confirm_password = 'Confirm Password is required';
+    errors.confirm_password = stringsoflanguages.confirmPasswordRequired;
   } else if (!isPasswordMatch(formData.password, formData.confirm_password)) {
-    errors.confirm_password = 'Passwords do not match';
+    errors.confirm_password = stringsoflanguages.confirmPasswordError;
   }
-
+  if (!formData.birthdate?.trim()) {
+    errors.birthdate = stringsoflanguages.birthdateRequired;
+  }
   
 
 

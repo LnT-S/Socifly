@@ -16,10 +16,12 @@ import TextinputA from '../atoms/TextinputA';
 import TextinputB from '../atoms/TextinputB';
 import LinearGradients from '../atoms/LinearGradients';
 import global from '../styles/global';
-import { PRIMARY } from '../styles/colors';
-import { FETCH } from '../services/fetch';
-import { getResponsiveValue } from '../styles/responsive';
-import { validateForm } from '../utils/validation/validateForm';
+import {FETCH} from '../services/fetch';
+import {getResponsiveValue} from '../styles/responsive';
+import {validateForm} from '../utils/validation/validateForm';
+import stringsoflanguages from '../utils/ScreenStrings';
+import DateTimePicker from '@react-native-community/datetimepicker'; 
+
 
 const SignUpScreen = props => {
   const [value, setValue] = useState({
@@ -28,6 +30,7 @@ const SignUpScreen = props => {
     phone: '',
     password: '',
     confirm_password: '',
+    birthdate: '', 
   });
 
   const [username, setUsername] = useState('');
@@ -35,10 +38,34 @@ const SignUpScreen = props => {
   const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = useState(false);
   const [showPassword1, setShowPassword1] = useState(false);
+  const [showDatePicker, setShowDatePicker] = useState(false);
   const handleChange = (field, text) => {
     setValue((prev) => ({ ...prev, [field]: text }));
     setErrors((prev) => ({ ...prev, [field]: '' })); // Clear the error when typing
   };
+
+  const handleDateChange = (event, selectedDate) => {
+    setShowDatePicker(false); // Hide the date picker
+    if (selectedDate) {
+      const formattedDate = selectedDate.toISOString().split('T')[0]; // Format the selected date as needed
+      handleChange('birthdate', formattedDate); // Update the 'birthdate' field in your state
+    }
+  };
+
+  const renderDatePicker = () => {
+    if (showDatePicker) {
+      return (
+        <DateTimePicker
+          value={value.birthdate ? new Date(value.birthdate) : new Date()} // Set the initial date value
+          mode="date"
+          display="calendar"
+          onChange={handleDateChange}
+        />
+      );
+    }
+    return null;
+  };
+  
 
   const scrollViewRef = useRef(null);
 
@@ -58,7 +85,7 @@ const SignUpScreen = props => {
       let data = await FETCH(
         'server',
         'POST',
-        'http://192.168.1.32:8000/v1/auth/signup',
+        'http://192.168.1.32:8000/v1/auth/signup',//localhost:8000/v1/auth/signup
         '',
         value,
       );
@@ -89,7 +116,7 @@ const SignUpScreen = props => {
       style={{ flex: 1 }}>
       <SafeAreaView style={styles.container}>
         <LinearGradients customStyle={styles.loginGradient}>
-          <Text style={global.title}>SIGN UP</Text>
+          <Text style={global.title}>{stringsoflanguages.signUp}</Text>
         </LinearGradients>
 
         <View style={global.bContainer}>
@@ -100,20 +127,23 @@ const SignUpScreen = props => {
             keyboardShouldPersistTaps="handled">
 
             <TextinputA
-              style={[
-                styles.input,
-                errors.name ? styles.inputError : null,
-              ]}
-              placeholder="Enter Full Name"
+            // style={[
+            //   styles.input,
+            //   errors.name ? styles.inputError : null,
+            // ]}
+              placeholder={stringsoflanguages.enterFullName}
               value={value?.name}
               onChangeText={(text) => handleChange('name', text)}
               error={errors.name}
-
+              
             />
             {errors.name && <Text style={global.error}>{errors.name}</Text>}
-
+            
+         
+            
+            
             <TextinputA
-              placeholder="Enter Email Id"
+              placeholder={stringsoflanguages.enterEmailId}
               value={value?.email}
               keyboardType="email-address"
               onChangeText={(text) => handleChange('email', text)}
@@ -121,7 +151,7 @@ const SignUpScreen = props => {
             />
             {errors.email && <Text style={global.error}>{errors.email}</Text>}
             <TextinputA
-              placeholder="Enter Phone No"
+              placeholder={stringsoflanguages.enterPhoneNo}
               value={value?.phone}
               keyboardType="numeric"
               maxLength={10}
@@ -129,11 +159,28 @@ const SignUpScreen = props => {
               error={errors.phone}
             />
             {errors.phone && <Text style={global.error}>{errors.phone}</Text>}
+            <Pressable
+              onPress={() => setShowDatePicker(true)} // Show the date picker when pressed
+            >
+              <TextinputA
+                placeholder={stringsoflanguages.enterBirthdate}
+                value={value?.birthdate}
+                editable={false} // Disable manual input
+                error={errors.birthdate}
+              />
+            </Pressable>
 
+            {errors.birthdate && (
+              <Text style={global.error}>{errors.birthdate}</Text>
+            )}
 
+            {/* Render the date picker */}
+            {renderDatePicker()}
+
+           
             <TextinputB
-              placeholder="Password"
-              secureTextEntry={!showPassword}
+              placeholder={stringsoflanguages.password}
+              secureTextEntry
               onChangeText={(text) => handleChange('password', text)}
               error={errors.password}
             />
@@ -142,9 +189,9 @@ const SignUpScreen = props => {
               <Text style={global.error}>{errors.password}</Text>
             )}
 
-
+            
             <TextinputB
-              placeholder="Confirm Password"
+              placeholder={stringsoflanguages.confirmPassword}
               value={value?.confirm_password}
               secureTextEntry={!showPassword1}
               onFocus={() =>
@@ -162,7 +209,7 @@ const SignUpScreen = props => {
               <ButtonA
                 // name={"Sign Up"}
                 // onPress={SignUpcheck}
-                name={isLoading ? 'Signing Up...' : 'Sign Up'}
+                name={isLoading ? 'Signing Up...' : stringsoflanguages.signUp2}
                 onPress={handleSignUp}
                 disabled={isLoading}
               />

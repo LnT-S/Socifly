@@ -5,17 +5,22 @@ import global from '../styles/global';
 import TextinputA from '../atoms/TextinputA';
 import TextinputB from '../atoms/TextinputB';
 import ButtonA from '../atoms/ButtonA';
-import { LINKS, PRIMARY } from '../styles/colors';
-import { validate2 } from '../utils/validation/validate2';
-import { getResponsiveValue } from '../styles/responsive';
+import {BLACK, LINKS} from '../styles/colors';
 
+// import { isEmailValid } from "../utils/validation/formValidation";
+
+import {getResponsiveValue} from '../styles/responsive';
+
+// import stringsoflanguages from '../utils/ScreenStrings'
+import stringsoflanguages from '../utils/ScreenStrings';
+
+import { validate2 } from '../utils/validation/validate2';
 const LoginScreen = props => {
   const [errors, setErrors] = useState({});
   // .....
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  
   
   const handleLogin = async () => {
     console.log('handleLogin function executed');
@@ -74,22 +79,25 @@ const LoginScreen = props => {
   const handleNextPageSignUp = () => {
     props.navigation.navigate('SignUpScreen');
   };
+  const handleNextLang = () => {
+    props.navigation.navigate('ChangeLanguage', { returnTo: 'LoginScreen' });
+
+  };
 
   return (
     <SafeAreaView style={styles.container}>
       <LinearGradients customStyle={styles.loginGradient}>
-        <Text style={global.title}>WELCOME!</Text>
+        <Text style={global.title}>{stringsoflanguages.welcome}</Text>
       </LinearGradients>
 
       <View style={global.aContainer}>
-
-        <TextinputA
+      <TextinputA
           style={[
             styles.input,
             errors.email ? styles.inputError : null
           ]}
 
-          placeholder="Username or Phone"
+          placeholder={stringsoflanguages.emailOrPhone}
           value={username}
           onChangeText={(text) => {
             setUsername(text);
@@ -106,7 +114,7 @@ const LoginScreen = props => {
             styles.input,
             errors.password ? styles.inputError : null
           ]}
-          placeholder="Password"
+          placeholder={stringsoflanguages.password}
           value={password}
           onChangeText={(text) => {
             setPassword(text);
@@ -120,22 +128,26 @@ const LoginScreen = props => {
         {errors.password && <Text style={[global.error, styles.errorText1]}>{errors.password}</Text>}
 
         <ButtonA
-          name={'Log In'}
-          //  onPress={handleHome}
+          name={stringsoflanguages.login}
+          // onPress={handleNextPage}
           onPress={handleLogin}
           disabled={isLoading}
         />
 
         <View style={styles.content}>
           <Pressable onPress={handleNextPage}>
-            <Text style={styles.link}>Forgot Password?</Text>
+            <Text style={styles.link}>{stringsoflanguages.forgotPassword}</Text>
           </Pressable>
           <View style={styles.signupContainer}>
-            <Text style={styles.createAccount}>Don't have an account?</Text>
+            <Text style={styles.createAccount}>{stringsoflanguages.noAccount}</Text>
             <Pressable onPress={handleNextPageSignUp}>
-              <Text style={styles.link}>Sign Up</Text>
+              <Text style={styles.link}>{stringsoflanguages.signUp}</Text>
             </Pressable>
+           
           </View>
+          <Pressable style={styles.langBtn} onPress={handleNextLang}>
+              <Text style={styles.lang}>{stringsoflanguages.changeLanguage}</Text>
+            </Pressable>
         </View>
       </View>
     </SafeAreaView>
@@ -168,7 +180,7 @@ const styles = StyleSheet.create({
   },
 
   content: {
-    top: 10,
+    top: getResponsiveValue("4%","4%"),
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -176,9 +188,10 @@ const styles = StyleSheet.create({
   link: {
     color: LINKS,
     textDecorationLine: 'underline',
-    fontSize: getResponsiveValue(16, 12),
-    marginTop: 10,
-    marginBottom: 10,
+    fontSize: getResponsiveValue(16,12),
+    marginTop: getResponsiveValue("2%","2%"),
+    marginBottom: getResponsiveValue("2%","2%"),
+    // marginBottom: 10,
   },
   signupContainer: {
     flexDirection: 'row',
@@ -189,11 +202,16 @@ const styles = StyleSheet.create({
     fontSize: getResponsiveValue(16, 12),
     marginRight: 5,
   },
-  togglePasswordButton: {
-    position: 'absolute',
-    right: 50,
-    top: "27%", // Adjust the top position as needed
-    
+  lang:{
+    color:"grey",
+    borderWidth:getResponsiveValue(1,1),
+   paddingHorizontal:"2%",
+   paddingVertical:"1%",
+    borderRadius:getResponsiveValue(5,5),
+    fontSize:getResponsiveValue(16,12),
+  },
+  langBtn:{
+    top:getResponsiveValue("30%","30%"),
   },
 });
 

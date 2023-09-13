@@ -15,7 +15,7 @@ const ButtonB = (props) => {
     ]}>
       <View style={styles.button}>
       <View style={styles.iconTextContainer}>
-      <Icon name="folder" style={styles.icon} />
+      <Icon name={props.names} style={styles.icon} />
         <Text style={styles.text}>{props.name}</Text>
         </View>
         </View>

@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import {View, Text, Modal, TouchableOpacity, StyleSheet} from 'react-native';
 import ButtonA from '../atoms/ButtonA';
 import {useNavigation} from '@react-navigation/native';
+import { BLACK } from '../styles/colors';
 
 const DialogueBox = ({isVisible, onClose, textContent}) => {
   const navigation = useNavigation();
@@ -53,6 +54,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     marginBottom: 20,
     fontWeight: 'bold',
+    color:BLACK,
   },
 
   row: {

@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, Pressable, Text } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import { getResponsiveValue,screenWidth } from '../styles/responsive'; 
-import { PRIMARY, SECONDARY } from '../styles/colors';
+import { PRIMARY, SECONDARY, WHITE } from '../styles/colors';
 
 
 const ButtonA = (props) => {
@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
   },
   text: {
-    color: 'white',
+    color: WHITE,
     fontSize: getResponsiveValue(18,16),
     textAlign: 'center',
     // paddingVertical: 10,
