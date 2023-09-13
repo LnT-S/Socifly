@@ -19,7 +19,7 @@ import defaultProfileImage from '../assets/images/Profile2.png';
 import Share from 'react-native-share';
 import {captureRef} from 'react-native-view-shot';
 import RNFS from 'react-native-fs';
-
+import RewardedAds from '../common/Ads/RewardedAds';
 import { TapGestureHandler, State ,GestureHandlerRootView } from 'react-native-gesture-handler';
 
 
@@ -27,8 +27,9 @@ const BirthdayPost = props => {
   const [downloaded, setDownloaded] = useState(false);
   const cardRef = useRef(null); // Create a ref for the card view
   const doubleTapRef = useRef(null);
-
+  const [shouldShowAd, setShouldShowAd] = useState(false);
   const handleDownload = async () => {
+    setShouldShowAd(true);
     if (cardRef.current) {
       try {
         const uri = await captureRef(cardRef, {
@@ -55,7 +56,9 @@ const BirthdayPost = props => {
       }
     }
   };
-
+  const handleDownloadAfterAd = () => {
+    setShouldShowAd(false); //ads 
+  };
   const handleNextPage = () => {
     console.log('Pressing posts navigation');
     props.navigation.navigate('Edit');
@@ -223,6 +226,7 @@ const BirthdayPost = props => {
       {downloaded && (
         <Text style={styles.downloadedText}>Image downloaded!</Text>
       )}
+      <RewardedAds shouldShowAd={shouldShowAd} onAdShown={handleDownloadAfterAd} />
     </SafeAreaView>
 
     </GestureHandlerRootView>

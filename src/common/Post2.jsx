@@ -19,16 +19,25 @@ import defaultProfileImage from '../assets/images/Profile2.png';
 import Share from 'react-native-share';
 import {captureRef} from 'react-native-view-shot';
 import RNFS from 'react-native-fs';
-
 import { TapGestureHandler, State ,GestureHandlerRootView } from 'react-native-gesture-handler';
-
+import RewardedAds from '../common/Ads/RewardedAds';
 
 const Post2 = props => {
   const [downloaded, setDownloaded] = useState(false);
   const cardRef = useRef(null); // Create a ref for the card view
   const doubleTapRef = useRef(null);
-
+  const [likeScale] = useState(new Animated.Value(1));
+  const [liked, setLiked] = useState(false);
+  const [likeCount, setLikeCount] = useState(0);
+  const currentDate = new Date();
+  const day = currentDate.getDate().toString().padStart(2, '0');
+  const month = (currentDate.getMonth() + 1).toString().padStart(2, '0');
+  const year = currentDate.getFullYear();
+  const [shouldShowAd, setShouldShowAd] = useState(false);
+  const formattedDate = `${day}/${month}/${year}`;
+ 
   const handleDownload = async () => {
+    setShouldShowAd(true);
     if (cardRef.current) {
       try {
         const uri = await captureRef(cardRef, {
@@ -49,11 +58,15 @@ const Post2 = props => {
         setDownloaded(true);
         setTimeout(() => {
           setDownloaded(false);
+         
         }, 3000);
       } catch (error) {
         console.error('Error capturing view:', error);
       }
     }
+  };
+  const handleDownloadAfterAd = () => {
+    setShouldShowAd(false); //ads 
   };
 
   const handleNextPage = () => {
@@ -61,10 +74,6 @@ const Post2 = props => {
     props.navigation.navigate('Edit');
   };
 
-  const [likeScale] = useState(new Animated.Value(1));
-  const [liked, setLiked] = useState(false);
-  const [likeCount, setLikeCount] = useState(0);
-  
   const handleLike = () => {
     Animated.sequence([
       Animated.timing(likeScale, {
@@ -86,7 +95,6 @@ const Post2 = props => {
     }
     setLiked(!liked);
   };
-
   useEffect(() => {
     // You can add animation logic here for the like button
   }, [liked]);
@@ -137,15 +145,6 @@ const Post2 = props => {
     }
     setLiked(!liked);
   };
-
-  const currentDate = new Date();
-  const day = currentDate.getDate().toString().padStart(2, '0');
-  const month = (currentDate.getMonth() + 1).toString().padStart(2, '0');
-  const year = currentDate.getFullYear();
-
-  const formattedDate = `${day}/${month}/${year}`;
-
-
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
@@ -204,12 +203,15 @@ const Post2 = props => {
           </Animated.View>
         </Pressable>
         <View style={styles.iconGroup}>
+       
           <IconButton onPress={onShare}>
             <FeatherIcon name="share-2" style={styles.icon2} />
           </IconButton>
+          <Pressable >
           <IconButton onPress={handleDownload}>
             <FeatherIcon name="download" style={styles.icon2} />
           </IconButton>
+          </Pressable>
           {props.isEditMode ? null : (
             <IconButton onPress={handleNextPage}>
               <EntypoIcon name="edit" style={styles.icon2} />
@@ -220,6 +222,7 @@ const Post2 = props => {
       {downloaded && (
         <Text style={styles.downloadedText}>Image downloaded!</Text>
       )}
+       <RewardedAds shouldShowAd={shouldShowAd} onAdShown={handleDownloadAfterAd} />
     </SafeAreaView>
 
     </GestureHandlerRootView>

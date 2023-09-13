@@ -7,17 +7,17 @@ import {
   Pressable,
 } from 'react-native';
 import React from 'react';
-import {BLACK, PRIMARY, WHITE} from '../styles/colors';
-import {getResponsiveValue} from '../styles/responsive';
+import { BLACK, PRIMARY, WHITE } from '../styles/colors';
+import { getResponsiveValue } from '../styles/responsive';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import {Image} from 'react-native-animatable';
+import { Image } from 'react-native-animatable';
 import LinearGradients from '../atoms/LinearGradients';
 import MaterialCommunityIconsIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import EntypoIcon from 'react-native-vector-icons/Entypo';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import { Linking } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+
 const AboutUs = props => {
   const handleNextPage = () => {
     props.navigation.navigate('PrivacyPolicy');
@@ -38,7 +38,25 @@ const AboutUs = props => {
       })
       .catch((err) => console.error('An error occurred', err));
   };
-
+  const dummyText = {
+    dataProtection: ` 
+        Dear users,
+             Have a warm and helpful greeting from me. I am Dhiraj Gajendra Navlakhe the owner of this ‘SOCIFLY APP’. I was completed advanced diploma in graphic designing and animation from IMR College Jalgaon, Maharashtra. After that I am working as a freelance graphic designer from last 11 years. I am working with leading publication houses and advertising agencies from India, UK, US and Australia. Some of my clients are as follows.
+             
+             •	Youkiyoto Publishing (Canada)
+             •	Shildcrest Publishing (London, UK)
+             •	Atmosphere Press (Austin, USA)
+             •	Zorba Books (Gurgaon, India)
+             •	Varada Prakashan (Pune, India)
+             •	Youtbook (Chennai, India) 
+      
+         Now I am starting this new app for all of you so that all of you send your wishes to your friends, relatives and customers in very special way to create a new bonding with all of them. 
+        Kindly use the ‘SOCIFLY APP’ and gives your love and likes to it.
+      Also share the app and rate is app on Play Store. 
+    
+      Have a nice day. 
+         Thank you`,
+  };
   const openLink1 = () => {
     const url = 'https://www.apple.com/';  // Replace with your desired URL
     Linking.openURL(url)
@@ -70,55 +88,67 @@ const AboutUs = props => {
             />
           </LinearGradients>
 
-          <View>
-            <Text style={styles.text}>Make Your Daily</Text>
-          </View>
-          <View>
-            <Text style={styles.text2}>Unique Status On Socifly</Text>
-          </View>
-          <View style={styles.infoContainer}>
-            <View style={styles.listItemContainer}>
-              <View style={styles.bullet} />
-              <Text style={styles.listItem}>Fresh Quotes Everyday</Text>
-            </View>
+          <View style={styles.hContainer} >
+            <Text>Dear User</Text>
+            <Text>Have a warm and helpful greeting from me.
+              I am Dhiraj Gajendra Navlakhe the owner of this ‘SOCIFLY APP’.
+              I was completed advanced diploma in graphic designing and animation from IMR College Jalgaon, Maharashtra.
+              After that I am working as a freelance graphic designer from last 11 years.
+              I am working with leading publication houses and advertising agencies from India, UK, US and Australia.
+              Some of my clients are as follows.
+            </Text>
 
-            <View style={styles.listItemContainer}>
-              <View style={styles.bullet} />
-              <Text style={styles.listItem}>Download Easily</Text>
+            <View style={{ flexDirection: 'row', alignItems: 'center', }}>
+            <Text style={styles.dot}> • </Text>
+            <Text>Youkiyoto Publishing (Canada)</Text>
             </View>
+              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+               <Text style={styles.dot}> • </Text>
+              <Text>Shildcrest Publishing (London, UK)</Text>
+              </View>
+              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <Text style={styles.dot}> • </Text> 
+              <Text>Atmosphere Press (Austin, USA)</Text>
+              </View>
+              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <Text style={styles.dot}> • </Text>
+              <Text>Zorba Books (Gurgaon, India)</Text>
+              </View>
+              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <Text style={styles.dot}> • </Text> 
+              <Text>Varada Prakashan (Pune, India)</Text>
+              </View>
+              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <Text style={styles.dot}> • </Text>
+              <Text>Youtbook (Chennai, India)</Text>
+              </View>
 
-            <View style={styles.listItemContainer}>
-              <View style={styles.bullet} />
-              <Text style={styles.listItem}>Quick Share & Download</Text>
-            </View>
-
-            <View style={styles.listItemContainer}>
-              <View style={styles.bullet} />
-              <Text style={styles.listItem}>Like Your Favourites</Text>
-            </View>
             <GestureHandlerRootView>
-            <View style={styles.imageContainer2}>
-              <TouchableOpacity onPress={openLink}>
-              <Image
-                style={styles.image2}
-                resizeMode="contain"
-                source={require('../assets/images/googlePlay.png')}
-              />
-              </TouchableOpacity>
-              <TouchableOpacity onPress={openLink1}>
-              <Image
-                resizeMode="contain"
-                style={styles.image3}
-                source={require('../assets/images/appstore.png')}
-              />
-              </TouchableOpacity>
-            </View>
+              <View style={styles.imageContainer2}>
+                <Pressable onPress={openLink}>
+                  <Image
+                    style={styles.image2}
+                    resizeMode="contain"
+                    source={require('../assets/images/googlePlay.png')}
+                  />
+                </Pressable>
+
+                <Pressable onPress={openLink1}>
+                  <Image
+                    resizeMode="contain"
+                    style={styles.image3}
+                    source={require('../assets/images/appstore.png')}
+                  />
+                </Pressable>
+              </View>
             </GestureHandlerRootView>
             <View style={styles.iconContainer}>
               <MaterialCommunityIconsIcon name="gmail" style={styles.icon2} />
               <EntypoIcon name="facebook" style={styles.icon} />
               <FontAwesomeIcon name="instagram" style={styles.icon3} />
             </View>
+          </View>
+          <View style={styles.infoContainer}>
             <View style={styles.rect3}>
               <View style={styles.footer}>
                 <Pressable onPress={handleNextPage}>
@@ -141,13 +171,18 @@ const AboutUs = props => {
 };
 
 const styles = StyleSheet.create({
+  dot:{
+    color:PRIMARY,
+   
+  },
   container: {
     flex: 1,
     // alignItems: 'center',
+
   },
   mainContainer: {
     alignItems: 'center',
-    top: getResponsiveValue(20, 10),
+    top: getResponsiveValue(20, 5),
   },
   loginGradient: {
     // flex: 1,
@@ -155,8 +190,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     height: '100%',
     paddingVertical: getResponsiveValue('6%', '6%'),
-    borderRadius: getResponsiveValue(50, 25),
-    width: '90%',
+    borderRadius: getResponsiveValue(50, 10),
+    width: '100%',
   },
   scroll: {
     // flex:1,
@@ -165,7 +200,7 @@ const styles = StyleSheet.create({
   status: {
     width: '100%',
     backgroundColor: WHITE,
-    height: getResponsiveValue('5%', '7%'),
+    height: getResponsiveValue('5%', '10%'),
     flexDirection: 'row',
 
     // justifyContent: 'center',
@@ -203,11 +238,13 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     // backgroundColor:PRIMARY,
     // borderRadius:getResponsiveValue(50,25),
+    marginLeft: 20
   },
   image3: {
     width: getResponsiveValue(300, 150),
     height: getResponsiveValue(300, 150),
     alignSelf: 'center',
+    marginRight: 20
     // backgroundColor:PRIMARY,
     // borderRadius:getResponsiveValue(50,25),
   },
@@ -224,7 +261,7 @@ const styles = StyleSheet.create({
     color: BLACK,
   },
   text2: {
-    top: getResponsiveValue(60, 30),
+    top: getResponsiveValue(60, 60),
     fontSize: getResponsiveValue(24, 20),
     fontWeight: 'bold',
     color: WHITE,
@@ -234,20 +271,16 @@ const styles = StyleSheet.create({
     letterSpacing: getResponsiveValue(4, 2),
   },
   infoContainer: {
-    backgroundColor: WHITE,
-    width: '100%',
-    marginBottom: '40%',
-    top: '10%',
-    borderTopLeftRadius: getResponsiveValue(40, 20),
-    borderTopRightRadius: getResponsiveValue(40, 20),
-    alignItems: 'center', // Align children to the start
-    paddingVertical: getResponsiveValue(20, 10),
-    paddingHorizontal: getResponsiveValue(20, 10),
+    marginBottom: '20%',
+
+
   },
   listItemContainer: {
     flexDirection: 'row', // Align bullet and text horizontally
     alignItems: 'center', // Align items vertically within each row
-    marginBottom: getResponsiveValue(10, 5), // Adjust spacing between list items
+    marginBottom: getResponsiveValue(10, 7), // Adjust spacing between list items
+    top: 25,
+
   },
   bullet: {
     width: getResponsiveValue(20, 10),
@@ -255,13 +288,32 @@ const styles = StyleSheet.create({
     borderRadius: getResponsiveValue(20, 10),
     backgroundColor: PRIMARY, // Customize the bullet color
     marginRight: getResponsiveValue(20, 10),
+
+  },
+  bullet1: {
+    width: getResponsiveValue(20, 10),
+    height: getResponsiveValue(20, 10),
+    borderRadius: getResponsiveValue(20, 10),
+    backgroundColor: PRIMARY, // Customize the bullet color
+    marginRight: getResponsiveValue(20, 18),
+    left: 10
+
   },
   listItem: {
     fontSize: getResponsiveValue(24, 16),
     color: BLACK,
   },
+  listItem1: {
+    fontSize: getResponsiveValue(24, 16),
+    color: BLACK,
+    paddingRight: getResponsiveValue(24, 46),
+  },
+  listItem3: {
+    fontSize: getResponsiveValue(24, 16),
+    color: BLACK,
+    paddingRight: getResponsiveValue(24, 14),
+  },
   imageContainer2: {
-    top: getResponsiveValue('5%', '10%'),
     width: '100%',
     flexDirection: 'row',
     justifyContent: 'space-around',
@@ -269,18 +321,24 @@ const styles = StyleSheet.create({
   icon: {
     color: PRIMARY,
     fontSize: getResponsiveValue(50, 25),
+    left: 22,
+    bottom: getResponsiveValue(24, 16),
   },
   icon2: {
     color: PRIMARY,
     fontSize: getResponsiveValue(60, 30),
+    left: 50,
+    bottom: getResponsiveValue(24, 19),
   },
   icon3: {
     color: PRIMARY,
     fontSize: getResponsiveValue(58, 28),
+    bottom: getResponsiveValue(24, 16),
+
   },
   iconContainer: {
     backgroundColor: WHITE,
-    marginBottom: '10%',
+    marginBottom: '8%',
     top: '5%',
     width: '100%',
     justifyContent: 'space-around',
@@ -308,6 +366,17 @@ const styles = StyleSheet.create({
     width: '0.4%',
     height: '100%',
     backgroundColor: 'grey',
+  },
+  hContainer: {
+    paddingVertical: '1%',
+    paddingHorizontal: '8%',
+    backgroundColor: WHITE,
+    top: 5,
+    borderRadius: getResponsiveValue(30, 15),
+  },
+  text3: {
+    color: BLACK,
+    fontSize: getResponsiveValue(18, 16),
   },
 });
 

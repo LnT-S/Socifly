@@ -11,6 +11,7 @@ const interstitial = InterstitialAd.createForAdRequest(adUnitId2, {
   });
 const InterstitialAds = (props) => {
     const [loaded, setLoaded] = useState(false);
+    // const navigation = useNavigation();
     useEffect(() => {
         const unsubscribe = interstitial.addAdEventListener(AdEventType.LOADED, () => {
           setLoaded(true);

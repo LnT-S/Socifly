@@ -57,8 +57,14 @@ const ContactUs = props => {
 
           <View style={styles.inputC}>
 
-          <TextinputA placeholder="Enter Name"  onChangeText={text => setFormData({ ...formData, name: text })}
-          error={formErrors.name}/>
+          <TextinputA placeholder="Enter Name" 
+          onChangeText={(text) => {
+            setFormData({ ...formData, name: text });
+            // Clear the error for 'name' when the user starts typing
+            setFormErrors({ ...formErrors, name: '' });
+          }}
+          error={formErrors.name}
+        />
           {formErrors.name && <Text style={global.error}>{formErrors.name}</Text>}
           </View>
 
@@ -67,14 +73,24 @@ const ContactUs = props => {
           placeholder="Enter Phone No"
           keyboardType="numeric"
           maxLength={10}
-          onChangeText={text => setFormData({ ...formData, phone: text })}
+          onChangeText={(text) => {
+            setFormData({ ...formData, phone: text });
+            // Clear the error for 'phone' when the user starts typing
+            setFormErrors({ ...formErrors, phone: '' });
+          }}
+          
           error={formErrors.phone}
           />
           {formErrors.phone && <Text style={global.error}>{formErrors.phone}</Text>}
           </View>
 
           <View style={styles.inputC}>
-          <TextinputA placeholder="Enter Email Id"  onChangeText={text => setFormData({ ...formData, email: text })}
+          <TextinputA placeholder="Enter Email Id" 
+          onChangeText={(text) => {
+            setFormData({ ...formData, email: text });
+            // Clear the error for 'phone' when the user starts typing
+            setFormErrors({ ...formErrors, email: '' });
+          }}
           error={formErrors.email} />
           {formErrors.email && <Text style={global.error}>{formErrors.email}</Text>}
 
@@ -83,11 +99,15 @@ const ContactUs = props => {
           <View style={styles.inputC}>
           <TextInput
           multiline
-          placeholderTextColor="#8b0e68"
+          placeholderTextColor="#000000"
           numberOfLines={5}
           style={styles.input}
           placeholder="Enter Your Message"
-          onChangeText={text => setFormData({ ...formData, message: text })}
+          onChangeText={(text) => {
+            setFormData({ ...formData, message: text });
+            // Clear the error for 'phone' when the user starts typing
+            setFormErrors({ ...formErrors, message: '' });
+          }}
           error={formErrors.message} 
           />
           {formErrors.message && <Text style={global.error}>{formErrors.message}</Text>}
@@ -164,7 +184,7 @@ const styles = StyleSheet.create({
     textAlignVertical: 'top',
     marginBottom: getResponsiveValue(40, 30),
     color: BLACK,
-    borderColor:PRIMARY,
+   
     width: getResponsiveValue(500, screenWidth * 0.8),
   },
   inputC:{

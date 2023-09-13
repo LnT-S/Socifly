@@ -6,6 +6,7 @@ import {
   TextInput,
   ScrollView,
   Animated,
+  FlatList 
 } from 'react-native';
 import React, { useState, useEffect, useRef } from 'react';
 import LinearGradient2 from '../atoms/LinearGradient2';
@@ -15,7 +16,7 @@ import Category from '../common/Category';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import IoniconsIcon from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIconsIcon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { FlatList } from 'react-native';
+
 import Post from '../common/Post';
 import Post2 from '../common/Post2';
 import Post3 from '../common/Post3';
@@ -33,6 +34,7 @@ import RewardedAds from '../common/Ads/RewardedAds';
 
 const HomePage = props => {
   const [shouldShowAd, setShouldShowAd] = useState(false);
+  const [isRewardedAdLoaded, setIsRewardedAdLoaded] = useState(false);
   const bannerData = [1, 2, 3];
   const [currentBannerIndex, setCurrentBannerIndex] = useState(0);
   const flatListRef = useRef(null);
@@ -43,7 +45,11 @@ const HomePage = props => {
   // const handleNextPage2 = () => {
   //   props.navigation.navigate('CreatePage');
   // };
-
+  useEffect(() => {
+    if (shouldShowAd && isRewardedAdLoaded) {
+      RewardedAds.show(); // Show the rewarded ad
+    }
+  }, [shouldShowAd, isRewardedAdLoaded]);
   const showRewardedAd = () => {
     // Logic to set shouldShowAd to true
     setShouldShowAd(true);
@@ -66,6 +72,9 @@ const HomePage = props => {
     return () => clearTimeout(scrollTimeout);
   }, [currentBannerIndex]);
 
+  const handleRewardedAdLoaded = () => {
+    setIsRewardedAdLoaded(true);
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -81,7 +90,7 @@ const HomePage = props => {
               }, 1000); // Adjust the timeout duration as needed
             }}
           >
-            <RewardedAds shouldShowAd={shouldShowAd} />
+          <RewardedAds shouldShowAd={shouldShowAd} onAdLoaded={handleRewardedAdLoaded} />
             <View style={styles.createRow}>
               <Text style={styles.create}>New</Text>
               <IoniconsIcon
@@ -163,7 +172,7 @@ const styles = StyleSheet.create({
     height: getResponsiveValue(100, 60),
   },
   adss:{
-    top:15,
+    top:2,
   },
   Container: {
     flexDirection: 'row',

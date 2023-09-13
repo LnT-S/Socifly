@@ -18,20 +18,22 @@ import {
   isEmailValid,
   isPhoneNumberValid,
 } from '../utils/validation/formValidation';
+import { useFocusEffect } from '@react-navigation/native';
 
   const ForgotPassword = props => {
   const [inputValue, setInputValue] = useState('');
   const [inputType, setInputType] = useState('email'); // 'email' or 'phone'
   const [validationError, setValidationError] = useState('');
-  const [errors, setErrors] = useState({});
+  
   
   const handleInputValueChange = (field, text) => {
-   
-    setErrors((prev) => ({ ...prev, [field]: '' })); 
+    setValidationError('');
     setInputValue(text);
+    
   };
 
   const handleLogin = () => {
+    setValidationError('');
     if (inputType === 'email') {
       if (!isEmailValid(inputValue)) {
         setValidationError('Invalid email format');
@@ -49,6 +51,11 @@ import {
     // Navigate to the next screen
     props.navigation.navigate('OtpScreen');
   };
+  useFocusEffect(
+    React.useCallback(() => {
+      setValidationError('');
+    }, [])
+  );
   // Placeholder functions for sending OTP data
   const sendEmailOTP = email => {
     // Send email OTP logic here
@@ -76,16 +83,17 @@ import {
           <TextinputA
             style={styles.pl}
             placeholder="Enter Email Id"
-            onChangeText={handleInputValueChange}
+            onChangeText={(text) => handleInputValueChange('email', text)}
             value={inputValue}
             error={validationError !== ''}
+            
           />
           
         ) : (
           <TextinputA
             style={styles.pl}
             placeholder="Enter Phone Number"
-            onChangeText={handleInputValueChange}
+            onChangeText={(text) => handleInputValueChange('phone', text)}
             value={inputValue}
             keyboardType="numeric"
             maxLength={10}
