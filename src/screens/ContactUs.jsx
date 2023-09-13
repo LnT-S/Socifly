@@ -69,7 +69,12 @@ const ContactUs = props => {
           placeholder={stringsoflanguages.enterPhoneNo}
           keyboardType="numeric"
           maxLength={10}
-          onChangeText={text => setFormData({ ...formData, phone: text })}
+          onChangeText={(text) => {
+            setFormData({ ...formData, phone: text });
+            // Clear the error for 'phone' when the user starts typing
+            setFormErrors({ ...formErrors, phone: '' });
+          }}
+          
           error={formErrors.phone}
           />
           {formErrors.phone && <Text style={global.error}>{formErrors.phone}</Text>}
@@ -167,7 +172,7 @@ const styles = StyleSheet.create({
     textAlignVertical: 'top',
     marginBottom: getResponsiveValue(40, 30),
     color: BLACK,
-    borderColor:PRIMARY,
+   
     width: getResponsiveValue(500, screenWidth * 0.8),
   },
   inputC:{

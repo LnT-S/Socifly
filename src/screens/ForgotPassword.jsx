@@ -6,7 +6,6 @@ import {
   Text,
   TextInput,
   SafeAreaView,
-  Dimensions,
 } from 'react-native';
 import LinearGradients from '../atoms/LinearGradients';
 import global from '../styles/global';
@@ -25,42 +24,75 @@ import CustomModal from '../atoms/CustomModal';
 import { useLocal } from '../context/ProfileContext';
 
 const ForgotPassword = props => {
-  const {localState, localDispatch} = useLocal()
+  const { localState, localDispatch } = useLocal()
   const [inputValue, setInputValue] = useState('');
   const [inputType, setInputType] = useState('email'); // 'email' or 'phone'
   const [validationError, setValidationError] = useState('');
   const [errors, setErrors] = useState({});
   const [showModal, setShowModal] = useState(false)
   const [modal, setModal] = useState({
-    visible : false,
-    message : '',
-    navigationPage : '',
-    onClose : null
+    visible: false,
+    message: '',
+    navigationPage: '',
+    onClose: null
   })
 
-  const handleInputValueChange = (field, text) => {
-    setErrors((prev) => ({ ...prev, [field]: '' }));
-    setInputValue(text);
-  };
+  // const handleInputValueChange = (field, text) => {
+  //   setErrors((prev) => ({ ...prev, [field]: '' }));
+  //   setInputValue(text);
+  // };
 
-  const handleLogin = () => {
+  const handleInputValueChange = (text) => {
+    // Update the input value based on inputType
     if (inputType === 'email') {
-      if (!isEmailValid(inputValue)) {
-        setValidationError(stringsoflanguages.emailRequired);
-        return;
-      }
-      sendEmailOTP(inputValue);
+      setEmail(text);
     } else {
-      if (!isPhoneNumberValid(inputValue)) {
-        setValidationError(stringsoflanguages.phoneNoRequired);
-        return;
+      setPhoneNumber(text);
+    }
+
+    // Clear the validation error
+    setValidationError('');
+  };
+  const handleLogin = () => {
+    let inputValid = true;
+
+    // Validate based on inputType
+    if (inputType === 'email') {
+      if (!email.trim()) {
+        setValidationError(stringsoflanguages.emailRequired);
+        inputValid = false;
+      } else if (!isEmailValid(email)) {
+        setValidationError(stringsoflanguages.emailError);
+        inputValid = false;
       }
-      sendPhoneOTP(inputValue);
+    } else {
+      if (!phoneNumber.trim()) {
+        setValidationError(stringsoflanguages.phoneNoRequired);
+        inputValid = false;
+      } else if (!isPhoneNumberValid(phoneNumber)) {
+        setValidationError(stringsoflanguages.phoneNoError);
+        inputValid = false;
+      }
+    }
+
+    // Check if the input is valid before proceeding
+    if (!inputValid) {
+      return;
+    }
+
+    // Send OTP logic here
+    if (inputType === 'email') {
+      sendEmailOTP(email);
+    } else {
+      sendPhoneOTP(phoneNumber);
     }
 
     // Navigate to the next screen
     // props.navigation.navigate('OtpScreen');
   };
+
+
+
   // Placeholder functions for sending OTP data
   const sendEmailOTP = async (email) => {
     // Send email OTP logic here
@@ -69,33 +101,42 @@ const ForgotPassword = props => {
       '/auth/reset-password',
       { email: email },
     )
-    console.log('***', data,status)
+    console.log('***', data, status)
     if (status === 200) {
       await AsyncStorage.setItem('userId', data.userId);
       localDispatch({
-        type : 'USERID',
-        payload : data.userId
+        type: 'USERID',
+        payload: data.userId
       })
       props.navigation.navigate('OtpScreen');
     } else {
       let a = setModal({
-        visible : true,
-        message : data.message,
-        navigationPage : 'ForgotPassword',
-        onClose : ()=>{setShowModal(false)}
+        visible: true,
+        message: data.message,
+        navigationPage: 'ForgotPassword',
+        onClose: () => { setShowModal(false) }
       })
       setShowModal(true)
     }
     // console.log('***',data)
   };
 
-  const sendPhoneOTP = phoneNumber => {
+  const sendPhoneOTP = (phoneNumber) => {
     // Send phone OTP logic here
   };
 
   const toggleInputType = () => {
     setInputType(inputType === 'email' ? 'phone' : 'email');
+    // Clear the input values and validation error when toggling
+    setEmail('');
+    setPhoneNumber('');
     setValidationError('');
+  };
+
+  const inputStyle = {
+    borderColor: validationError ? 'red' : 'grey',
+    borderWidth: 1,
+    // Add other styles as needed
   };
 
 
@@ -104,32 +145,37 @@ const ForgotPassword = props => {
       <LinearGradients customStyle={styles.loginGradient}>
         <Text style={styles.title2}>{stringsoflanguages.resetPassword}</Text>
       </LinearGradients>
-      {showModal?<CustomModal visible={modal.visible} message={modal.message} navigationPage={modal.navigationPage} onClose={modal.onClose} />:''}
+      {showModal ? <CustomModal visible={modal.visible} message={modal.message} navigationPage={modal.navigationPage} onClose={modal.onClose} /> : ''}
       <View style={global.aContainer}>
         {inputType === 'email' ? (
           <TextinputA
-            style={styles.pl}
+            style={[styles.pl, inputStyle]}
             placeholder={stringsoflanguages.enterEmailId}
-            onChangeText={(v) => { handleInputValueChange('email', v) }}
-            value={inputValue}
+            onChangeText={(text) => handleInputValueChange(text)}
+            value={email}
+            onFocus={() => setValidationError('')} // Clear error when focused
+            onBlur={() => { }}
+
           />
+
         ) : (
           <TextinputA
-            style={styles.pl}
+            style={[styles.pl, inputStyle]}
             placeholder={stringsoflanguages.enterPhoneNo}
-            onChangeText={(v) => { handleInputValueChange('phone', v) }}
-            value={inputValue}
+            onChangeText={(text) => handleInputValueChange(text)}
+            value={phoneNumber}
             keyboardType="numeric"
             maxLength={10}
           />
+
         )}
-        {validationError ? (
-          <Text style={global.error}>{validationError}</Text>
-        ) : null}
+        {validationError ? <Text style={global.error}>{validationError}</Text> : null}
         <ButtonA name={stringsoflanguages.sendOtp} onPress={handleLogin} />
         <Pressable onPress={toggleInputType}>
           <Text style={styles.toggleType}>
-            {inputType === 'email' ? stringsoflanguages.usePhoneNumber : stringsoflanguages.useEmail}
+            {inputType === 'email'
+              ? stringsoflanguages.usePhoneNumber
+              : stringsoflanguages.useEmail}
           </Text>
         </Pressable>
       </View>
@@ -143,7 +189,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     height: '50%',
-    // Add any other custom styles you want for the LinearGradients in the LoginScreen
   },
   container: {
     flex: 1,
@@ -156,11 +201,6 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: getResponsiveValue(50, 30),
     marginBottom: 20,
-  },
-  or: {
-    fontSize: getResponsiveValue(18, 16),
-    color: BLACK,
-    marginBottom: getResponsiveValue(30, 18),
   },
   toggleType: {
     color: LINKS,

@@ -77,6 +77,13 @@ const Edit = props => {
           style={styles.slider}
           dotStyle={styles.dot}
           activeDotStyle={styles.activeDot}>
+            <Post2
+            userName={userName}
+            source={imageSource}
+            props={props}
+            isEditMode={true}
+            textColor={currentColor}
+          />
           <Post1
             userName={userName}
             source={imageSource}
@@ -84,13 +91,7 @@ const Edit = props => {
             isEditMode={true}
             textColor={currentColor}
           />
-          <Post2
-            userName={userName}
-            source={imageSource}
-            props={props}
-            isEditMode={true}
-            textColor={currentColor}
-          />
+        
           <Post3
             userName={userName}
             source={imageSource}
@@ -110,7 +111,7 @@ const Edit = props => {
 
         <KeyboardAvoidingView
           behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-          style={{flex: 1, bottom: getResponsiveValue('5%', '15%')}}>
+          style={styles.keyBoardAV}>
           <View style={styles.boxContainer}>
             <View style={styles.ccontainer}>
               <Text style={styles.text}>Edit</Text>
@@ -118,6 +119,7 @@ const Edit = props => {
             <TextinputC
               placeholder={stringsoflanguages.changeYourName}
               value={inputValue}
+              maxLength={20}
               onChangeText={handleInputChange}
               onFocus={() => setInputValue('')}
               onBlur={() => {
@@ -160,6 +162,13 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
+  },
+  keyBoardAV:{
+    flex: 1, 
+    bottom: getResponsiveValue('5%', '15%'),
+    // position:"absolute",
+    // marginTop:"100%",
+    // top:"80%",
   },
   colorC: {
     justifyContent: 'center',

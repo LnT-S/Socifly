@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef, Component} from 'react';
+import React, { useState, useEffect, useRef, Component } from 'react';
 import {
   StyleSheet,
   View,
@@ -8,20 +8,21 @@ import {
   Animated,
   Alert,
 } from 'react-native';
-import {SafeAreaView} from 'react-native-safe-area-context';
-import {BLACK, PRIMARY, SECONDARY, WHITE} from '../../styles/colors';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { BLACK, PRIMARY, SECONDARY, WHITE } from '../../styles/colors';
 import MaterialCommunityIconsIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import EntypoIcon from 'react-native-vector-icons/Entypo';
 import IconButton from '../../atoms/IconButton';
-import {getResponsiveValue, screenWidth} from '../../styles/responsive';
+import { getResponsiveValue, screenWidth } from '../../styles/responsive';
 import defaultProfileImage from '../../assets/images/profile3.png';
 // import defaultProfileImage from '../../assets/pics/pic1.png';
 import Share from 'react-native-share';
-import {captureRef} from 'react-native-view-shot';
+import { captureRef } from 'react-native-view-shot';
 import RNFS from 'react-native-fs';
+import RewardedAds from '../../common/Ads/RewardedAds';
 import Icon2 from "react-native-vector-icons/FontAwesome";
-import { TapGestureHandler, State ,GestureHandlerRootView } from 'react-native-gesture-handler';
+import { TapGestureHandler, State, GestureHandlerRootView } from 'react-native-gesture-handler';
 import stringsoflanguages from '../../utils/ScreenStrings';
 import LinearGradient from 'react-native-linear-gradient';
 
@@ -29,9 +30,20 @@ const Post2 = props => {
   const [downloaded, setDownloaded] = useState(false);
   const cardRef = useRef(null); // Create a ref for the card view
   const doubleTapRef = useRef(null);
+  const [likeScale] = useState(new Animated.Value(1));
+  const [liked, setLiked] = useState(false);
+  const [likeCount, setLikeCount] = useState(0);
+  const [shouldShowAd, setShouldShowAd] = useState(false); 
+
   const [likedMessageVisible, setLikedMessageVisible] = useState(false);
 
+  const [downloadClicked, setDownloadClicked] = useState(false);
+
+
   const handleDownload = async () => {
+    setDownloadClicked(true);
+    // setShouldShowAd(true);  //ads
+
     if (cardRef.current) {
       try {
         const uri = await captureRef(cardRef, {
@@ -52,22 +64,26 @@ const Post2 = props => {
         setDownloaded(true);
         setTimeout(() => {
           setDownloaded(false);
+
         }, 3000);
+
+        setShouldShowAd(true);
       } catch (error) {
         console.error('Error capturing view:', error);
+
       }
     }
   };
+  const handleDownloadAfterAd = () => {
+    setShouldShowAd(false); //ads 
+  };
+
 
   const handleNextPage = () => {
     console.log('Pressing posts navigation');
     props.navigation.navigate('Edit');
   };
 
-  const [likeScale] = useState(new Animated.Value(1));
-  const [liked, setLiked] = useState(false);
-  const [likeCount, setLikeCount] = useState(0);
-  
   const handleLike = () => {
     Animated.sequence([
       Animated.timing(likeScale, {
@@ -94,7 +110,6 @@ const Post2 = props => {
     }
     setLiked(!liked);
   };
-
   useEffect(() => {
     // You can add animation logic here for the like button
   }, [liked]);
@@ -109,7 +124,7 @@ const Post2 = props => {
         });
         // Share options with both message, URL, and image
         const shareOptions = {
-          message: 'Hello, check this out! \nhttps://www.example.com/image.jpg',
+          message: '',
           url: uri, // Use the captured image URI
           title: 'Share via', // Title of the share dialog
           subject: 'Share Link', // Subject of the share dialog
@@ -158,48 +173,51 @@ const Post2 = props => {
 
   const formattedDate = `${day}/${month}/${year}`;
 
-  const textColorStyle = { color: props.textColor || WHITE};
+  const textColorStyle = { color: props.textColor || WHITE };
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
 
-    <SafeAreaView style={styles.container}>
-    <TapGestureHandler
-      
-    ref={doubleTapRef}
-    waitFor={cardRef} // Wait for single tap to finish before detecting double tap
-    onHandlerStateChange={({ nativeEvent }) => {
-      if (nativeEvent.state === State.ACTIVE) {
-        handleDoubleTap();
-      }
-    }}
-    numberOfTaps={2} // Detect double tap
-  >
-  
-  <LinearGradient ref={cardRef} style={styles.cardContainer2} colors={[ "#6d76b0","#0aaabb"]}>
-   
-  
-  <Image style={styles.backGround} resizeMode="cover"  source={require('../../assets/images/bg2.jpeg')}/>
-        <View style={styles.cardContainer}>
-          <Image
-            source={props?.source}
-            resizeMode="contain"
-            style={styles.image}
-          />
-        </View>
+      <SafeAreaView style={styles.container}>
+        <TapGestureHandler
+
+          ref={doubleTapRef}
+          waitFor={cardRef} // Wait for single tap to finish before detecting double tap
+          onHandlerStateChange={({ nativeEvent }) => {
+            if (nativeEvent.state === State.ACTIVE) {
+              handleDoubleTap();
+            }
+          }}
+          numberOfTaps={2} // Detect double tap
+        >
+
+          <LinearGradient ref={cardRef} style={styles.cardContainer2} colors={["#6d76b0", "#0aaabb"]}>
 
 
+            <Image style={styles.backGround} resizeMode="cover" source={require('../../assets/images/bg2.jpeg')} />
+            <View style={styles.cardContainer}>
+              <Image
+                source={props?.source}
+                resizeMode="contain"
+                style={styles.image}
+              />
+            </View>
 
-        <View style={styles.profileContainer}>
-     
-          <Image source={defaultProfileImage} style={styles.profileImage} />
 
-          <View style={styles.infoContainer}>
-            <Text style={styles.date}>{formattedDate}</Text>
-            <Text  style={[styles.name, textColorStyle]}>{props.userName}</Text>
-            <View style={styles.horizontal}/>
-          
-            <View style={styles.infoC}>
+            <View style={styles.profileContainer}>
+
+              <Image source={defaultProfileImage} style={styles.profileImage} />
+
+
+              <View style={styles.infoContainer}>
+                <View style={styles.dateC}>
+                  <Text style={styles.date}>{formattedDate}</Text>
+                </View>
+
+                <Text style={[styles.name, textColorStyle]}>{props.userName}</Text>
+                <View style={styles.horizontal} />
+
+                <View style={styles.infoC}>
                   <Icon2 name="phone" style={styles.iconPhone} />
                   <Text style={[styles.info, textColorStyle]}>
                     +91 9405789152
@@ -211,44 +229,49 @@ const Post2 = props => {
                     user123email@email.com
                   </Text>
                 </View>
+              </View>
+            </View>
+          </LinearGradient>
+
+        </TapGestureHandler>
+
+
+        <View style={styles.toolbar}>
+          <Pressable onPress={handleLike}>
+            <Animated.View
+              style={[styles.likeButton, { transform: [{ scale: likeScale }] }]}>
+              <MaterialCommunityIconsIcon
+                name={liked ? 'heart-circle' : 'heart-circle-outline'}
+                style={[styles.icon1, liked && styles.likedIcon]}
+              />
+            </Animated.View>
+          </Pressable>
+          <View style={styles.iconGroup}>
+
+            <IconButton onPress={onShare}>
+              <FeatherIcon name="share-2" style={styles.icon2} />
+            </IconButton>
+            <Pressable >
+              <IconButton onPress={handleDownload}>
+                <FeatherIcon name="download" style={styles.icon2} />
+              </IconButton>
+            </Pressable>
+            {props.isEditMode ? null : (
+              <IconButton onPress={handleNextPage}>
+                <EntypoIcon name="edit" style={styles.icon2} />
+              </IconButton>
+            )}
           </View>
         </View>
-        </LinearGradient>
-
-      </TapGestureHandler>
-     
-
-      <View style={styles.toolbar}>
-        <Pressable onPress={handleLike}>
-          <Animated.View
-            style={[styles.likeButton, {transform: [{scale: likeScale}]}]}>
-            <MaterialCommunityIconsIcon
-              name={liked ? 'heart-circle' : 'heart-circle-outline'}
-              style={[styles.icon1, liked && styles.likedIcon]}
-            />
-          </Animated.View>
-        </Pressable>
-        <View style={styles.iconGroup}>
-          <IconButton onPress={onShare}>
-            <FeatherIcon name="share-2" style={styles.icon2} />
-          </IconButton>
-          <IconButton onPress={handleDownload}>
-            <FeatherIcon name="download" style={styles.icon2} />
-          </IconButton>
-          {props.isEditMode ? null : (
-            <IconButton onPress={handleNextPage}>
-              <EntypoIcon name="edit" style={styles.icon2} />
-            </IconButton>
-          )}
-        </View>
-      </View>
-      {downloaded && (
-        <Text style={styles.downloadedText}>{stringsoflanguages.imageDownloaded}</Text>
-      )}
+        {downloaded && (
+          <Text style={styles.downloadedText}>{stringsoflanguages.imageDownloaded}</Text>
+        )}
+        <RewardedAds shouldShowAd={shouldShowAd} onAdShown={handleDownloadAfterAd} />
         {likedMessageVisible && (
           <Text style={styles.likedText}>{stringsoflanguages.liked}</Text>
         )}
-    </SafeAreaView>
+    
+      </SafeAreaView>
 
     </GestureHandlerRootView>
   );
@@ -256,7 +279,7 @@ const Post2 = props => {
 
 const styles = StyleSheet.create({
   container: {
-    flex:1,
+    flex: 1,
     alignItems: 'center',
     marginTop: '7%',
     marginBottom: '10%',
@@ -275,7 +298,7 @@ const styles = StyleSheet.create({
   cardContainer: {
     paddingHorizontal: '3%',
     // backgroundColor: PRIMARY,
-  
+
     width: '100%',
     aspectRatio: 308 / 346,
   },
@@ -286,12 +309,12 @@ const styles = StyleSheet.create({
     width: '80%',
 
   },
-  backGround:{
-    position:"absolute",
-width:"100%",
-height:"100%",
-resizeMode:"cover",
-// top:"80%",
+  backGround: {
+    position: "absolute",
+    width: "100%",
+    height: "100%",
+    resizeMode: "cover",
+    // top:"80%",
   },
   image: {
     width: '100%',
@@ -318,8 +341,8 @@ resizeMode:"cover",
     position: 'absolute',
     bottom: '10%',
     left: '10%',
-    borderColor:WHITE,
-    borderWidth:getResponsiveValue(4,2),
+    borderColor: WHITE,
+    borderWidth: getResponsiveValue(4, 2),
   },
   infoContainer: {
     position: 'absolute',
@@ -327,59 +350,63 @@ resizeMode:"cover",
     right: '10%',
   },
   date: {
-    fontSize: getResponsiveValue(12, 7),
+    fontSize: getResponsiveValue(14, 9),
     color: WHITE,
     fontWeight: 'bold',
     textShadowColor: "#0000006e",
-    textShadowOffset: { width: 1, height: 1 } ,
-    textShadowRadius: getResponsiveValue(4,2) ,
-    padding:"1%",
-    paddingHorizontal:"2%",
-    // position:"relative",
-  
-    top: getResponsiveValue('8%', -2),
-    left: getResponsiveValue('120%', 120),
+    textShadowOffset: { width: 1, height: 1 },
+    textShadowRadius: getResponsiveValue(4, 2),
+    paddingHorizontal: "4%",
+    paddingVertical: "2%",
+    backgroundColor: "#731bbcca",
+    borderRadius: getResponsiveValue(20, 10),
+  },
+  dateC: {
+    position: "absolute",
+    alignItems: "center",
+    bottom: getResponsiveValue('100%', "90%"),
+    left: getResponsiveValue('100%', "90%"),
   },
   name: {
-    fontSize: getResponsiveValue(20, 12),
+    fontSize: getResponsiveValue(20, 13),
     color: WHITE,
     fontWeight: 'bold',
-    top: getResponsiveValue('20%', '30%'),
-    left:getResponsiveValue("40%","40%"),
+    top: getResponsiveValue('20%', '32%'),
+    left: getResponsiveValue("40%", "40%"),
     textShadowColor: "#000000",
-    textShadowOffset: { width: 1, height: 1 } ,
-    textShadowRadius: getResponsiveValue(4,2) ,
+    textShadowOffset: { width: 1, height: 1 },
+    textShadowRadius: getResponsiveValue(4, 2),
   },
   horizontal: {
-    backgroundColor:"#e8ad23",
-    
-     height:getResponsiveValue(2,1),
-     width:"100%",
-     top: getResponsiveValue('20%', '30%'),
-     left: getResponsiveValue('40%', '40%'),
-   },
+    backgroundColor: "#e8ad23",
+
+    height: getResponsiveValue(2, 1),
+    width: "100%",
+    top: getResponsiveValue('20%', '30%'),
+    left: getResponsiveValue('40%', '40%'),
+  },
   info: {
-    fontSize: getResponsiveValue(12, 8),
+    fontSize: getResponsiveValue(12, 9),
     color: WHITE,
     marginLeft: getResponsiveValue(10, 5),
     textShadowColor: "#000000",
-    textShadowOffset: { width: 1, height: 1 } ,
-    textShadowRadius: getResponsiveValue(4,2) ,
+    textShadowOffset: { width: 1, height: 1 },
+    textShadowRadius: getResponsiveValue(4, 2),
     fontWeight: 'bold',
   },
   infoC: {
     flexDirection: 'row',
 
-    top: getResponsiveValue('15%', '15%'),
-    left: getResponsiveValue('70%', '70%'),
+    top: getResponsiveValue('10%', '12%'),
+    left: getResponsiveValue('100%', '105%'),
   },
   iconPhone: {
-    fontSize: getResponsiveValue(20, 10),
-    color: "#e8ad23",
+    fontSize: getResponsiveValue(23, 10),
+    color: WHITE,
     // top: getResponsiveValue('20%', '30%'),
     // left: getResponsiveValue('40%', '40%'),
     textShadowColor: '#000000',
-    textShadowOffset: {width: 1, height: 1},
+    textShadowOffset: { width: 1, height: 1 },
     textShadowRadius: getResponsiveValue(2, 1),
   },
 
@@ -391,7 +418,7 @@ resizeMode:"cover",
     paddingVertical: '2%',
     backgroundColor: WHITE,
     width: '80%',
-  
+
   },
   iconGroup: {
     flexDirection: 'row',
@@ -409,26 +436,26 @@ resizeMode:"cover",
     fontSize: getResponsiveValue(50, 25),
   },
   likedIcon: {
-    color: "rgba(235,124,148,1)", 
+    color: "rgba(235,124,148,1)",
   },
 
   downloadedText: {
     color: 'green',
     fontSize: getResponsiveValue(16, 12),
- 
-    backgroundColor:WHITE,
-    borderRadius:20,
-    padding:8,
-    position:"absolute",
-    top:"105%",
-   
- 
+
+    backgroundColor: WHITE,
+    borderRadius: 20,
+    padding: 8,
+    position: "absolute",
+    top: "105%",
+
+
   },
 
-    likedText: {
+  likedText: {
     color: 'rgba(235,124,148,1)', // You can adjust the color as needed
     fontSize: getResponsiveValue(16, 12),
-    fontWeight:"bold",
+    fontWeight: "bold",
     // marginRight: getResponsiveValue(10, 5),
     backgroundColor: WHITE,
     borderRadius: 20,

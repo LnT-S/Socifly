@@ -11,13 +11,14 @@ import defaultProfileImage from '../../assets/images/Profile2.png';
 import Share from 'react-native-share';
 import { captureRef } from 'react-native-view-shot';
 import RNFS from 'react-native-fs';
-
+import RewardedAds from '../../common/Ads/RewardedAds';
 const Post = (props) => {
   const [downloaded, setDownloaded] = useState(false);
   const cardRef = useRef(null); // Create a ref for the card view
-  const [showInterstitial, setShowInterstitial] = useState(true);
+  const [shouldShowAd, setShouldShowAd] = useState(false);
   const handleDownload = async () => {
   if (cardRef.current) {
+    setShouldShowAd(true);
     try {
       const uri = await captureRef(cardRef, {
         format: 'png', // You can choose other formats like 'jpg' as well
@@ -43,7 +44,12 @@ const Post = (props) => {
     }
   }
 };
-
+const handleDownloadAfterAd = () => {
+  // Trigger your download logic here
+  // This function will be called when the ad is shown
+  // You can use this function to download the image for Post2
+  setShouldShowAd(false);
+};
   const handleNextPage = () => {
     console.log('Pressing posts navigation');
     props.props.navigation.navigate('Edit');
@@ -78,9 +84,6 @@ const Post = (props) => {
     // You can add animation logic here for the like button
   }, [liked]);
 
-
-
- 
 
   const onShare = async () => {
     if (cardRef.current) {
@@ -144,7 +147,8 @@ const Post = (props) => {
         </View>
       </View>
       {downloaded && <Text style={styles.downloadedText}>Image downloaded!</Text>}
-    </SafeAreaView>
+      <RewardedAds shouldShowAd={shouldShowAd} onAdShown={handleDownloadAfterAd} />
+      </SafeAreaView>
   );
 };
 

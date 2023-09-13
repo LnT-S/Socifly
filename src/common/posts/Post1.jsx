@@ -19,6 +19,8 @@ import defaultProfileImage from '../../assets/images/profile3.png';
 import Share from 'react-native-share';
 import {captureRef} from 'react-native-view-shot';
 import RNFS from 'react-native-fs';
+import RewardedAds from '../../common/Ads/RewardedAds';
+
 import Icon2 from "react-native-vector-icons/FontAwesome";
 import {
   TapGestureHandler,
@@ -31,9 +33,11 @@ const Post1 = props => {
   const [downloaded, setDownloaded] = useState(false);
   const cardRef = useRef(null); // Create a ref for the card view
   const doubleTapRef = useRef(null);
+  const [shouldShowAd, setShouldShowAd] = useState(false);
   const [likedMessageVisible, setLikedMessageVisible] = useState(false);
 
   const handleDownload = async () => {
+    setShouldShowAd(true);
     if (cardRef.current) {
       try {
         const uri = await captureRef(cardRef, {
@@ -59,6 +63,9 @@ const Post1 = props => {
         console.error('Error capturing view:', error);
       }
     }
+  };
+  const handleDownloadAfterAd = () => {
+    setShouldShowAd(false); //ads 
   };
 
   const handleNextPage = () => {
@@ -111,7 +118,7 @@ const Post1 = props => {
 
         // Share options with both message, URL, and image
         const shareOptions = {
-          message: 'Hello, check this out! \nhttps://www.example.com/image.jpg',
+          message: '',
           url: uri, // Use the captured image URI
           title: 'Share via', // Title of the share dialog
           subject: 'Share Link', // Subject of the share dialog
@@ -190,11 +197,16 @@ const Post1 = props => {
               />
             </View>
 
+            
+
             <View style={styles.profileContainer}>
               <Image source={defaultProfileImage} style={styles.profileImage} />
 
               <View style={styles.infoContainer}>
-                <Text style={styles.date}>{formattedDate}</Text>
+              <View style={styles.dateC}>
+        <Text style={styles.date}>{formattedDate}</Text>
+        </View>
+               
                 <Text style={[styles.name, textColorStyle]}>
                   {props.userName}
                 </Text>
@@ -217,30 +229,34 @@ const Post1 = props => {
           </View>
         </TapGestureHandler>
 
-        <View style={styles.toolbar}>
-          <Pressable onPress={handleLike}>
-            <Animated.View
-              style={[styles.likeButton, {transform: [{scale: likeScale}]}]}>
-              <MaterialCommunityIconsIcon
-                name={liked ? 'heart-circle' : 'heart-circle-outline'}
-                style={[styles.icon1, liked && styles.likedIcon]}
-              />
-            </Animated.View>
-          </Pressable>
-          <View style={styles.iconGroup}>
-            <IconButton onPress={onShare}>
-              <FeatherIcon name="share-2" style={styles.icon2} />
+      <View style={styles.toolbar}>
+        <Pressable onPress={handleLike}>
+          <Animated.View
+            style={[styles.likeButton, {transform: [{scale: likeScale}]}]}>
+            <MaterialCommunityIconsIcon
+              name={liked ? 'heart-circle' : 'heart-circle-outline'}
+              style={[styles.icon1, liked && styles.likedIcon]}
+            />
+          </Animated.View>
+        </Pressable>
+        <View style={styles.iconGroup}>
+          <IconButton onPress={onShare}>
+            <FeatherIcon name="share-2" style={styles.icon2} />
+          </IconButton>
+          <IconButton onPress={handleDownload}>
+            <FeatherIcon name="download" style={styles.icon2} />
+          </IconButton>
+          {props.isEditMode ? null : (
+            <IconButton onPress={handleNextPage}>
+              <EntypoIcon name="edit" style={styles.icon2} />
             </IconButton>
-            <IconButton onPress={handleDownload}>
-              <FeatherIcon name="download" style={styles.icon2} />
-            </IconButton>
-            {props.isEditMode ? null : (
-              <IconButton onPress={handleNextPage}>
-                <EntypoIcon name="edit" style={styles.icon2} />
-              </IconButton>
-            )}
-          </View>
+          )}
         </View>
+      </View>
+      {downloaded && (
+        <Text style={styles.downloadedText}>Image downloaded!</Text>
+      )}
+      <RewardedAds shouldShowAd={shouldShowAd} onAdShown={handleDownloadAfterAd} />
         {downloaded && (
           <Text style={styles.downloadedText}>
             {stringsoflanguages.imageDownloaded}
@@ -330,20 +346,29 @@ const styles = StyleSheet.create({
     right: '10%',
   },
   date: {
-    fontSize: getResponsiveValue(12, 7),
+    fontSize: getResponsiveValue(14, 9),
     color: WHITE,
     fontWeight: 'bold',
-    // position:"relative",
-    top: getResponsiveValue('8%', -2),
-    left: getResponsiveValue('120%', 120),
-    textShadowColor: '#000000',
-    textShadowOffset: {width: 1, height: 1},
-    textShadowRadius: getResponsiveValue(4, 2),
+    textShadowColor: "#0000006e",
+    textShadowOffset: { width: 1, height: 1 } ,
+    textShadowRadius: getResponsiveValue(4,2) ,
+    paddingHorizontal:"4%",
+    paddingVertical:"2%",
+    backgroundColor:"#ee6516c8",
+    borderRadius: getResponsiveValue(20,10),
+  },
+  dateC:{
+    position:"absolute",
+alignItems:"center",
+ bottom: getResponsiveValue('100%', "90%"),
+ left: getResponsiveValue('100%', "90%"),
   },
   name: {
-    fontSize: getResponsiveValue(20, 12),
+    fontSize: getResponsiveValue(20, 13),
     color: BLACK,
     fontWeight: 'bold',
+    // position:"absolute",
+    width:"100%",
     top: getResponsiveValue('20%', '30%'),
     left: getResponsiveValue('40%', '40%'),
     textShadowColor: '#05050567',
@@ -360,8 +385,8 @@ const styles = StyleSheet.create({
   },
 
   info: {
-    fontSize: getResponsiveValue(12, 8),
-    color: BLACK,
+    fontSize: getResponsiveValue(12, 9),
+    color: WHITE,
     marginLeft: getResponsiveValue(10, 5),
     fontWeight: 'bold',
     textShadowColor: '#05050567',
@@ -373,12 +398,12 @@ const styles = StyleSheet.create({
   infoC: {
     flexDirection: 'row',
 
-    top: getResponsiveValue('15%', '15%'),
-    left: getResponsiveValue('70%', '70%'),
+    top: getResponsiveValue('10%', '12%'),
+    left: getResponsiveValue('100%', '105%'),
   },
   iconPhone: {
     fontSize: getResponsiveValue(20, 10),
-    color: 'yellow',
+    color: WHITE,
     // top: getResponsiveValue('20%', '30%'),
     // left: getResponsiveValue('40%', '40%'),
     textShadowColor:   '#05050567',

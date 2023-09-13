@@ -182,14 +182,14 @@ const handleColorChange2 = (color) => {
             placeholder={stringsoflanguages.changeName}
             value={tempName} 
             onChangeText={handleNameChange} 
-         
+            maxLength={19}
           />
 
           <TextinputC
             placeholder={stringsoflanguages.changeYourName}
             value={tempUserName} 
             onChangeText={handleUserNameChange} 
-           
+            maxLength={19}
           />
        
           <ButtonA name={stringsoflanguages.change} onPress={handleApplyChanges}/>

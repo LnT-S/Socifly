@@ -25,6 +25,7 @@ import ChangeLanguage from './src/screens/static/ChangeLanguage.jsx';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import stringsoflanguages from './src/utils/ScreenStrings.jsx';
 import { LanguageProvider } from './src/context/LanguageContext.js';
+import NewPassword from './src/screens/NewPassword.jsx';
 
 const Stack = createNativeStackNavigator();
 function App() {
@@ -126,6 +127,11 @@ function App() {
         <Stack.Screen
           name="NewEdit"
           component={NewEdit}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="NewPassword"
+          component={NewPassword}
           options={{headerShown: false}}
         />
        

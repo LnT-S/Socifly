@@ -140,7 +140,8 @@ const handleColorChange2 = (color) => {
           style={styles.slider}
           dotStyle={styles.dot}
           activeDotStyle={styles.activeDot}>
-          <ImagePost
+         
+          <ImagePost2
             name={name}
             userName={userName}
             selectedImage={selectedImage}
@@ -150,26 +151,26 @@ const handleColorChange2 = (color) => {
             isEditMode={true}
             textColor={currentColor}
             textColor2={currentColor2}
-       
+      
           />
-          <ImagePost2
+           <ImagePost
             name={name}
             userName={userName}
             selectedImage={selectedImage}
             setSelectedImage={setSelectedImage}
-            source={require('../../assets/pics/iPic2.jpeg')}
+            source={require('../../assets/pics/iPic5.png')}
             props={props}
             isEditMode={true}
             textColor={currentColor}
             textColor2={currentColor2}
-      
+       
           />
           <ImagePost3
             name={name}
             userName={userName}
             selectedImage={selectedImage}
             setSelectedImage={setSelectedImage}
-            source={require('../../assets/pics/iPic3.jpeg')}
+            source={require('../../assets/pics/iPic4.jpeg')}
             props={props}
             isEditMode={true}
             textColor={currentColor}
@@ -181,7 +182,7 @@ const handleColorChange2 = (color) => {
             userName={userName}
             selectedImage={selectedImage}
             setSelectedImage={setSelectedImage}
-            source={require('../../assets/pics/iPic4.jpeg')}
+            source={require('../../assets/pics/iPic3.jpeg')}
             props={props}
             isEditMode={true}
             textColor={currentColor}
@@ -246,12 +247,14 @@ const handleColorChange2 = (color) => {
               placeholder={stringsoflanguages.enterText}
               value={tempName}
               onChangeText={handleNameChange}
+              maxLength={286}
             />
 
             <TextinputA
               placeholder={stringsoflanguages.changeYourName}
               value={tempUserName}
               onChangeText={handleUserNameChange}
+              maxLength={19}
             />
 
             <ButtonA

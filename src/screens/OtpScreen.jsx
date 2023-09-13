@@ -110,11 +110,16 @@ const OtpScreen = (props) => {
         </View>
       </View>
       <View style={styles.rect3}>
-        <Text style={styles.text3}>{stringsoflanguages.didntReceivedOtp}</Text>
-        <Pressable>
-          <Text style={styles.text4}>{stringsoflanguages.resendAgain}</Text>
-        </Pressable>
-      </View>
+      <Text style={styles.text3}>
+        {isTimerRunning ? `${stringsoflanguages.enterOtpReceived} ${timer} seconds.` : stringsoflanguages.didntReceivedOtp}
+      </Text>
+      <Pressable onPress={handleResend}>
+        <Text style={styles.text4}>
+          {isTimerRunning ? '' : stringsoflanguages.resendAgain}
+        </Text>
+      </Pressable>
+    </View>
+    
     </SafeAreaView>
   );
 };
@@ -202,3 +207,4 @@ const styles = StyleSheet.create({
 });
 
 export default OtpScreen;
+

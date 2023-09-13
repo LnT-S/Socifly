@@ -40,7 +40,9 @@ export const validateForm = formData => {
   } else if (!isPasswordMatch(formData.password, formData.confirm_password)) {
     errors.confirm_password = stringsoflanguages.confirmPasswordError;
   }
-
+  if (!formData.birthdate?.trim()) {
+    errors.birthdate = stringsoflanguages.birthdateRequired;
+  }
   
 
 

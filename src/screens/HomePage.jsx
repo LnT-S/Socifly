@@ -47,6 +47,7 @@ const HomePage = props => {
   },[])
 
   const [shouldShowAd, setShouldShowAd] = useState(false);
+  const [isRewardedAdLoaded, setIsRewardedAdLoaded] = useState(false);
   const bannerData = [1, 2, 3];
   const [currentBannerIndex, setCurrentBannerIndex] = useState(0);
   const flatListRef = useRef(null);
@@ -57,7 +58,11 @@ const HomePage = props => {
   // const handleNextPage2 = () => {
   //   props.navigation.navigate('CreatePage');
   // };
-
+  useEffect(() => {
+    if (shouldShowAd && isRewardedAdLoaded) {
+      RewardedAds.show(); // Show the rewarded ad
+    }
+  }, [shouldShowAd, isRewardedAdLoaded]);
   const showRewardedAd = () => {
     // Logic to set shouldShowAd to true
     setShouldShowAd(true);
@@ -80,6 +85,9 @@ const HomePage = props => {
     return () => clearTimeout(scrollTimeout);
   }, [currentBannerIndex]);
 
+  const handleRewardedAdLoaded = () => {
+    setIsRewardedAdLoaded(true);
+  };
 
   
 
@@ -101,7 +109,7 @@ const HomePage = props => {
               }, 1000); // Adjust the timeout duration as needed
             }}
           >
-          <RewardedAds shouldShowAd={shouldShowAd} />
+          <RewardedAds shouldShowAd={shouldShowAd} onAdLoaded={handleRewardedAdLoaded} />
             <View style={styles.createRow}>
               {/* <Pressable  style={styles.createRow}> */}
                 <Text style={styles.create}>{stringsoflanguages.new}</Text>
@@ -145,16 +153,12 @@ const HomePage = props => {
           navigation={props.navigation}
          
         />
-
         <GoogleAds />
         <PostArray
           // posts={posts}
           // renderPostComponent={renderPostComponent}
           navigation={props.navigation}
-         
         />
-
-        <InterstitialAds/>
       </ScrollView>
     </SafeAreaView>
   );

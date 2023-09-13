@@ -91,12 +91,14 @@ const RewardedAds = (props) => {
         <SafeAreaView style={styles.container}>
             <View style={styles.adContainer}>
           <TouchableOpacity style={styles.nextadd} onPress={() => {
-            rewarded.show();
+            rewarded.show().catch((error) => {
+              console.error('Failed to show rewarded ad:', error);
+            });
           }}>
-            <Text>Show RewardedAd Ads</Text>
+            
              
           </TouchableOpacity>
-          <Button title="Page Not Found" onPress={pageNotFound} />
+          
             </View>
         </SafeAreaView>
     );
