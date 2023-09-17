@@ -7,6 +7,7 @@ import {
   TextInput,
   Image,
   KeyboardAvoidingView,
+  Platform,
 } from 'react-native';
 import React, {useState, useEffect} from 'react';
 import ButtonA from '../atoms/ButtonA';
@@ -17,9 +18,9 @@ import Icon from 'react-native-vector-icons/Entypo';
 import Icon2 from "react-native-vector-icons/FontAwesome";
 import MaterialIconsIcon from 'react-native-vector-icons/MaterialIcons';
 import {getResponsiveValue} from '../styles/responsive';
-// import {launchImageLibrary} from 'react-native-image-picker';
+import {ImagePicker ,launchImageLibrary} from 'react-native-image-picker';
 // import { openCropper } from 'react-native-image-crop-picker';
-import ImagePicker from 'react-native-image-crop-picker';
+// import ImagePicker from 'react-native-image-crop-picker';
 import defaultProfileImage from '../assets/images/Profile.png';
 // import SettingsScreen from './Settings';
 import { useProfile } from '../context/ProfileContext'; 
@@ -28,21 +29,39 @@ import stringsoflanguages from '../utils/ScreenStrings';
 import { WHITE } from '../styles/colors';
 //import InterstitialAds from '../common/Ads/InterstitialAds';
  import RewardedAds from '../common/Ads/RewardedAds';
-
+import { FETCH, MULTIPART_FETCH } from '../services/fetch';
+import CustomModal from '../atoms/CustomModal';
+import { useLocal } from '../context/ProfileContext';
 
 
 const ProfileScreen = props => {
+  const {localState, localDispatch} = useLocal()
+  const [showModal, setShowModal] = useState(false)
+  const [imagePickerResponse, setPickedImage] = useState()
+  const [modal, setModal] = useState({
+    visible: false,
+    message: '',
+    navigationPage: '',
+    onClose: null
+  })
   const { profileState, dispatch } = useProfile();
   const [isEditing, setIsEditing] = useState(false);
-  const [name, setName] = useState(profileState.name || 'User Name');
-  const [email, setEmail] = useState(profileState.email || 'user@email.com');
-  const [phoneNumber, setPhoneNumber] = useState(profileState.phoneNumber || '1234567890');
   const [selectedProfileImage, setSelectedProfileImage] = useState(
     profileState.profileImage
   );
+  const [value , SetValue] = useState({
+    name : profileState.name || '',
+    email : profileState.email || '',
+    phone : profileState.phone || null,
+  })
+  const [avatar , setAvatar] = useState(profileState.avatar || '')
 
-  const [dataLoaded, setDataLoaded] = useState(false);
-
+  const handleChange = ({field , text})=>{
+    // console.log({field , text})
+    SetValue(prev=>({
+      ...prev , [field] : text
+    }))
+  }
 
   // const handleNextPage = () => {
   //   props.navigation.navigate('HomePage');
@@ -53,79 +72,108 @@ const ProfileScreen = props => {
 
   const selectImage = async () => {
     if (isEditing) {
-      const options = {
-        mediaType: 'photo', // Specify media type: 'photo' or 'video'
-        maxWidth: 500, // Maximum width of the image
-        maxHeight: 500, // Maximum height of the image
-        quality: 1, // Image quality: 0 to 1
-        includeBase64: false, // Set to true if you want to get base64 data
-      };
-  
-      try {
-        const response = await ImagePicker.openPicker({
-          ...options,
-          cropping: true,
-          width: 300,
-          height: 300,
-        });
-  
-        if (response) {
-          setSelectedProfileImage(response.path);
-  
-          // Save image URI to AsyncStorage
-          await AsyncStorage.setItem('profileImageURI', response.path);
-        }
-      } catch (error) {
-        console.log('Error cropping image:', error);
-      }
+      const response = await launchImageLibrary({
+        mediaType: 'photo',
+        includeBase64: false,
+        selectionLimit: 1,
+      });
+      // console.log(response.assets[0])
+      setPickedImage(response.assets[0])
+      setSelectedProfileImage(response.assets[0].uri);
     }
   };
   
-
   const toggleEdit = () => {
     setIsEditing(!isEditing);
   };
 
-  const saveChanges = async () => {
-    if (isEditing) {
-      dispatch({
-        type: 'UPDATE_NAME',
-        payload: name,
-      });
-      dispatch({
-        type: 'UPDATE_EMAIL',
-        payload: email,
-      });
-      dispatch({
-        type: 'UPDATE_PHONE',
-        payload: phoneNumber,
-      });
-  
-      // Save updated profile data to AsyncStorage
+  const updateContext = ()=>{
+    dispatch({
+      type : 'USER_NAME',
+      payload : value.name
+    })
+    dispatch({
+      type : 'EMAIL',
+      payload :value.email
+    })
+    dispatch({
+      type : 'PHONE',
+      payload : value.phone
+    })
+    dispatch({
+      type : 'AVATAR',
+      payload : avatar
+    })
+  }
+
+  const loadProfileData = async () => {
+    try {
+     let {data , status} =await  FETCH(
+      'GET',
+      '/profile/get-info',
+      ''
+     )
+     if(status === 200){
+      // console.log(data)
+      SetValue(data.data)
+      setAvatar(data.data.image)
+      updateContext()
+     }else{
+      let a = setModal({
+        visible: true,
+        message: 'Service Error',
+        navigationPage: 'LoginScreen',
+      })
+      setShowModal(true)
+     }
+    } catch (error) {
+      console.log('Error loading profile data:', error);
     }
-    toggleEdit();
   };
+
+  async function updateInfo(){
+    const formData = new FormData();
+    if(imagePickerResponse){
+      formData.append('avatar', {
+        name: imagePickerResponse.fileName,
+        type: imagePickerResponse.type ,
+        uri:
+            Platform.OS === "android"
+                ? imagePickerResponse.uri
+                : imagePickerResponse.uri.replace("file://", "")
+    });
+    }
+  formData.append('name',value.name)
+  formData.append('email',value.email)
+  formData.append('phone',value.phone)
+    // let {data , status} = MULTIPART_FETCH(
+    //   'POST',
+    //   '/auth/edit-profile',
+    //   '',
+    //   value
+    // )
+    let token = await AsyncStorage.getItem('token')
+    const url = 'http://10.0.2.2:8000/v1/auth/edit-profile'
+  try {
+      const response = await fetch(url,{
+        method : 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`
+        },
+        body : formData
+      })
+      const data = await response.json()
+  } catch (error) {
+    console.log('Error',error)
+  }
+  loadProfileData().then().catch(err=>console.log('EFFECT ERROR',err))
+    toggleEdit()
+  }
   
   useEffect(() => {
-    const loadProfileData = async () => {
-      try {
-        const storedName = await AsyncStorage.getItem('profileName');
-        const storedEmail = await AsyncStorage.getItem('profileEmail');
-        const storedPhoneNumber = await AsyncStorage.getItem('profilePhoneNumber');
-        const storedProfileImage = await AsyncStorage.getItem('profileImage');
-
-        setName(storedName || name);
-        setEmail(storedEmail || email);
-        setPhoneNumber(storedPhoneNumber || phoneNumber);
-        setSelectedProfileImage(storedProfileImage || null);
-
-        setDataLoaded(true);
-      } catch (error) {
-        console.log('Error loading profile data:', error);
-      }
-    };
-
-    loadProfileData();
+    loadProfileData()
+    setSelectedProfileImage('')
+    // console.log(avatar)
   }, []);
 
  
@@ -136,6 +184,7 @@ const ProfileScreen = props => {
       style={{flex: 1}}>
       <SafeAreaView style={styles.container}>
         <LinearGradients customStyle={styles.loginGradient}>
+      {showModal ? <CustomModal visible={modal.visible} message={modal.message} navigationPage={modal.navigationPage} onClose={modal.onClose} /> : ''}
           <View style={styles.header}>
           <Pressable 
           onPress={() => {
@@ -163,8 +212,9 @@ const ProfileScreen = props => {
             <Pressable onPress={selectImage}>
               <Image
                 source={
-                  selectedProfileImage
-                    ? { uri: selectedProfileImage }
+                  (selectedProfileImage || avatar
+                    )
+                    ? { uri:selectedProfileImage || profileState.server + avatar }
                     : defaultProfileImage
                 }
                 style={styles.profileImage}
@@ -178,38 +228,38 @@ const ProfileScreen = props => {
             {isEditing ? (
               <TextInput
                 style={styles.editableField}
-                value={name}
-                onChangeText={setName}
-                placeholder={name ? '' : 'User Name'}
+                value={value.name}
+                onChangeText={(v)=>{handleChange({field :'name' , text : v})}}
+                placeholder={value.name ? '' : 'User Name'}
               />
             ) : (
-              <Text   placeholder={'User Name'}  style={styles.yourName}>{name}</Text>
+              <Text   placeholder={'User Name'}  style={styles.yourName}>{value.name}</Text>
             )}
             {isEditing ? (
               <TextInput
                 style={styles.editableField}
-                value={email}
-                onChangeText={setEmail}
+                value={value.email}
+                onChangeText={(v)=>{handleChange({field :'email' , text : v})}}
               />
             ) : (
-              <Text style={styles.yourEmail}>{email}</Text>
+              <Text style={styles.yourEmail}>{value.email}</Text>
             )}
             {isEditing ? (
               <TextInput
                 style={styles.editableField}
-                value={phoneNumber}
-                onChangeText={setPhoneNumber}
+                value={value.phone.toString()}
+                onChangeText={(v)=>{handleChange({field :'phone' , text : v})}}
                 keyboardType="numeric"
                 maxLength={10}
               />
             ) : (
-              <Text style={styles.yourEmail}>{phoneNumber}</Text>
+              <Text style={styles.yourEmail}>{value.phone}</Text>
             )}
           </View>
         </LinearGradients>
         <View style={global.dContainer}>
           {isEditing ? (
-            <ButtonA name={stringsoflanguages.save} onPress={saveChanges} />
+            <ButtonA name={stringsoflanguages.save} onPress={updateInfo}/>
           ) : (
             <ButtonA name={stringsoflanguages.editProfile} onPress={toggleEdit} />
           )}

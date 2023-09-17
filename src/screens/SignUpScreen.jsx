@@ -91,7 +91,7 @@ const SignUpScreen = props => {
       setIsLoading(true); // Start loading
       let formData = new FormData();
       formData.append('data', value);
-      console.log('VAlue is', { value });
+      // console.log('VAlue is', { value });
       let {status , data} = await FETCH(
         'POST',
         '/auth/signup',
@@ -125,7 +125,7 @@ const SignUpScreen = props => {
   // ...
 
   useEffect(() => {
-    console.log('In SingUp Page');
+    // console.log('In SingUp Page');
   }, []);
   return (
     <KeyboardAvoidingView

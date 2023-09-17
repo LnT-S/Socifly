@@ -1,4 +1,4 @@
-import React, {useState , useEffect, useContext} from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import {
   StyleSheet,
   View,
@@ -10,8 +10,8 @@ import {
 import global from '../styles/global';
 import TextinputA from '../atoms/TextinputA';
 import ButtonA from '../atoms/ButtonA';
-import {BLACK, LINKS, PRIMARY} from '../styles/colors';
-import {getResponsiveValue} from '../styles/responsive';
+import { BLACK, LINKS, PRIMARY } from '../styles/colors';
+import { getResponsiveValue } from '../styles/responsive';
 import OTPInputView from '@twotalltotems/react-native-otp-input';
 // import { useOtpVerify, getHash, startOtpListener } from 'react-native-otp-verify';
 import stringsoflanguages from '../utils/ScreenStrings';
@@ -20,54 +20,80 @@ import { FETCH } from '../services/fetch';
 import CustomModal from '../atoms/CustomModal';
 
 const OtpScreen = (props) => {
-  const {localState, localDispatch} = useLocal()
+  const { localState, localDispatch } = useLocal()
   const [otp, setOtp] = useState('');
   const [otpError, setOtpError] = useState('');
   const [showModal, setShowModal] = useState(false)
   const [modal, setModal] = useState({
-    visible : false,
-    message : '',
-    navigationPage : '',
-    onClose : null
+    visible: false,
+    message: '',
+    navigationPage: '',
+    onClose: null
   })
+  const [timer, setTimer] = useState(120); // Initial value of 120 seconds
+  const [isTimerRunning, setIsTimerRunning] = useState(false);
 
   const handleOtpChange = (text) => {
     setOtp(text);
     localDispatch({
-      type : 'OTP',
-      payload : text
+      type: 'OTP',
+      payload: text
     })
     setOtpError('');
   };
 
-  const handleNextPage = async() => {
+  const startTimer = () => {
+    setTimer(120); // Reset the timer to 120 seconds
+    setIsTimerRunning(true);
+
+    const intervalId = setInterval(() => {
+      setTimer(prevTimer => {
+        if (prevTimer === 0) {
+          setIsTimerRunning(false);
+          clearInterval(intervalId);
+          return 0;
+        }
+        return prevTimer - 1;
+      });
+    }, 1000); // Decrease the timer every second (1000 milliseconds)
+  };
+
+  useEffect(() => {
+    startTimer();
+  }, []);
+
+  const handleResend = () => {
+    if (!isTimerRunning) {
+      startTimer();
+      // Add logic here to resend the OTP
+    }
+  };
+
+  const handleNextPage = async () => {
     if (otp.length === 6) {
-      const {data,status}= await FETCH(
+      const { data, status } = await FETCH(
         'POST',
         '/auth/verify-reset-password-otp',
         localState.userId,
-        {otp}
+        { otp }
       )
-      if(status===200){
-        console.log('Move TO New Password Enter Screen')
-        // props.navigation.navigate('LoginScreen');
-      }else{
+      if (status === 200) {
+        // console.log('Move TO New Password Enter Screen')
+        props.navigation.navigate('NewPassword');
+      } else {
         let a = setModal({
-          visible : true,
-          message : data.message,
-          navigationPage : 'SignUpScreen',
-          onClose : ()=>{setShowModal(false)}
+          visible: true,
+          message: data.message,
+          navigationPage: 'SignUpScreen',
+          onClose: () => { setShowModal(false) }
         })
         setShowModal(true)
       }
-    } else  {
+    } else {
       setOtpError(stringsoflanguages.otpError);
     }
     // props.navigation.navigate('LoginScreen');
   };
-  useEffect(() => {
-    console.log('local',localState)
-  });
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.rect1}>
@@ -101,25 +127,25 @@ const OtpScreen = (props) => {
           value={otp}
           onCodeChanged={handleOtpChange}
         />
-         {otpError ? <Text style={global.error}>{otpError}</Text> : null}
+        {otpError ? <Text style={global.error}>{otpError}</Text> : null}
 
-         {showModal?<CustomModal visible={modal.visible} message={modal.message} navigationPage={modal.navigationPage} onClose={modal.onClose} />:''}
+        {showModal ? <CustomModal visible={modal.visible} message={modal.message} navigationPage={modal.navigationPage} onClose={modal.onClose} /> : ''}
 
         <View style={styles.buttonV}>
           <ButtonA onPress={handleNextPage} name={stringsoflanguages.verify} />
         </View>
       </View>
       <View style={styles.rect3}>
-      <Text style={styles.text3}>
-        {isTimerRunning ? `${stringsoflanguages.enterOtpReceived} ${timer} seconds.` : stringsoflanguages.didntReceivedOtp}
-      </Text>
-      <Pressable onPress={handleResend}>
-        <Text style={styles.text4}>
-          {isTimerRunning ? '' : stringsoflanguages.resendAgain}
+        <Text style={styles.text3}>
+          {isTimerRunning ? `${stringsoflanguages.enterOtpReceived} ${timer} seconds.` : stringsoflanguages.didntReceivedOtp}
         </Text>
-      </Pressable>
-    </View>
-    
+        <Pressable onPress={handleResend}>
+          <Text style={styles.text4}>
+            {isTimerRunning ? '' : stringsoflanguages.resendAgain}
+          </Text>
+        </Pressable>
+      </View>
+
     </SafeAreaView>
   );
 };
@@ -149,7 +175,7 @@ const styles = StyleSheet.create({
   image: {
     width: getResponsiveValue(200, 100),
     height: getResponsiveValue(200, 100),
-    left: getResponsiveValue("4%","4%"), 
+    left: getResponsiveValue("4%", "4%"),
   },
   text1: {
     color: PRIMARY,
@@ -172,7 +198,7 @@ const styles = StyleSheet.create({
     top: getResponsiveValue('25%', '10%'),
     alignItems: 'center',
     flexDirection: 'row',
-  
+
   },
   borderStyleBase: {
     width: 30,
@@ -184,8 +210,8 @@ const styles = StyleSheet.create({
   },
 
   underlineStyleBase: {
-    width: getResponsiveValue(50,30),
-    height: getResponsiveValue(60,45),
+    width: getResponsiveValue(50, 30),
+    height: getResponsiveValue(60, 45),
     borderWidth: 0,
     borderBottomWidth: getResponsiveValue(2, 1),
     borderColor: 'grey',
@@ -199,10 +225,10 @@ const styles = StyleSheet.create({
   otp: {
     width: '80%',
     height: 200,
-    left:getResponsiveValue(30,10),
+    left: getResponsiveValue(30, 10),
   },
-  buttonV:{
-    top: getResponsiveValue("10%",0),
+  buttonV: {
+    top: getResponsiveValue("10%", 0),
   },
 });
 

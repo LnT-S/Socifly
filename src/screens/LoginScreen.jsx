@@ -49,7 +49,7 @@ const LoginScreen = props => {
 
     try {
       setIsLoading(true); // Start loading
-      console.log('VAlue is', { formData1 });
+      // console.log('VAlue is', { formData1 });
 
       let {status , data} = await FETCH(
         'POST',
@@ -57,8 +57,8 @@ const LoginScreen = props => {
         '',
         formData1,
       );
-      if(status!==400 && status!==500){
-        console.log('LOG : Status is not 400');
+      if(status!==400 && status!==500 && status!== 401){
+        // console.log('LOG : Status is not 400');
         if(data.data.token){
           console.log('LOG : Token is Found')
           await AsyncStorage.setItem('token' , data.data.token)
@@ -73,7 +73,7 @@ const LoginScreen = props => {
       }else{
         let a = setModal({
           visible : true,
-          message : data.message,
+          message : data.message || 'Invalid Login Attempt',
           navigationPage : 'SignUpScreen',
           onClose : ()=>{setShowModal(false)}
         })
@@ -105,20 +105,41 @@ const LoginScreen = props => {
 
   };
 
+  const logs = async ()=>{
+    let token = await AsyncStorage.getItem('token')
+    if(token){
+      console.log('Token Exists Redirecting to the home page');
+      let {status,data} =await FETCH(
+        'GET',
+        '/profile/get-info',
+        ''
+      )
+      if(status === 401){
+        let a = setModal({
+          visible: true,
+          message: 'Login Expired',
+          navigationPage: 'LoginScreen',
+          onClose: () => { setShowModal(false) }
+        })
+        setShowModal(true)
+        await AsyncStorage.clear()
+      }else{
+        props.navigation.navigate('HomePage')
+      }
+    }else{
+      console.log('TOken Not Found Enter your Details')
+      setUsername('')
+      setPassword('')
+    }
+  }
+
 
   useEffect(()=>{
-    let logs = async ()=>{
-      let token = await AsyncStorage.getItem('token')
-      if(token){
-        console.log('Token Exists Redirecting to the home page');
-        props.navigation.navigate('HomePage')
-      }else{
-        console.log('TOken Not Found Enter your Details')
-        setUsername('')
-        setPassword('')
-      }
-    }
-    logs()
+    try {
+     logs().then().catch(err=>console.log('EFFECT ERROR 0',err))
+   } catch (error) {
+    console.log('ERROR',error)
+   }
   },[])
 
   return (

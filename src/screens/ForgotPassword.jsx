@@ -37,56 +37,42 @@ const ForgotPassword = props => {
     onClose: null
   })
 
-  // const handleInputValueChange = (field, text) => {
-  //   setErrors((prev) => ({ ...prev, [field]: '' }));
-  //   setInputValue(text);
-  // };
-
   const handleInputValueChange = (text) => {
-    // Update the input value based on inputType
-    if (inputType === 'email') {
-      setEmail(text);
-    } else {
-      setPhoneNumber(text);
-    }
-
-    // Clear the validation error
-    setValidationError('');
+    setErrors({})
+    setInputValue(text);
   };
+
   const handleLogin = () => {
     let inputValid = true;
 
     // Validate based on inputType
     if (inputType === 'email') {
-      if (!email.trim()) {
+      if (!inputValue.trim()) {
         setValidationError(stringsoflanguages.emailRequired);
         inputValid = false;
-      } else if (!isEmailValid(email)) {
+      } else if (!isEmailValid(inputValue)) {
         setValidationError(stringsoflanguages.emailError);
         inputValid = false;
       }
     } else {
-      if (!phoneNumber.trim()) {
+      if (!inputValue.trim()) {
         setValidationError(stringsoflanguages.phoneNoRequired);
         inputValid = false;
-      } else if (!isPhoneNumberValid(phoneNumber)) {
+      } else if (!isPhoneNumberValid(inputValue)) {
         setValidationError(stringsoflanguages.phoneNoError);
         inputValid = false;
       }
     }
-
     // Check if the input is valid before proceeding
     if (!inputValid) {
       return;
     }
-
     // Send OTP logic here
     if (inputType === 'email') {
-      sendEmailOTP(email);
+      sendEmailOTP(inputValue);
     } else {
-      sendPhoneOTP(phoneNumber);
+      sendPhoneOTP(inputValue);
     }
-
     // Navigate to the next screen
     // props.navigation.navigate('OtpScreen');
   };
@@ -96,7 +82,7 @@ const ForgotPassword = props => {
   // Placeholder functions for sending OTP data
   const sendEmailOTP = async (email) => {
     // Send email OTP logic here
-    let { data, status } = await FETCH(
+    let { data, status } =await  FETCH(
       'GET',
       '/auth/reset-password',
       { email: email },
@@ -136,7 +122,6 @@ const ForgotPassword = props => {
   const inputStyle = {
     borderColor: validationError ? 'red' : 'grey',
     borderWidth: 1,
-    // Add other styles as needed
   };
 
 
@@ -152,7 +137,7 @@ const ForgotPassword = props => {
             style={[styles.pl, inputStyle]}
             placeholder={stringsoflanguages.enterEmailId}
             onChangeText={(text) => handleInputValueChange(text)}
-            value={email}
+            value={inputValue}
             onFocus={() => setValidationError('')} // Clear error when focused
             onBlur={() => { }}
 
@@ -163,7 +148,7 @@ const ForgotPassword = props => {
             style={[styles.pl, inputStyle]}
             placeholder={stringsoflanguages.enterPhoneNo}
             onChangeText={(text) => handleInputValueChange(text)}
-            value={phoneNumber}
+            value={inputValue}
             keyboardType="numeric"
             maxLength={10}
           />

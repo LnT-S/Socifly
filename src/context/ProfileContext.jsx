@@ -8,45 +8,47 @@ export const LocalContext = createContext()
 export const ProfileProvider = ({ children }) => {
   // Define your initial state and reducer here
   const initialState = {
-    name: '',
+    name: 'Aman',
     email: '',
-    phone: '',
+    phone: null,
+    avatar: '',
+    server: 'http://10.0.2.2:8000'
     // ... other profile fields
   };
 
   const localData = {
-    otp : '',
-    userId : '',
-
+    otp: '',
+    userId: '',
+    category: [],
+    images: []
   }
 
   const profileReducer = (state = initialState, action) => {
     switch (action.type) {
-      case 'UPDATE_NAME':
-        return { ...state, name: action.payload };
-      case 'UPDATE_EMAIL':
-        return { ...state, email: action.payload };
-      case 'UPDATE_PHONE':
-        return { ...state, phone: action.payload };
-
       case 'USER_NAME':
         return { ...state, name: action.payload }
       case 'EMAIL':
         return { ...state, email: action.payload };
       case 'PHONE':
         return { ...state, phone: action.payload };
+      case 'AVATAR':
+        return { ...state, avatar: action.payload };
       // ... other cases
       default:
         return state;
     }
   };
 
-  const localDataReducer = ( state= localData, action)=>{
-    switch(action.type){
+  const localDataReducer = (state = localData, action) => {
+    switch (action.type) {
       case 'OTP':
-        return {...state , otp:action.payload}
+        return { ...state, otp: action.payload }
       case 'USERID':
-        return {...state , userId:action.payload}
+        return { ...state, userId: action.payload }
+      case 'CATEGORY':
+        return { ...state, category: action.payload }
+      case 'IMAGES':
+        return { ...state, images: action.payload }
       default:
         return state;
     }
@@ -57,7 +59,7 @@ export const ProfileProvider = ({ children }) => {
 
   return (
     <ProfileContext.Provider value={{ profileState, dispatch }}>
-      <LocalContext.Provider value={{localState, localDispatch}}>
+      <LocalContext.Provider value={{ localState, localDispatch }}>
         {children}
       </LocalContext.Provider>
     </ProfileContext.Provider>

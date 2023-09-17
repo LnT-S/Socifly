@@ -1,48 +1,48 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View , StyleSheet} from 'react-native';
 import Post1 from '../posts/Post1';
 import Post2 from '../posts/Post2';
 import Post3 from '../posts/Post3';
 import Post4 from '../posts/Post4';
 import BirthdayPost from '../posts/BirthdayPost';
+import GoogleAds from '../../common/Ads/GoogleAds';
 // import GoogleAds from '../common/GoogleAds';
 import stringsoflanguages from '../../utils/ScreenStrings';
+import { FETCH } from '../../services/fetch';
+import { useProfile } from '../../context/ProfileContext';
 
 const PostArray = ({ navigation }) => {
+  const { profileState, dispatch } = useProfile();
   const name =stringsoflanguages.name;
   const userName = "User Name";
 
-  const posts = [
-    { id: 1, type: 'Post1', source: require('../../assets/pics/pic1.png') },
-    { id: 2, type: 'Post2', source: require('../../assets/pics/pic1.png') },
-    { id: 3, type: 'Post3', source: require('../../assets/pics/pic1.png') },
-    { id: 4, type: 'Post4', source: require('../../assets/pics/pic1.png') },
-    { id: 5, type: 'Post5', source: require('../../assets/pics/Birthday.jpg') },
+  const [posts, setPost] = useState([
     // Add more posts as needed
-  ];
+  ]);
 
-  
-
-  const renderPostComponent = (post) => {
-    switch (post.type) {
-      case 'Post1':
-        return <Post2 userName={userName} key={post.id} source={post.source} navigation={navigation}    />;
-      case 'Post2':
-        return <Post1 userName={userName} key={post.id} source={post.source} navigation={navigation}  />;
-      case 'Post3':
-        return <Post3 userName={userName} key={post.id} source={post.source} navigation={navigation}  /> ;
-      case 'Post4':
-        return <Post4 userName={userName} key={post.id} source={post.source} navigation={navigation}  />;
-      case 'Post5':
-        return <BirthdayPost userName={userName} name={name} key={post.id} source={post.source} navigation={navigation} />;
-      default:
-        return null; 
+  let getImages = async()=>{
+    let {status , data} = await FETCH(
+      'GET',
+      '/home/get-images',
+      ''
+    )
+    if(status===200){
+      setPost(data.data)
     }
-  };
+  }
 
+  useEffect(()=>{
+    setPost([])
+    getImages().then().catch(err=>console.log('EFFECT ERROR',err))
+  },[])
   return (
     <View style={styles.postArrayContainer}>
-      {posts.map((post) => renderPostComponent(post))}
+      {posts.map((post , i) => {
+        if(i%4===0&&i!==0){
+          return (<GoogleAds />)
+        }
+        return (<Post2 userName={profileState.name} key={post._id} source={profileState.server + post.path} navigation={navigation}  />)
+      })}
     </View>
   );
 };

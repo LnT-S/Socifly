@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import {useNavigation} from '@react-navigation/native';
 import server from './server';
 
 
@@ -57,6 +57,10 @@ export async function FETCH(method: string, url: string, params: string | object
       },
       body: JSON.stringify(formData)
     })
+    // console.log(res)
+   if(res.status===401 || res.status===404){
+    return {data : 'Unauthorized Login Attempt' , status : 401}
+   }
     const data = await res.json();
 
     console.log(`Data Recieved after calling API:${URL} is --->`)
@@ -73,7 +77,7 @@ export async function FETCH(method: string, url: string, params: string | object
 }
 
 
-export async function MULTIPART_FETCH(method: string, url: string, params: string | object /* | array*/, formData?: Object) {
+export async function MULTIPART_FETCH(method: string, url: string, params: string | object /* | array*/, formData?: FormData) {
   const errMsgLength = 100
   let auth_token = await AsyncStorage.getItem('token')
   if(!auth_token){
@@ -125,7 +129,7 @@ export async function MULTIPART_FETCH(method: string, url: string, params: strin
         'Content-Type': 'multipart/form-data',
         Authorization: auth_token? `Bearer ${auth_token}`: ''
       },
-      body: JSON.stringify(formData)
+      body: formData
     })
     const data = await res.json();
 

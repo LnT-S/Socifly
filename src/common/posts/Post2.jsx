@@ -197,7 +197,7 @@ const Post2 = props => {
             <Image style={styles.backGround} resizeMode="cover" source={require('../../assets/images/bg2.jpeg')} />
             <View style={styles.cardContainer}>
               <Image
-                source={props?.source}
+                source={{uri : props.source}}
                 resizeMode="contain"
                 style={styles.image}
               />
@@ -298,7 +298,6 @@ const styles = StyleSheet.create({
   cardContainer: {
     paddingHorizontal: '3%',
     // backgroundColor: PRIMARY,
-
     width: '100%',
     aspectRatio: 308 / 346,
   },

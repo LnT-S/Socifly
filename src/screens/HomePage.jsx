@@ -17,8 +17,8 @@ import FeatherIcon from 'react-native-vector-icons/Feather';
 import IoniconsIcon from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIconsIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-import {BLACK, WHITE} from '../styles/colors';
-import {getResponsiveValue} from '../styles/responsive';
+import { BLACK, WHITE } from '../styles/colors';
+import { getResponsiveValue } from '../styles/responsive';
 import PostArray from '../common/postArrays/PostArray';
 import stringsoflanguages from '../utils/ScreenStrings';
 import GoogleAds from '../common/Ads/GoogleAds';
@@ -26,62 +26,64 @@ import RewardedAds from '../common/Ads/RewardedAds';
 import InterstitialAds from '../common/Ads/InterstitialAds';
 import BannerAds from '../common/Ads/BannerAds';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {useNavigation} from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
+import { FETCH } from '../services/fetch';
+import { useProfile } from '../context/ProfileContext';
 
 
 //import RewardedInterstitialAds from '../common/RewardedInterstitialAds';
 
 const HomePage = props => {
+  const { profileState, dispatch } = useProfile();
   const navigation = useNavigation();
-  useEffect(()=>{
-    async function token(){
-      let token = await AsyncStorage.getItem('token')
-      if(token){
-        console.log('LOG : Token Found')
-      }else{
-        console.log('LOG : Token not found')
-        navigation.navigate('LoginScreen')
-      }
+  const [value , SetValue] = useState({
+    name : profileState.name || '',
+    email : profileState.email || '',
+    phone : profileState || null,
+  })
+  const [avatar , setAvatar] = useState(profileState.avatar || '')
+  async function token() {
+    let token = await AsyncStorage.getItem('token')
+    if (token) {
+      console.log('LOG : Token Found')
+    } else {
+      console.log('LOG : Token not found')
+      navigation.navigate('LoginScreen')
     }
-    token()
-  },[])
+  }
+  useEffect(() => {
+    token().then().catch(err=>console.log('EFFECT ERROR',err))
+  }, [])
 
   const [shouldShowAd, setShouldShowAd] = useState(false);
   const [isRewardedAdLoaded, setIsRewardedAdLoaded] = useState(false);
   const bannerData = [1, 2, 3];
   const [currentBannerIndex, setCurrentBannerIndex] = useState(0);
   const flatListRef = useRef(null);
-  
+
   const handleNextPage = () => {
     props.navigation.navigate('ProfileScreen');
   };
-  // const handleNextPage2 = () => {
-  //   props.navigation.navigate('CreatePage');
-  // };
+
   useEffect(() => {
     if (shouldShowAd && isRewardedAdLoaded) {
       RewardedAds.show(); // Show the rewarded ad
     }
   }, [shouldShowAd, isRewardedAdLoaded]);
+
   const showRewardedAd = () => {
     // Logic to set shouldShowAd to true
     setShouldShowAd(true);
   };
-  // useEffect(() => {
-  //   if (shouldShowAd) {
-  //     RewardedAds.show(); // Show the rewarded ad
-  //   }
-  // }, [shouldShowAd]);
+
   useEffect(() => {
     const nextBannerIndex = (currentBannerIndex + 1) % bannerData.length;
-
     const scrollTimeout = setTimeout(() => {
       if (flatListRef.current) {
         flatListRef.current.scrollToIndex({ index: nextBannerIndex, animated: true });
         setCurrentBannerIndex(nextBannerIndex);
       }
     }, 3000); // Adjust the timeout duration (milliseconds) as needed for automatic scrolling
-
     return () => clearTimeout(scrollTimeout);
   }, [currentBannerIndex]);
 
@@ -89,7 +91,54 @@ const HomePage = props => {
     setIsRewardedAdLoaded(true);
   };
 
-  
+  const updateContext = ()=>{
+    dispatch({
+      type : 'USER_NAME',
+      payload : value.name
+    })
+    dispatch({
+      type : 'EMAIL',
+      payload :value.email
+    })
+    dispatch({
+      type : 'PHONE',
+      payload : value.phone
+    })
+    dispatch({
+      type : 'AVATAR',
+      payload : avatar
+    })
+  }
+
+  const loadProfileData = async () => {
+    try {
+     let {data , status} = await FETCH(
+      'GET',
+      '/profile/get-info',
+      ''
+     )
+
+     if(status === 200){
+      console.log(data)
+      SetValue(data.data)
+      setAvatar('http://10.0.2.2:8000'+data.data.image)
+      // updateContext()
+     }else{
+      let a = setModal({
+        visible: true,
+        message: 'Service Error',
+        navigationPage: 'LoginScreen',
+      })
+      setShowModal(true)
+     }
+    } catch (error) {
+      console.log('Error loading profile data 0:', error);
+    }
+  };
+
+  useEffect(()=>{
+    loadProfileData().then().catch(err=>console.log('EFFECT ERROR',err))
+  },[])
 
   return (
     <SafeAreaView style={styles.container}>
@@ -99,7 +148,7 @@ const HomePage = props => {
             <TextInput placeholder="" style={styles.textInput} />
             <FeatherIcon name="search" style={styles.icon2} />
           </View>
-           
+
           <Pressable
             style={styles.button}
             onPress={() => {
@@ -109,14 +158,14 @@ const HomePage = props => {
               }, 1000); // Adjust the timeout duration as needed
             }}
           >
-          <RewardedAds shouldShowAd={shouldShowAd} onAdLoaded={handleRewardedAdLoaded} />
+            <RewardedAds shouldShowAd={shouldShowAd} onAdLoaded={handleRewardedAdLoaded} />
             <View style={styles.createRow}>
               {/* <Pressable  style={styles.createRow}> */}
-                <Text style={styles.create}>{stringsoflanguages.new}</Text>
+              <Text style={styles.create}>{stringsoflanguages.new}</Text>
 
-                <IoniconsIcon
-                  name="ios-add-circle-outline"
-                  style={styles.icon3}></IoniconsIcon>
+              <IoniconsIcon
+                name="ios-add-circle-outline"
+                style={styles.icon3}></IoniconsIcon>
               {/* </Pressable> */}
             </View>
           </Pressable>
@@ -136,29 +185,24 @@ const HomePage = props => {
         <Category />
       </View>
       <ScrollView style={styles.postS}>
-   <FlatList 
-   ref={flatListRef}
-   style={styles.adss}
-   horizontal
-   pagingEnabled
-   data={bannerData}
-   renderItem={({item})=>(
-    <BannerAds/>
-   )}
-   keyExtractor={(item)=>item.toString()}
-   />
+        <FlatList
+          ref={flatListRef}
+          style={styles.adss}
+          horizontal
+          pagingEnabled
+          data={bannerData}
+          renderItem={({ item }) => (
+            <BannerAds />
+          )}
+          keyExtractor={(item) => item.toString()}
+        />
         <PostArray
           // posts={posts}
           // renderPostComponent={renderPostComponent}
           navigation={props.navigation}
-         
+
         />
         <GoogleAds />
-        <PostArray
-          // posts={posts}
-          // renderPostComponent={renderPostComponent}
-          navigation={props.navigation}
-        />
       </ScrollView>
     </SafeAreaView>
   );
@@ -173,8 +217,8 @@ const styles = StyleSheet.create({
     height: getResponsiveValue(100, 60),
   },
 
- 
-  adss:{
+
+  adss: {
     // top:15,
   },
   Container: {
@@ -272,7 +316,7 @@ const styles = StyleSheet.create({
   postS: {
     flex: 0.8,
   },
- 
+
 
 });
 
