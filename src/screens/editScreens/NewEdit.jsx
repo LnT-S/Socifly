@@ -30,13 +30,15 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import ColorPicker from 'react-native-wheel-color-picker';
 import TextinputA from '../../atoms/TextinputA';
 import CustomColorPicker from '../../utils/CustomColorPicker';
+import { useLocal } from '../../context/ProfileContext';
 
 const handleColorChangeComplete = (color) => {
   // Handle color change completion here
 };
 
 const NewEdit = props => {
-  const imageSource = require('../../assets/pics/iPic1.jpeg');
+  const {localState, localDispatch} = useLocal()
+  const imageSource = localState.editImage
   const [name, setName] = useState(stringsoflanguages.enterTextHere);
   const [userName, setUserName] = useState('User Name');
   const [tempName, setTempName] = useState(''); // Temporary name storage
@@ -146,19 +148,18 @@ const handleColorChange2 = (color) => {
             userName={userName}
             selectedImage={selectedImage}
             setSelectedImage={setSelectedImage}
-            source={require('../../assets/pics/iPic1.jpeg')}
+            source={imageSource}
             props={props}
             isEditMode={true}
             textColor={currentColor}
             textColor2={currentColor2}
-      
           />
            <ImagePost
             name={name}
             userName={userName}
             selectedImage={selectedImage}
             setSelectedImage={setSelectedImage}
-            source={require('../../assets/pics/iPic5.png')}
+            source={imageSource}
             props={props}
             isEditMode={true}
             textColor={currentColor}
@@ -170,7 +171,7 @@ const handleColorChange2 = (color) => {
             userName={userName}
             selectedImage={selectedImage}
             setSelectedImage={setSelectedImage}
-            source={require('../../assets/pics/iPic4.jpeg')}
+            source={imageSource}
             props={props}
             isEditMode={true}
             textColor={currentColor}
@@ -182,7 +183,7 @@ const handleColorChange2 = (color) => {
             userName={userName}
             selectedImage={selectedImage}
             setSelectedImage={setSelectedImage}
-            source={require('../../assets/pics/iPic3.jpeg')}
+            source={imageSource}
             props={props}
             isEditMode={true}
             textColor={currentColor}

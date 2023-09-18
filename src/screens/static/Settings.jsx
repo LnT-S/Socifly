@@ -20,9 +20,10 @@ import MaterialCommunityIconsIcon from 'react-native-vector-icons/MaterialCommun
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import DialogueBox from '../../common/DialogueBox';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import { useLocal , useProfile } from '../../context/ProfileContext';
 
 const Settings = props => {
+  const {profileState , dispatch } = useProfile()
   const navigation = useNavigation();
   const [isTextContainerPressed, setIsTextContainerPressed] = useState(false);
   const textContainerScaleValue = new Animated.Value(1);
@@ -95,7 +96,7 @@ const Settings = props => {
       <View style={styles.mainRect}>
         <View style={styles.rect1}>
           <View style={styles.innerRect1}>
-            <Image source={defaultProfileImage} style={styles.profileImage} />
+            <Image source={profileState.avatar?{uri :profileState.server +  profileState.avatar}:defaultProfileImage} style={styles.profileImage} />
             <Pressable
               onPressIn={handleTextContainerPressIn}
               onPressOut={handleTextContainerPressOut}
@@ -104,9 +105,9 @@ const Settings = props => {
                 style={[styles.textContainer, animatedTextContainerStyles]}
               >
                 <View style={styles.textContainer}>
-                  <Text style={styles.text1}>Your Name</Text>
-                  <Text style={styles.text2}>your_email123@isEmail.com</Text>
-                  <Text style={styles.text2}>+91 1234567890</Text>
+                  <Text style={styles.text1}>{profileState.name}</Text>
+                  <Text style={styles.text2}>{profileState.email}</Text>
+                  <Text style={styles.text2}>{profileState.phone}</Text>
                 </View>
               </Animated.View>
             </Pressable>

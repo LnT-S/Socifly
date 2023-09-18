@@ -12,7 +12,12 @@ import Share from 'react-native-share';
 import { captureRef } from 'react-native-view-shot';
 import RNFS from 'react-native-fs';
 import RewardedAds from '../../common/Ads/RewardedAds';
+import { useLocal , useProfile} from '../../context/ProfileContext';
+import { LIKE } from '../../utils/like';
+
 const Post = (props) => {
+  const {localState, localDispatch} = useLocal()
+  const {profileState, dispatch} = useProfile()
   const [downloaded, setDownloaded] = useState(false);
   const cardRef = useRef(null); // Create a ref for the card view
   const [shouldShowAd, setShouldShowAd] = useState(false);
@@ -78,6 +83,7 @@ const handleDownloadAfterAd = () => {
       setLikeCount(likeCount + 1);
     }
     setLiked(!liked);
+    LIKE(props.id)
   };
 
   useEffect(() => {
@@ -117,12 +123,12 @@ const handleDownloadAfterAd = () => {
       <View style={styles.cardContainer}>
       <View  ref={cardRef} style={styles.cardContainer2}>
         <View style={styles.imageContainer}>
-          <Image source={props?.source} resizeMode="contain" style={styles.image} />
+          <Image source={{uri : props?.source}} resizeMode="contain" style={styles.image} />
         </View>
         <Image source={defaultProfileImage} style={styles.profileImage} />
-        <Text style={[styles.Name, textColorStyle]}>User Name</Text>
-        <Text style={styles.Name2}>+91 9405789152</Text>
-        <Text style={styles.Name2}>user123email@email.com</Text>
+        <Text style={[styles.Name, textColorStyle]}>{profileState.name}</Text>
+        <Text style={styles.Name2}>{profileState.phone}</Text>
+        <Text style={styles.Name2}>{profileState.email}</Text>
         </View>
         <View style={styles.toolbar}>
           <Pressable onPress={handleLike}>

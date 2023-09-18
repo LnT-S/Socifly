@@ -8,18 +8,15 @@ import {
 } from 'react-native';
 // import Swiper from 'react-native-swiper';
 import React, {useState, useEffect} from 'react';
-
 import {BLACK, PRIMARY, WHITE} from '../../styles/colors';
 import {getResponsiveValue} from '../../styles/responsive';
 import TextinputC from '../../atoms/TextinputC';
 import ButtonA from '../../atoms/ButtonA';
 import BirthdayPost from '../../common/posts/BirthdayPost';
-
 import { launchImageLibrary } from 'react-native-image-picker';
 import { openCropper } from 'react-native-image-crop-picker';
 import ButtonB from '../../atoms/ButtonB';
 import stringsoflanguages from '../../utils/ScreenStrings';
-
 import CustomColorPicker from '../../utils/CustomColorPicker';
 
 const handleColorChangeComplete = (color) => {
@@ -33,8 +30,6 @@ const BirthdayEdit = props => {
   const [userName, setUserName] = useState('User Name');
   const [tempName, setTempName] = useState(''); // Temporary name storage
   const [tempUserName, setTempUserName] = useState(''); // Temporary user name storage
-
-  // const [selectedProfileImage, setSelectedProfileImage] = useState("../assets/images/Profile.png");
   const [selectedImage, setSelectedImage] = useState(null);
   const selectImage = () => {
     const options = {
@@ -44,18 +39,15 @@ const BirthdayEdit = props => {
       quality: 1,
       includeBase64: false,
     };
-
     launchImageLibrary(options, async (response) => {
       if (response.assets && response.assets.length > 0) {
         const selectedImage = response.assets[0];
-  
         try {
           const croppedImage = await openCropper({
             path: selectedImage.uri,
             width: 300,
             height: 300,
           });
-  
           setSelectedImage({ uri: croppedImage.path });
         } catch (error) {
           console.log('Error cropping image:', error);
@@ -67,7 +59,6 @@ const BirthdayEdit = props => {
 
   const [colorPickerVisible, setColorPickerVisible] = useState(false);
   const [currentColor, setCurrentColor] = useState('#ffffff');
-
   const openColorPicker = () => {
     setColorPickerVisible(true);
   };

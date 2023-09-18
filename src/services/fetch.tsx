@@ -59,6 +59,7 @@ export async function FETCH(method: string, url: string, params: string | object
     })
     // console.log(res)
    if(res.status===401 || res.status===404){
+    // await AsyncStorage.removeItem('token')
     return {data : 'Unauthorized Login Attempt' , status : 401}
    }
     const data = await res.json();

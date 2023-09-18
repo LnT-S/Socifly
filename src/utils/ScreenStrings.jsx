@@ -1,6 +1,6 @@
 import LocalizedStrings from 'react-native-localization';
 const strings = new LocalizedStrings({
-  en: {
+  english: {
     welcome: 'WELCOME!',
     emailOrPhone: 'Email or Phone No.',
     password: 'Password',
@@ -103,7 +103,7 @@ const strings = new LocalizedStrings({
     place5: 'Varada Prakashan (Pune, India)',
     place6: 'Youtbook (Chennai, India)',
   },
-  hi: {
+  hindi: {
     welcome: 'आपका स्वागत है',
     emailOrPhone: 'ईमेल या फ़ोन नंबर',
     password: 'पासवर्ड',
@@ -207,7 +207,7 @@ const strings = new LocalizedStrings({
     place5: 'Varada Prakashan (Pune, India)',
     place6: 'Youtbook (Chennai, India)',
   },
-  ma: {
+  marathi: {
     welcome: 'आपले स्वागत आहे',
     emailOrPhone: 'ईमेल किंवा फोन नंबर',
     password: 'पासवर्ड',

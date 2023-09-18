@@ -27,8 +27,12 @@ import {
 } from 'react-native-gesture-handler';
 import Icon2 from "react-native-vector-icons/FontAwesome";
 import {launchImageLibrary} from 'react-native-image-picker';
+import { useLocal , useProfile} from '../../context/ProfileContext';
+import { LIKE } from '../../utils/like';
 
 const ImagePost4 = props => {
+  const {localState, localDispatch} = useLocal()
+  const {profileState, dispatch} = useProfile()
   const [downloaded, setDownloaded] = useState(false);
   const cardRef = useRef(null); // Create a ref for the card view
   const doubleTapRef = useRef(null);
@@ -97,6 +101,7 @@ const ImagePost4 = props => {
       }, 1000); // Hide the message after 2 seconds
     }
     setLiked(!liked);
+    LIKE(props.id)
   };
 
   useEffect(() => {
@@ -155,6 +160,7 @@ const ImagePost4 = props => {
       }, 1000); // Hide the message after 2 seconds
     }
     setLiked(!liked);
+    LIKE(props.id)
   };
 
   const currentDate = new Date();
@@ -188,7 +194,7 @@ const ImagePost4 = props => {
                 source={
                   props.selectedImage
                     ? {uri: props.selectedImage.uri}
-                    : props?.source
+                    : {uri : props?.source}
                 }
                 resizeMode="contain"
                 style={styles.image}
@@ -202,7 +208,7 @@ const ImagePost4 = props => {
             <View style={styles.profileContainer}>
             <View style={styles.diamondContainer}>
                 <View style={styles.diamondMask}>
-                  <Image source={defaultProfileImage} style={styles.profileImage} />
+                  <Image source={profileState.avatar?{uri :profileState.server +  profileState.avatar}:defaultProfileImage} style={styles.profileImage} />
                 </View>
               </View>
 
@@ -210,18 +216,18 @@ const ImagePost4 = props => {
               <View style={styles.dateC}>
         <Text style={styles.date}>{formattedDate}</Text>
         </View>
-                <Text style={[styles.name,textColorStyle2]}>{props.userName}</Text>
+                <Text style={[styles.name,textColorStyle2]}>{profileState.name}</Text>
                 <View style={styles.horizontal} />
                 <View style={styles.infoC}>
                   <Icon2 name="phone" style={styles.iconPhone} />
                   <Text style={[styles.info, textColorStyle2]}>
-                    +91 9405789152
+                  {profileState.phone}
                   </Text>
                 </View>
                 <View style={styles.infoC}>
                   <EntypoIcon name="email" style={styles.iconPhone} />
                   <Text style={[styles.info, textColorStyle2]}>
-                    user123email@email.com
+                  {profileState.email}
                   </Text>
                 </View>
               </View>

@@ -4,14 +4,15 @@ import { BLACK, WHITE } from '../../styles/colors';
 import { getResponsiveValue } from '../../styles/responsive';
 import stringsoflanguages from '..//../utils/ScreenStrings';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useLocal } from '../../context/ProfileContext';
 
 
 const ChangeLanguage = ({ navigation }) => {
-  
+  const{localState, localDispatch} = useLocal()
   const lang = [
-    { shortform: 'en', longform: 'English' },
-    { shortform: 'hi', longform: 'हिन्दी' },
-    { shortform: 'ma', longform: 'मराठी' },
+    { shortform: 'english', longform: 'English' },
+    { shortform: 'hindi', longform: 'हिन्दी' },
+    { shortform: 'marathi', longform: 'मराठी' },
   ];
 
   
@@ -31,6 +32,10 @@ const ChangeLanguage = ({ navigation }) => {
     stringsoflanguages.setLanguage(value);
     setSelectedLanguage(value);
     AsyncStorage.setItem('selectedLanguage', value); // Persist selected language
+    localDispatch({
+      type: "LANG",
+      payload : value
+    })
     console.log(`Language set to ${value}`);
     navigation.navigate('LoginScreen', { JSON_Clicked_Item: value });
   };

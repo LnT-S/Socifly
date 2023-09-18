@@ -32,7 +32,7 @@ const SignUpScreen = props => {
     phone: '',
     password: '',
     confirm_password: '',
-    birthdate: '', 
+    bday: '', 
   });
 
   const [username, setUsername] = useState('');
@@ -57,7 +57,7 @@ const SignUpScreen = props => {
     setShowDatePicker(false); // Hide the date picker
     if (selectedDate) {
       const formattedDate = selectedDate.toISOString().split('T')[0]; // Format the selected date as needed
-      handleChange('birthdate', formattedDate); // Update the 'birthdate' field in your state
+      handleChange('bday', formattedDate); // Update the 'birthdate' field in your state
     }
   };
 
@@ -65,7 +65,7 @@ const SignUpScreen = props => {
     if (showDatePicker) {
       return (
         <DateTimePicker
-          value={value.birthdate ? new Date(value.birthdate) : new Date()} // Set the initial date value
+          value={value.bday ? new Date(value.bday) : new Date('1990-01-01')} // Set the initial date value
           mode="date"
           display="calendar"
           onChange={handleDateChange}
@@ -79,7 +79,7 @@ const SignUpScreen = props => {
   const scrollViewRef = useRef(null);
 
   const handleSignUp = async () => {
-    console.log('LOG : Submiiting Form')
+    console.log('LOG : Submiiting Form',value)
     const validationErrors = validateForm(value);
     console.log('LOG : Validation Status',validationErrors)
     // if (Object.keys(validationErrors).length > 0) {
@@ -183,7 +183,7 @@ const SignUpScreen = props => {
             >
               <TextinputA
                 placeholder={stringsoflanguages.enterBirthdate}
-                value={value?.birthdate}
+                value={value?.bday}
                 editable={false} // Disable manual input
                 error={errors.birthdate}
               />

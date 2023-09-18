@@ -1,5 +1,4 @@
-import React, { createContext, useContext, useReducer } from 'react';
-
+import React, { createContext, useContext, useEffect, useReducer } from 'react';
 // Create the ProfileContext
 export const ProfileContext = createContext();
 export const LocalContext = createContext()
@@ -10,8 +9,9 @@ export const ProfileProvider = ({ children }) => {
   const initialState = {
     name: 'Aman',
     email: '',
+    password : '',
     phone: null,
-    avatar: '',
+    avatar:'',
     server: 'http://10.0.2.2:8000'
     // ... other profile fields
   };
@@ -20,11 +20,13 @@ export const ProfileProvider = ({ children }) => {
     otp: '',
     userId: '',
     category: [],
-    images: []
+    images: [],
+    lang : 'english',
+    editImage  : ''
   }
 
   const profileReducer = (state = initialState, action) => {
-    switch (action.type) {
+    switch (action?.type) {
       case 'USER_NAME':
         return { ...state, name: action.payload }
       case 'EMAIL':
@@ -49,14 +51,22 @@ export const ProfileProvider = ({ children }) => {
         return { ...state, category: action.payload }
       case 'IMAGES':
         return { ...state, images: action.payload }
+      case 'LANG':
+        return { ...state, lang: action.payload }
+      case 'EDITIMAGEURI':
+        return { ...state, editImage: action.payload }
       default:
         return state;
     }
   }
 
+  
   const [profileState, dispatch] = useReducer(profileReducer, initialState);
   const [localState, localDispatch] = useReducer(localDataReducer, localData);
-
+  
+  useEffect(()=>{
+    console.log(localState)
+  },[localState])
   return (
     <ProfileContext.Provider value={{ profileState, dispatch }}>
       <LocalContext.Provider value={{ localState, localDispatch }}>

@@ -25,15 +25,20 @@ import Icon2 from "react-native-vector-icons/FontAwesome";
 import { TapGestureHandler, State, GestureHandlerRootView } from 'react-native-gesture-handler';
 import stringsoflanguages from '../../utils/ScreenStrings';
 import LinearGradient from 'react-native-linear-gradient';
+import { useLocal, useProfile } from '../../context/ProfileContext';
+import { FETCH } from '../../services/fetch';
+import { LIKE } from '../../utils/like';
 
 const Post2 = props => {
+  const { localState, localDispatch } = useLocal()
+  const { profileState, dispatch } = useProfile()
   const [downloaded, setDownloaded] = useState(false);
   const cardRef = useRef(null); // Create a ref for the card view
   const doubleTapRef = useRef(null);
   const [likeScale] = useState(new Animated.Value(1));
   const [liked, setLiked] = useState(false);
   const [likeCount, setLikeCount] = useState(0);
-  const [shouldShowAd, setShouldShowAd] = useState(false); 
+  const [shouldShowAd, setShouldShowAd] = useState(false);
 
   const [likedMessageVisible, setLikedMessageVisible] = useState(false);
 
@@ -81,10 +86,14 @@ const Post2 = props => {
 
   const handleNextPage = () => {
     console.log('Pressing posts navigation');
+    localDispatch({
+      type: "EDITIMAGEURI",
+      payload: props.source
+    })
     props.navigation.navigate('Edit');
   };
 
-  const handleLike = () => {
+  const handleLike = async () => {
     Animated.sequence([
       Animated.timing(likeScale, {
         toValue: 1.2,
@@ -109,10 +118,12 @@ const Post2 = props => {
       }, 1000); // Hide the message after 2 seconds
     }
     setLiked(!liked);
+    await LIKE(props.id)
   };
   useEffect(() => {
     // You can add animation logic here for the like button
-  }, [liked]);
+    console.log('Likes ',props)
+  }, []);
 
   const onShare = async () => {
     if (cardRef.current) {
@@ -137,7 +148,7 @@ const Post2 = props => {
     }
   };
 
-  const handleDoubleTap = () => {
+  const handleDoubleTap = async() => {
     // Trigger the like animation
     Animated.sequence([
       Animated.timing(likeScale, {
@@ -164,7 +175,10 @@ const Post2 = props => {
       }, 1000); // Hide the message after 2 seconds
     }
     setLiked(!liked);
+    await LIKE(props.id)
   };
+
+ 
 
   const currentDate = new Date();
   const day = currentDate.getDate().toString().padStart(2, '0');
@@ -175,64 +189,55 @@ const Post2 = props => {
 
   const textColorStyle = { color: props.textColor || WHITE };
 
+  useEffect(()=>{
+    console.log('POST@ PROPS',props,profileState)
+  },[])
+
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-
       <SafeAreaView style={styles.container}>
         <TapGestureHandler
-
           ref={doubleTapRef}
           waitFor={cardRef} // Wait for single tap to finish before detecting double tap
           onHandlerStateChange={({ nativeEvent }) => {
             if (nativeEvent.state === State.ACTIVE) {
-              handleDoubleTap();
+              handleDoubleTap(); 
             }
           }}
           numberOfTaps={2} // Detect double tap
         >
-
           <LinearGradient ref={cardRef} style={styles.cardContainer2} colors={["#6d76b0", "#0aaabb"]}>
-
-
             <Image style={styles.backGround} resizeMode="cover" source={require('../../assets/images/bg2.jpeg')} />
             <View style={styles.cardContainer}>
               <Image
-                source={{uri : props.source}}
+                source={{ uri: props.source }}
                 resizeMode="contain"
                 style={styles.image}
               />
             </View>
-
-
             <View style={styles.profileContainer}>
-
-              <Image source={defaultProfileImage} style={styles.profileImage} />
-
-
+              <Image source={profileState.avatar?{uri :profileState.server +  profileState.avatar}:defaultProfileImage} style={styles.profileImage} />
               <View style={styles.infoContainer}>
                 <View style={styles.dateC}>
                   <Text style={styles.date}>{formattedDate}</Text>
                 </View>
-
-                <Text style={[styles.name, textColorStyle]}>{props.userName}</Text>
+                <Text style={[styles.name, textColorStyle]}>{profileState.name}</Text>
                 <View style={styles.horizontal} />
-
                 <View style={styles.infoC}>
                   <Icon2 name="phone" style={styles.iconPhone} />
                   <Text style={[styles.info, textColorStyle]}>
-                    +91 9405789152
+                    {profileState.phone}
                   </Text>
                 </View>
                 <View style={styles.infoC}>
                   <EntypoIcon name="email" style={styles.iconPhone} />
                   <Text style={[styles.info, textColorStyle]}>
-                    user123email@email.com
+                    {profileState.email}
                   </Text>
                 </View>
               </View>
             </View>
           </LinearGradient>
-
         </TapGestureHandler>
 
 
@@ -270,7 +275,7 @@ const Post2 = props => {
         {likedMessageVisible && (
           <Text style={styles.likedText}>{stringsoflanguages.liked}</Text>
         )}
-    
+
       </SafeAreaView>
 
     </GestureHandlerRootView>

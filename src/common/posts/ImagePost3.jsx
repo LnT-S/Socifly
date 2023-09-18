@@ -1,23 +1,23 @@
-import React, {useState, useEffect, useRef, Component} from 'react';
+import React, { useState, useEffect, useRef, Component } from 'react';
 import {
   StyleSheet,
   View,
   Text,
   Pressable,
   Image,
-  Animated, 
+  Animated,
   Alert,
 } from 'react-native';
-import {SafeAreaView} from 'react-native-safe-area-context';
-import {BLACK, POST2, PRIMARY, SECONDARY, WHITE,POST,POST1} from '../../styles/colors';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { BLACK, POST2, PRIMARY, SECONDARY, WHITE, POST, POST1 } from '../../styles/colors';
 import MaterialCommunityIconsIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import EntypoIcon from 'react-native-vector-icons/Entypo';
 import IconButton from '../../atoms/IconButton';
-import {getResponsiveValue, screenWidth} from '../../styles/responsive';
+import { getResponsiveValue, screenWidth } from '../../styles/responsive';
 import defaultProfileImage from '../../assets/images/Profile2.png';
 import Share from 'react-native-share';
-import {captureRef} from 'react-native-view-shot';
+import { captureRef } from 'react-native-view-shot';
 import RNFS from 'react-native-fs';
 import stringsoflanguages from '../../utils/ScreenStrings';
 import {
@@ -26,9 +26,13 @@ import {
   GestureHandlerRootView,
 } from 'react-native-gesture-handler';
 import Icon2 from "react-native-vector-icons/FontAwesome";
-import {launchImageLibrary} from 'react-native-image-picker';
+import { launchImageLibrary } from 'react-native-image-picker';
+import { useLocal, useProfile } from '../../context/ProfileContext';
+import { LIKE } from '../../utils/like';
 
 const ImagePost3 = props => {
+  const { localState, localDispatch } = useLocal()
+  const { profileState, dispatch } = useProfile()
   const [downloaded, setDownloaded] = useState(false);
   const cardRef = useRef(null); // Create a ref for the card view
   const doubleTapRef = useRef(null);
@@ -97,6 +101,7 @@ const ImagePost3 = props => {
       }, 1000); // Hide the message after 2 seconds
     }
     setLiked(!liked);
+    LIKE(props.id)
   };
 
   useEffect(() => {
@@ -155,6 +160,7 @@ const ImagePost3 = props => {
       }, 1000); // Hide the message after 2 seconds
     }
     setLiked(!liked);
+    LIKE(props.id)
   };
 
   const currentDate = new Date();
@@ -169,12 +175,12 @@ const ImagePost3 = props => {
   const textColorStyle2 = { color: props.textColor2 || WHITE };
 
   return (
-    <GestureHandlerRootView style={{flex: 1}}>
+    <GestureHandlerRootView style={{ flex: 1 }}>
       <SafeAreaView style={styles.container}>
         <TapGestureHandler
           ref={doubleTapRef}
           waitFor={cardRef} // Wait for single tap to finish before detecting double tap
-          onHandlerStateChange={({nativeEvent}) => {
+          onHandlerStateChange={({ nativeEvent }) => {
             if (nativeEvent.state === State.ACTIVE) {
               handleDoubleTap();
             }
@@ -182,42 +188,42 @@ const ImagePost3 = props => {
           numberOfTaps={2} // Detect double tap
         >
           <View ref={cardRef} style={styles.cardContainer2}>
-          <Image style={styles.backGround} resizeMode="cover"  source={require('../../assets/images/bg3.png')}/>
+            <Image style={styles.backGround} resizeMode="cover" source={require('../../assets/images/bg3.png')} />
             <View style={styles.cardContainer}>
               <Image
                 source={
                   props.selectedImage
-                    ? {uri: props.selectedImage.uri}
-                    : props?.source
+                    ? { uri: props.selectedImage.uri }
+                    : { uri: props?.source }
                 }
                 resizeMode="contain"
                 style={styles.image}
               />
               <View style={styles.textBox}>
 
-              <Text style={[styles.nameC,textColorStyle]}>{props.name}</Text>
+                <Text style={[styles.nameC, textColorStyle]}>{props.name}</Text>
               </View>
             </View>
 
             <View style={styles.profileContainer}>
-            <View style={styles.profileImageBg} />
-              <Image source={defaultProfileImage} style={styles.profileImage} />
+              <View style={styles.profileImageBg} />
+              <Image source={profileState.avatar?{uri :profileState.server +  profileState.avatar}:defaultProfileImage} style={styles.profileImage} />
               <View style={styles.infoContainer}>
-              <View style={styles.dateC}>
-        <Text style={styles.date}>{formattedDate}</Text>
-        </View>
-                <Text style={[styles.name,textColorStyle2]}>{props.userName}</Text>
+                <View style={styles.dateC}>
+                  <Text style={styles.date}>{formattedDate}</Text>
+                </View>
+                <Text style={[styles.name, textColorStyle2]}>{profileState.name}</Text>
                 <View style={styles.horizontal} />
                 <View style={styles.infoC}>
                   <Icon2 name="phone" style={styles.iconPhone} />
                   <Text style={[styles.info, textColorStyle2]}>
-                    +91 9405789152
+                  {profileState.phone}
                   </Text>
                 </View>
                 <View style={styles.infoC}>
                   <EntypoIcon name="email" style={styles.iconPhone} />
                   <Text style={[styles.info, textColorStyle2]}>
-                    user123email@email.com
+                  {profileState.email}
                   </Text>
                 </View>
               </View>
@@ -228,7 +234,7 @@ const ImagePost3 = props => {
         <View style={styles.toolbar}>
           <Pressable onPress={handleLike}>
             <Animated.View
-              style={[styles.likeButton, {transform: [{scale: likeScale}]}]}>
+              style={[styles.likeButton, { transform: [{ scale: likeScale }] }]}>
               <MaterialCommunityIconsIcon
                 name={liked ? 'heart-circle' : 'heart-circle-outline'}
                 style={[styles.icon1, liked && styles.likedIcon]}
@@ -248,9 +254,9 @@ const ImagePost3 = props => {
               </IconButton>
             )}
           </View>
-      
+
         </View>
-      
+
         {downloaded && (
           <Text style={styles.downloadedText}>{stringsoflanguages.imageDownloaded}</Text>
         )}
@@ -279,13 +285,13 @@ const styles = StyleSheet.create({
     shadowOpacity: 1,
     shadowRadius: 10,
   },
-  backGround:{
-    position:"absolute",
-width:"100%",
-height:"100%",
-resizeMode:"cover",
-// top:"80%",
-zIndex:-1,
+  backGround: {
+    position: "absolute",
+    width: "100%",
+    height: "100%",
+    resizeMode: "cover",
+    // top:"80%",
+    zIndex: -1,
   },
   cardContainer: {
     paddingHorizontal: '3%',
@@ -311,7 +317,7 @@ zIndex:-1,
     // paddingBottom:"20%"
   },
   horizontal: {
-    backgroundColor:"#f01c1c",
+    backgroundColor: "#f01c1c",
 
     height: getResponsiveValue(2, 1),
     width: '100%',
@@ -338,12 +344,12 @@ zIndex:-1,
     position: 'absolute',
     bottom: '10%',
     left: '10%',
-    borderColor:BLACK,
-    borderWidth:getResponsiveValue(2,1),
+    borderColor: BLACK,
+    borderWidth: getResponsiveValue(2, 1),
     transform: [{ rotate: '-5deg' }]
   },
-  profileImageBg:{
-    
+  profileImageBg: {
+
     width: getResponsiveValue(170, 85),
     height: getResponsiveValue(170, 85),
     borderRadius: getResponsiveValue(20, 10),
@@ -378,10 +384,10 @@ zIndex:-1,
     fontSize: getResponsiveValue(25, 15),
     color: BLACK,
     fontWeight: "900",
-    letterSpacing:getResponsiveValue(1,0.5),
+    letterSpacing: getResponsiveValue(1, 0.5),
     textShadowColor: "#000000",
-    textShadowOffset: { width: 1, height: 1 } ,
-    textShadowRadius: getResponsiveValue(4,2) ,
+    textShadowOffset: { width: 1, height: 1 },
+    textShadowRadius: getResponsiveValue(4, 2),
     //  backgroundColor: BLACK,
     // position: 'absolute',
     // left:getResponsiveValue("20%","20%"),
@@ -397,30 +403,30 @@ zIndex:-1,
     color: WHITE,
     fontWeight: 'bold',
     textShadowColor: "#0000006e",
-    textShadowOffset: { width: 1, height: 1 } ,
-    textShadowRadius: getResponsiveValue(4,2) ,
-    paddingHorizontal:"4%",
-    paddingVertical:"2%",
-    backgroundColor:"#4bbc1bc8",
-    borderRadius: getResponsiveValue(20,10),
+    textShadowOffset: { width: 1, height: 1 },
+    textShadowRadius: getResponsiveValue(4, 2),
+    paddingHorizontal: "4%",
+    paddingVertical: "2%",
+    backgroundColor: "#4bbc1bc8",
+    borderRadius: getResponsiveValue(20, 10),
   },
-  dateC:{
-    position:"absolute",
-alignItems:"center",
- bottom: getResponsiveValue('100%', "90%"),
- left: getResponsiveValue('100%', "90%"),
+  dateC: {
+    position: "absolute",
+    alignItems: "center",
+    bottom: getResponsiveValue('100%', "90%"),
+    left: getResponsiveValue('100%', "90%"),
   },
   name: {
     fontSize: getResponsiveValue(20, 13),
     color: WHITE,
     fontWeight: 'bold',
-    
+
     top: getResponsiveValue('20%', '30%'),
-    left:getResponsiveValue("40%","40%"),
+    left: getResponsiveValue("40%", "40%"),
     textShadowColor: '#05050567',
-    textShadowOffset: { width: 1, height: 1 } ,
-    textShadowRadius: getResponsiveValue(4,2) ,
-  
+    textShadowOffset: { width: 1, height: 1 },
+    textShadowRadius: getResponsiveValue(4, 2),
+
   },
   info: {
     fontSize: getResponsiveValue(12, 9),
@@ -428,7 +434,7 @@ alignItems:"center",
     marginLeft: getResponsiveValue(10, 5),
     fontWeight: 'bold',
     textShadowColor: '#05050567',
-    textShadowOffset: {width: 1, height: 1},
+    textShadowOffset: { width: 1, height: 1 },
     textShadowRadius: getResponsiveValue(2, 1),
   },
 
@@ -443,8 +449,8 @@ alignItems:"center",
     color: WHITE,
     // top: getResponsiveValue('20%', '30%'),
     // left: getResponsiveValue('40%', '40%'),
-    textShadowColor:   '#05050567',
-    textShadowOffset: {width: 1, height: 1},
+    textShadowColor: '#05050567',
+    textShadowOffset: { width: 1, height: 1 },
     textShadowRadius: getResponsiveValue(2, 1),
   },
 
@@ -500,15 +506,15 @@ alignItems:"center",
     position: 'absolute',
     top: '60%',
   },
-  textBox:{
-alignItems:"center",
-justifyContent:"center",
-paddingHorizontal:"3%",
-// backgroundColor:'black',
-position:"absolute",
-height:"85%",
-width:"100%",
-left:"3%",
+  textBox: {
+    alignItems: "center",
+    justifyContent: "center",
+    paddingHorizontal: "3%",
+    // backgroundColor:'black',
+    position: "absolute",
+    height: "85%",
+    width: "100%",
+    left: "3%",
   },
 });
 

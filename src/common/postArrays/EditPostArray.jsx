@@ -1,4 +1,4 @@
-import React from 'react';
+import React  , {useState , useEffect} from 'react';
 import { View , StyleSheet} from 'react-native';
 import ImagePost from '../posts/ImagePost';
 import ImagePost2 from '../posts/ImagePost2';
@@ -10,43 +10,57 @@ import Post4 from '../posts/Post4';
 import BirthdayPost from '../posts/BirthdayPost';
 // import GoogleAds from '../common/GoogleAds';
 import stringsoflanguages from '../../utils/ScreenStrings';
+import { useProfile , useLocal } from '../../context/ProfileContext';
+import { FETCH } from '../../services/fetch';
 
 const EditPostArray = ({ navigation }) => {
-  const name = stringsoflanguages.enterTextHere;
-  const userName = "User Name";
+  const {localState, localDispatch} = useLocal()
+  const { profileState, dispatch } = useProfile();
+  const [showModal, setShowModal] = useState(false)
+  const [modal, setModal] = useState({
+    visible: false,
+    message: '',
+    navigationPage: '',
+    onClose: null
+  })
 
-  const posts = [
-    { id: 1, type: 'ImagePost', source: require('../../assets/pics/iPic1.jpeg') },
-    { id: 2, type: 'ImagePost2', source: require('../../assets/pics/iPic5.png') },
-    { id: 3, type: 'ImagePost3', source: require('../../assets/pics/iPic4.jpeg') },
-    { id: 4, type: 'ImagePost4', source: require('../../assets/pics/iPic3.jpeg') },
-    
-    // Add more posts as needed
-  ];
+  const [posts , setPost] = useState([]);
 
-  
 
-  const renderPostComponent = (post) => {
-    switch (post.type) {
-      case 'ImagePost':
-        return <ImagePost2 name={name}  userName={userName} key={post.id} source={post.source} navigation={navigation} />;
-      case 'ImagePost2':
-        return <ImagePost name={name} userName={userName} key={post.id} source={post.source} navigation={navigation} />;
-      case 'ImagePost3':
-        return <ImagePost3 name={name} userName={userName} key={post.id} source={post.source} navigation={navigation} /> ;
-      case 'ImagePost4':
-        return <ImagePost4 name={name} userName={userName} key={post.id} source={post.source} navigation={navigation} />;
-       default:
-        return null; 
+  async function getImageByCategory() {
+    let { status, data } = await FETCH(
+      'GET',
+      '/home/get-images-by-category',
+      {
+        lang: 'wallpaper',
+      }
+    )
+    if (status === 200) {
+      setPost(data.data)
+    } else {
+      let a = setModal({
+        visible: true,
+        message: JSON.stringify(data),
+        navigationPage: 'LoginScreen',
+        onClose: () => { setShowModal(false) }
+      })
+      setShowModal(true)
     }
-  };
+  }
+
+  useEffect(()=>{
+    getImageByCategory().then().catch(err=>console.log('EFFECT ERROR 4',err))
+  },[])
 
   return (
     <View style={styles.postArrayContainer}>
-      {posts.map((post) => renderPostComponent(post))}
+      {posts.map((post) => {
+        return (<ImagePost2 name={profileState.name}  userName={profileState.name} key={post._id} source={profileState.server + post.path} navigation={navigation} id={post._id}/>)
+      })}
     </View>
   );
 };
+
 
 
 const styles = StyleSheet.create({

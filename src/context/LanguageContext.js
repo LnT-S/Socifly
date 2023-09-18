@@ -13,7 +13,7 @@ export const useLanguage = () => {
 };
 
 export const LanguageProvider = ({ children }) => {
-  const [selectedLanguage, setSelectedLanguage] = useState('en'); // Default language
+  const [selectedLanguage, setSelectedLanguage] = useState('english'); // Default language
 
   const setLanguage = (language) => {
     setSelectedLanguage(language);

@@ -28,20 +28,30 @@ import BannerAds from '../common/Ads/BannerAds';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import { FETCH } from '../services/fetch';
-import { useProfile } from '../context/ProfileContext';
+import { useProfile, useLocal } from '../context/ProfileContext';
+import CustomModal from '../atoms/CustomModal';
 
 
 //import RewardedInterstitialAds from '../common/RewardedInterstitialAds';
 
 const HomePage = props => {
+  const { localState, localDispatch } = useLocal()
   const { profileState, dispatch } = useProfile();
+  const [refresh , setRefresh] = useState(true)
   const navigation = useNavigation();
-  const [value , SetValue] = useState({
-    name : profileState.name || '',
-    email : profileState.email || '',
-    phone : profileState || null,
+  const [showModal, setShowModal] = useState(false)
+  const [modal, setModal] = useState({
+    visible: false,
+    message: '',
+    navigationPage: '',
+    onClose: null
   })
-  const [avatar , setAvatar] = useState(profileState.avatar || '')
+  const [value, SetValue] = useState({
+    name: profileState.name || '',
+    email: profileState.email || '',
+    phone: profileState.phone || null,
+  })
+  const [avatar, setAvatar] = useState(profileState.avatar || '')
   async function token() {
     let token = await AsyncStorage.getItem('token')
     if (token) {
@@ -52,7 +62,7 @@ const HomePage = props => {
     }
   }
   useEffect(() => {
-    token().then().catch(err=>console.log('EFFECT ERROR',err))
+    token().then().catch(err => console.log('EFFECT ERROR', err))
   }, [])
 
   const [shouldShowAd, setShouldShowAd] = useState(false);
@@ -91,64 +101,115 @@ const HomePage = props => {
     setIsRewardedAdLoaded(true);
   };
 
-  const updateContext = ()=>{
+  const updateContext = () => {
     dispatch({
-      type : 'USER_NAME',
-      payload : value.name
+      type: 'USER_NAME',
+      payload: value.name
     })
     dispatch({
-      type : 'EMAIL',
-      payload :value.email
+      type: 'EMAIL',
+      payload: value.email
     })
     dispatch({
-      type : 'PHONE',
-      payload : value.phone
+      type: 'PHONE',
+      payload: value.phone
     })
     dispatch({
-      type : 'AVATAR',
-      payload : avatar
+      type: 'AVATAR',
+      payload: avatar
     })
   }
 
-  const loadProfileData = async () => {
-    try {
-     let {data , status} = await FETCH(
+  async function getImages(){
+    let {status , data} = await FETCH(
       'GET',
-      '/profile/get-info',
-      ''
-     )
-
-     if(status === 200){
-      console.log(data)
-      SetValue(data.data)
-      setAvatar('http://10.0.2.2:8000'+data.data.image)
-      // updateContext()
-     }else{
+      '/home/get-images',
+      {lang : localState.lang}
+    )
+    if(status===200){
+      localDispatch({
+        type : "IMAGES",
+        payload : data.data
+      })
+    } else {
       let a = setModal({
         visible: true,
-        message: 'Service Error',
+        message: data.message,
         navigationPage: 'LoginScreen',
+        onClose: () => { setShowModal(false) }
       })
       setShowModal(true)
-     }
-    } catch (error) {
+    }
+  }
+
+  async function getCategory() {
+    let { data, status } = await FETCH(
+      'GET',
+      '/home/get-category',
+      { lang: localState.lang }
+    )
+    // console.log(data.data[0])
+    if (status === 200) {
+      localDispatch({
+        type: 'CATEGORY',
+        payload: data.data
+      })
+    } else {
+      let a = setModal({
+        visible: true,
+        message: data.message,
+        navigationPage: 'LoginScreen',
+        onClose: () => { setShowModal(false) }
+      })
+      setShowModal(true)
+    }
+  }
+
+  async function loadProfileData(){
+    try {
+      let { data, status } = await FETCH(
+        'GET',
+        '/profile/get-info',
+      )
+
+      if (status === 200) {
+        console.log(data)
+        SetValue(data.data)
+        setAvatar(data.data.image)
+        updateContext() 
+      } else {
+        let a = setModal({
+          visible: true,
+          message: 'Service Error',
+          navigationPage: 'LoginScreen',
+        })
+        setShowModal(true)
+      }
+    } catch (error) { 
       console.log('Error loading profile data 0:', error);
     }
   };
 
-  useEffect(()=>{
-    loadProfileData().then().catch(err=>console.log('EFFECT ERROR',err))
-  },[])
+  function REFRESH(){
+    setRefresh(!refresh)
+  }
+
+  useEffect(() => {
+    loadProfileData().then().catch(err => console.log('EFFECT ERROR 0', err))
+    getCategory().then().catch(err=>console.log('EFFECT ERROR 1',err))
+    getImages().then().catch(err=>console.log('EFFECT ERROR 2',err))
+  }, [refresh])
+
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={styles.container} >
       <LinearGradient2 customStyle={styles.loginGradient}>
         <View style={styles.iconStackRow}>
           <View style={styles.iconStack}>
             <TextInput placeholder="" style={styles.textInput} />
             <FeatherIcon name="search" style={styles.icon2} />
           </View>
-
+          {showModal ? <CustomModal visible={modal.visible} message={modal.message} navigationPage={modal.navigationPage} onClose={modal.onClose} /> : ''}
           <Pressable
             style={styles.button}
             onPress={() => {
@@ -184,7 +245,7 @@ const HomePage = props => {
       <View style={styles.cardSection}>
         <Category />
       </View>
-      <ScrollView style={styles.postS}>
+      <ScrollView style={styles.postS}  onPress={REFRESH}>
         <FlatList
           ref={flatListRef}
           style={styles.adss}
@@ -204,6 +265,7 @@ const HomePage = props => {
         />
         <GoogleAds />
       </ScrollView>
+      <Text style={{textAlign : 'center'}} onPress={REFRESH}>REFRESH</Text>
     </SafeAreaView>
   );
 };

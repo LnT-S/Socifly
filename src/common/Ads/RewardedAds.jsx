@@ -5,7 +5,7 @@ import { AdEventType } from 'react-native-google-mobile-ads';
 import {RewardedAdEventType,  RewardedAd, TestIds } from 'react-native-google-mobile-ads';
 import { useNavigation } from '@react-navigation/native';
 
-const adUnitId = __DEV__ ? TestIds.REWARDED : 'ca-app-pub-7476617068399590/2806493368';
+const adUnitId = __DEV__ ? TestIds.REWARDED : 'ca-app-pub-7928655726884789/2557055236';
 const rewarded = RewardedAd.createForAdRequest(adUnitId, {
     requestNonPersonalizedAdsOnly: true,
     keywords: ['fashion', 'clothing'],

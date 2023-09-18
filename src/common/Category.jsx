@@ -21,34 +21,9 @@ const Category = (props) => {
         navigationPage: '',
         onClose: null
     })
-
-    async function getCategory() {
-        let { data, status } =await FETCH(
-            'GET',
-            '/home/get-category',
-            ''
-        )
-        // console.log(data.data[0])
-        if (status === 200) {
-            localDispatch({
-                type : 'CATEGORY',
-                payload: data.data
-            })
-            setCategory(localState.category)
-        } else {
-            let a = setModal({
-                visible: true,
-                message: data.message,
-                navigationPage: 'LoginScreen',
-                onClose: () => { setShowModal(false) }
-              })
-              setShowModal(true)
-        }
-    }
-
     useEffect(() => {
-        getCategory().then().catch(err=>console.log('EFFECT ERROR 1',err))
-    }, [])
+        setCategory(localState.category)
+    })
 
     return (
         <SafeAreaView style={styles.container}>

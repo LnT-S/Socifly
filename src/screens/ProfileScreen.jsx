@@ -52,7 +52,7 @@ const ProfileScreen = props => {
   const [value , SetValue] = useState({
     name : profileState.name || '',
     email : profileState.email || '',
-    phone : profileState.phone || null,
+    phone : profileState.phone.toString() || '',
   })
   const [avatar , setAvatar] = useState(profileState.avatar || '')
 
@@ -171,9 +171,9 @@ const ProfileScreen = props => {
   }
   
   useEffect(() => {
-    loadProfileData()
+    loadProfileData().then().catch(err=>console.log('EFFECT ERROR 5',err))
     setSelectedProfileImage('')
-    // console.log(avatar)
+    console.log('---------',profileState,value)
   }, []);
 
  
@@ -212,10 +212,9 @@ const ProfileScreen = props => {
             <Pressable onPress={selectImage}>
               <Image
                 source={
-                  (selectedProfileImage || avatar
-                    )
+                  (selectedProfileImage || avatar)
                     ? { uri:selectedProfileImage || profileState.server + avatar }
-                    : defaultProfileImage
+                     : defaultProfileImage
                 }
                 style={styles.profileImage}
               />
@@ -233,7 +232,7 @@ const ProfileScreen = props => {
                 placeholder={value.name ? '' : 'User Name'}
               />
             ) : (
-              <Text   placeholder={'User Name'}  style={styles.yourName}>{value.name}</Text>
+              <Text   placeholder={'User Name'}  style={styles.yourName}>{profileState.name}</Text>
             )}
             {isEditing ? (
               <TextInput
@@ -242,18 +241,18 @@ const ProfileScreen = props => {
                 onChangeText={(v)=>{handleChange({field :'email' , text : v})}}
               />
             ) : (
-              <Text style={styles.yourEmail}>{value.email}</Text>
+              <Text style={styles.yourEmail}>{profileState.email}</Text>
             )}
             {isEditing ? (
               <TextInput
                 style={styles.editableField}
-                value={value.phone.toString()}
+                value={`${value.phone}`}
                 onChangeText={(v)=>{handleChange({field :'phone' , text : v})}}
                 keyboardType="numeric"
                 maxLength={10}
               />
             ) : (
-              <Text style={styles.yourEmail}>{value.phone}</Text>
+              <Text style={styles.yourEmail}>{profileState.phone}</Text>
             )}
           </View>
         </LinearGradients>

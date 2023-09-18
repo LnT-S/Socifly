@@ -5,7 +5,7 @@ import React, { useEffect, useState,  } from 'react';
 import { BannerAd, BannerAdSize, TestIds } from 'react-native-google-mobile-ads';
 
 // const adUnitId = __DEV__ ? TestIds.BANNER : 'ca-app-pub-7476617068399590/2806493368';
-const adUnitId = __DEV__ ? TestIds.BANNER : 'ca-app-pub-6433904933387460/3797984717';
+const adUnitId = __DEV__ ? TestIds.BANNER : 'ca-app-pub-7928655726884789/7373186075';
 
 const BannerAds = (props) => {
    

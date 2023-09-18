@@ -10,7 +10,7 @@ import MaterialIconsIcon from "react-native-vector-icons/MaterialIcons";
 import ImagePost from '../common/posts/ImagePost';
 import { BLACK, WHITE } from '../styles/colors';
 
-import { getResponsiveValue} from '../styles/responsive'; 
+import { getResponsiveValue } from '../styles/responsive';
 import EditPostArray from '../common/postArrays/EditPostArray';
 import Icon from "react-native-vector-icons/Entypo";
 import stringsoflanguages from '../utils/ScreenStrings';
@@ -25,26 +25,26 @@ const CreatePage = (props) => {
 
   };
 
-  
+
   const [userName, setUserName] = useState("User Name");
   const [inputValue, setInputValue] = useState("");
   return (
     <SafeAreaView style={styles.container}>
-   
+
 
       <LinearGradient2 customStyle={styles.loginGradient}>
         <View style={styles.iconRow}>
           <View style={styles.iconContainer}>
-          <Pressable style={({ pressed }) => [
-            { opacity: pressed ? 0.7 : 0.9 },
-            styles.iconWrapper,
-          ]}>
-           
-            <FontAwesomeIcon
-              name="angle-left"
-              onPress={handleNextPage}
-              style={styles.iconA}
-            />
+            <Pressable style={({ pressed }) => [
+              { opacity: pressed ? 0.7 : 0.9 },
+              styles.iconWrapper,
+            ]}>
+
+              <FontAwesomeIcon
+                name="angle-left"
+                onPress={handleNextPage}
+                style={styles.iconA}
+              />
             </Pressable>
           </View>
           <Text style={styles.create}>{stringsoflanguages.new}</Text>
@@ -52,11 +52,11 @@ const CreatePage = (props) => {
             { opacity: pressed ? 0.7 : 0.9 },
             styles.iconWrapper,
           ]}>
-          <MaterialIconsIcon
-            name="settings"
-            onPress={handleNextPage2}
-            style={ styles.settingsIcon}
-          />
+            <MaterialIconsIcon
+              name="settings"
+              onPress={handleNextPage2}
+              style={styles.settingsIcon}
+            />
           </Pressable>
         </View>
       </LinearGradient2>
@@ -65,28 +65,28 @@ const CreatePage = (props) => {
         { opacity: pressed ? 0.8 : 1 },
         styles.iconWrapper,
       ]}>
-      <View style={styles.iconRow2}>
-        {/* <MaterialCommunityIconsIcon
+        <View style={styles.iconRow2}>
+          {/* <MaterialCommunityIconsIcon
           name="image-plus"
           style={styles.icon2}
         /> */}
 
-<Icon name="images" style={styles.icon2}></Icon>
-     
-      <View style={styles.loremIpsumColumn}>
-        <Pressable style={({ pressed }) => [
-          { opacity: pressed ? 0.8 : 1 },
-          styles.iconWrapper,
-        ]}>
-          <Text style={styles.loremIpsum}>{stringsoflanguages.addImagesGallery}</Text>
-        </Pressable>
-          <Text style={styles.loremIpsum2}>{stringsoflanguages.createCard}</Text>
+          <Icon name="images" style={styles.icon2}></Icon>
+
+          <View style={styles.loremIpsumColumn}>
+            <Pressable style={({ pressed }) => [
+              { opacity: pressed ? 0.8 : 1 },
+              styles.iconWrapper,
+            ]}>
+              <Text style={styles.loremIpsum}>{stringsoflanguages.addImagesGallery}</Text>
+            </Pressable>
+            <Text style={styles.loremIpsum2}>{stringsoflanguages.createCard}</Text>
+          </View>
         </View>
-      </View>
       </Pressable>
 
       <ScrollView>
-      {/* <View style={styles.rect3}>
+        {/* <View style={styles.rect3}>
         <Text style={styles.or}>OR</Text>
         <View style={styles.icon4Row}>
           <Icon name="wallpaper" style={styles.icon4} />
@@ -95,16 +95,16 @@ const CreatePage = (props) => {
           </Pressable>
         </View>
       </View> */}
-     
-      <View>
 
-      <EditPostArray
-          // posts={posts}
-          // renderPostComponent={renderPostComponent}
-          navigation={props.navigation}
-        />
- 
-      </View>
+        <View>
+
+          <EditPostArray
+            // posts={posts}
+            // renderPostComponent={renderPostComponent}
+            navigation={props.navigation}
+          />
+
+        </View>
       </ScrollView>
     </SafeAreaView>
   );
@@ -123,11 +123,11 @@ const styles = StyleSheet.create({
   },
 
   iconRow: {
-    paddingHorizontal: getResponsiveValue( "5%", "5%"),
+    paddingHorizontal: getResponsiveValue("5%", "5%"),
     flexDirection: "row",
     alignItems: "center",
     // justifyContent:"space-around",
-    justifyContent:"space-between",
+    justifyContent: "space-between",
     // justifyContent: "space-between",
     width: "100%",
     marginTop: getResponsiveValue(20, 10),
@@ -135,11 +135,11 @@ const styles = StyleSheet.create({
   iconContainer: {
     flexDirection: "row",
     alignItems: "center",
-   
+
   },
   icon: {
     color: "#fff",
-    fontSize: getResponsiveValue(40,30),
+    fontSize: getResponsiveValue(40, 30),
     // left:60
 
   },
@@ -148,7 +148,7 @@ const styles = StyleSheet.create({
     fontSize: getResponsiveValue(45, 35),
     // marginLeft: getResponsiveValue(30, 20),
     // padding:"2%",
-    paddingRight:getResponsiveValue("2%","4%"),
+    paddingRight: getResponsiveValue("2%", "4%"),
     // backgroundColor:"black"
   },
   create: {
@@ -157,7 +157,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontWeight: "bold",
     // left:getResponsiveValue("2%","2%"),
-    marginLeft: getResponsiveValue("2%","4%"),
+    marginLeft: getResponsiveValue("2%", "4%"),
   },
   settingsIcon: {
     color: "#fff",

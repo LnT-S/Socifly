@@ -13,8 +13,11 @@ import {FETCH} from '../services/fetch';
 import CustomModal from '../atoms/CustomModal';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useNavigation} from '@react-navigation/native';
+import { useLocal , useProfile} from '../context/ProfileContext';
 
 const LoginScreen = props => {
+  const {profileState, dispatch} = useProfile()
+  const {localState, localDispatch} = useLocal()
   const navigation = useNavigation();
   const [errors, setErrors] = useState({});
   // .....
@@ -37,7 +40,6 @@ const LoginScreen = props => {
       email: username,
       password,
     };
-
     const validationErrors = validate2(formData1);
     console.log('Validation errors:', validationErrors);
     console.log('formData:', formData1);
@@ -46,7 +48,6 @@ const LoginScreen = props => {
       setErrors(validationErrors);
       return;
     }
-
     try {
       setIsLoading(true); // Start loading
       // console.log('VAlue is', { formData1 });
@@ -79,20 +80,12 @@ const LoginScreen = props => {
         })
         setShowModal(true)
       }
-      
     } catch (error) {
       setIsLoading(false); // End loading on error
-
-      // Handle login error
       console.error('Login error:', error);
     }
   };
 
-  // ..............
-
-  // const handleHome = () => {
-  //   props.navigation.navigate('HomePage');
-  // };
   const handleNextPage = () => {
     props.navigation.navigate('ForgotPassword');
   };
@@ -107,6 +100,16 @@ const LoginScreen = props => {
 
   const logs = async ()=>{
     let token = await AsyncStorage.getItem('token')
+    let lang = await AsyncStorage.getItem('selectedLanguage')
+    if(!lang){
+      await AsyncStorage.setItem('selectedLanguage','english')
+      lang = 'english'
+    }
+    localDispatch({
+      type : "LANG",
+      payload : lang
+    })
+    console.log(lang)
     if(token){
       console.log('Token Exists Redirecting to the home page');
       let {status,data} =await FETCH(
@@ -124,6 +127,7 @@ const LoginScreen = props => {
         setShowModal(true)
         await AsyncStorage.clear()
       }else{
+        dispatch()
         props.navigation.navigate('HomePage')
       }
     }else{
@@ -159,7 +163,7 @@ const LoginScreen = props => {
           ]}
 
           placeholder={stringsoflanguages.emailOrPhone}
-          value={username}
+          value={username || profileState.email}
           onChangeText={(text) => {
             setUsername(text);
             setErrors({ ...errors, email: '' }); // Clear the error when typing

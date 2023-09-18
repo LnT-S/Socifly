@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef, Component} from 'react';
+import React, { useState, useEffect, useRef, Component } from 'react';
 import {
   StyleSheet,
   View,
@@ -8,17 +8,17 @@ import {
   Animated,
   Alert,
 } from 'react-native';
-import {SafeAreaView} from 'react-native-safe-area-context';
-import {BLACK, POST2, PRIMARY, SECONDARY, WHITE} from '../../styles/colors';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { BLACK, POST2, PRIMARY, SECONDARY, WHITE } from '../../styles/colors';
 import MaterialCommunityIconsIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import EntypoIcon from 'react-native-vector-icons/Entypo';
 import IconButton from '../../atoms/IconButton';
 import Icon2 from "react-native-vector-icons/FontAwesome";
-import {getResponsiveValue, screenWidth} from '../../styles/responsive';
+import { getResponsiveValue, screenWidth } from '../../styles/responsive';
 import defaultProfileImage from '../../assets/images/profile3.png';
 import Share from 'react-native-share';
-import {captureRef} from 'react-native-view-shot';
+import { captureRef } from 'react-native-view-shot';
 import RNFS from 'react-native-fs';
 import stringsoflanguages from '../../utils/ScreenStrings';
 import {
@@ -27,10 +27,13 @@ import {
   GestureHandlerRootView,
 } from 'react-native-gesture-handler';
 import RewardedAds from '../../common/Ads/RewardedAds';
-import {launchImageLibrary} from 'react-native-image-picker';
+import { launchImageLibrary } from 'react-native-image-picker';
 import { get } from 'react-native/Libraries/TurboModule/TurboModuleRegistry';
+import { useLocal } from '../../context/ProfileContext';
 
 const BirthdayPost = props => {
+  const { localState, localDispatch } = useLocal()
+  const imageSource = localState.imageSource
   const [downloaded, setDownloaded] = useState(false);
   const cardRef = useRef(null); // Create a ref for the card view
   const doubleTapRef = useRef(null);
@@ -174,14 +177,14 @@ const BirthdayPost = props => {
   const [selectedImage, setSelectedImage] = useState(null);
   const textColorStyle = { color: props.textColor || WHITE };
   const textColorStyle2 = { color: props.textColor2 || WHITE };
- 
+
   return (
-    <GestureHandlerRootView style={{flex: 1}}>
+    <GestureHandlerRootView style={{ flex: 1 }}>
       <SafeAreaView style={styles.container}>
         <TapGestureHandler
           ref={doubleTapRef}
           waitFor={cardRef} // Wait for single tap to finish before detecting double tap
-          onHandlerStateChange={({nativeEvent}) => {
+          onHandlerStateChange={({ nativeEvent }) => {
             if (nativeEvent.state === State.ACTIVE) {
               handleDoubleTap();
             }
@@ -189,41 +192,41 @@ const BirthdayPost = props => {
           numberOfTaps={2} // Detect double tap
         >
           <View ref={cardRef} style={styles.cardContainer2}>
-          <Image style={styles.backGround}    source={require("../../assets/images/BD1.png")}
-          resizeMode="contain"
-              />
-  
+            <Image style={styles.backGround} source={require("../../assets/images/BD1.png")}
+              resizeMode="contain"
+            />
+
             <View style={styles.cardContainer}>
               <Image
-                source={props?.source}
+                source={{ uri: props?.source }}
                 resizeMode="contain"
                 style={styles.image}
               />
-             
-               <Image
-      source={
-        props.selectedImage
-          ? { uri: props.selectedImage.uri }
-          : require('../../assets/images/Profile2.png')
-      }
-      style={styles.profileImage2}
-    />
+
+              <Image
+                source={
+                  props.selectedImage
+                    ? { uri: props.selectedImage.uri }
+                    : {uri : imageSource}
+                }
+                style={styles.profileImage2}
+              />
               <Image
                 source={require('../../assets/images/name2.png')}
                 style={styles.nameB}
               />
-               <Text style={[styles.nameC,textColorStyle]}>{props.name}</Text>
+              <Text style={[styles.nameC, textColorStyle]}>{props.name}</Text>
             </View>
 
             <View style={styles.profileContainer}>
-            <View style={styles.profileImageBg} />
+              <View style={styles.profileImageBg} />
               <Image source={defaultProfileImage} style={styles.profileImage} />
               <View style={styles.infoContainer}>
-              <View style={styles.dateC}>
-        <Text style={styles.date}>{formattedDate}</Text>
-        </View>
-             
-                <Text style={[styles.name,textColorStyle2]}>{props.userName}</Text>
+                <View style={styles.dateC}>
+                  <Text style={styles.date}>{formattedDate}</Text>
+                </View>
+
+                <Text style={[styles.name, textColorStyle2]}>{props.userName}</Text>
                 <View style={styles.horizontal} />
                 <View style={styles.infoC}>
                   <Icon2 name="phone" style={styles.iconPhone} />
@@ -239,13 +242,13 @@ const BirthdayPost = props => {
                 </View>
               </View>
             </View>
-          </View> 
+          </View>
         </TapGestureHandler>
 
         <View style={styles.toolbar}>
           <Pressable onPress={handleLike}>
             <Animated.View
-              style={[styles.likeButton, {transform: [{scale: likeScale}]}]}>
+              style={[styles.likeButton, { transform: [{ scale: likeScale }] }]}>
               <MaterialCommunityIconsIcon
                 name={liked ? 'heart-circle' : 'heart-circle-outline'}
                 style={[styles.icon1, liked && styles.likedIcon]}
@@ -286,14 +289,14 @@ const styles = StyleSheet.create({
     // backgroundColor: WHITE,
     width: '100%',
     height: '15%',
-   
+
   },
-  backGround:{
-    position:"absolute",
-width:"100%",
-height:"100%",
-resizeMode:"cover",
-top:"40%",
+  backGround: {
+    position: "absolute",
+    width: "100%",
+    height: "100%",
+    resizeMode: "cover",
+    top: "40%",
   },
   cardContainer: {
     // paddingHorizontal: '3%',
@@ -319,7 +322,7 @@ top:"40%",
     resizeMode: 'contain',
     // paddingBottom:"20%"
   },
- 
+
   profileContainer: {
     // backgroundColor: POST2,
     width: '80%',
@@ -342,8 +345,8 @@ top:"40%",
     left: '10%',
     transform: [{ rotate: '-10deg' }],
   },
-  profileImageBg:{
-    
+  profileImageBg: {
+
     width: getResponsiveValue(160, 65),
     height: getResponsiveValue(160, 65),
     borderRadius: getResponsiveValue(20, 10),
@@ -369,8 +372,8 @@ top:"40%",
     borderRadius: getResponsiveValue(160, 60),
     backgroundColor: WHITE,
     position: 'absolute',
-    borderColor:WHITE,
-    borderWidth:getResponsiveValue(4,2),
+    borderColor: WHITE,
+    borderWidth: getResponsiveValue(4, 2),
     top: getResponsiveValue('8%', '8%'),
     // left: '29%',
   },
@@ -401,21 +404,21 @@ top:"40%",
     color: WHITE,
     fontWeight: 'bold',
     textShadowColor: "#0000006e",
-    textShadowOffset: { width: 1, height: 1 } ,
-    textShadowRadius: getResponsiveValue(4,2) ,
-    paddingHorizontal:"4%",
-    paddingVertical:"2%",
-    backgroundColor:"#ae54f8c9",
-    borderRadius: getResponsiveValue(20,10),
+    textShadowOffset: { width: 1, height: 1 },
+    textShadowRadius: getResponsiveValue(4, 2),
+    paddingHorizontal: "4%",
+    paddingVertical: "2%",
+    backgroundColor: "#ae54f8c9",
+    borderRadius: getResponsiveValue(20, 10),
   },
-  dateC:{
-    position:"absolute",
-alignItems:"center",
- bottom: getResponsiveValue('100%', "90%"),
- left: getResponsiveValue('100%', "90%"),
+  dateC: {
+    position: "absolute",
+    alignItems: "center",
+    bottom: getResponsiveValue('100%', "90%"),
+    left: getResponsiveValue('100%', "90%"),
   },
   horizontal: {
-    backgroundColor:"#f50101",
+    backgroundColor: "#f50101",
 
     height: getResponsiveValue(2, 1),
     width: '100%',
@@ -429,16 +432,16 @@ alignItems:"center",
     top: getResponsiveValue('20%', '20%'),
     left: getResponsiveValue('30%', '35%'),
     textShadowColor: '#05050567',
-    textShadowOffset: { width: 1, height: 1 } ,
-    textShadowRadius: getResponsiveValue(4,2) ,
+    textShadowOffset: { width: 1, height: 1 },
+    textShadowRadius: getResponsiveValue(4, 2),
   },
   info: {
     fontSize: getResponsiveValue(12, 8),
     color: BLACK,
     marginLeft: getResponsiveValue(10, 5),
- fontWeight: 'bold',
+    fontWeight: 'bold',
     textShadowColor: '#05050567',
-    textShadowOffset: {width: 1, height: 1},
+    textShadowOffset: { width: 1, height: 1 },
     textShadowRadius: getResponsiveValue(2, 1),
   },
 
@@ -454,7 +457,7 @@ alignItems:"center",
     // top: getResponsiveValue('20%', '30%'),
     // left: getResponsiveValue('40%', '40%'),
     textShadowColor: '#05050567',
-    textShadowOffset: {width: 1, height: 1},
+    textShadowOffset: { width: 1, height: 1 },
     textShadowRadius: getResponsiveValue(2, 1),
     // transform: [{ rotate: '90deg' }],
   },

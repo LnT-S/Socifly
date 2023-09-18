@@ -9,39 +9,24 @@ import GoogleAds from '../../common/Ads/GoogleAds';
 // import GoogleAds from '../common/GoogleAds';
 import stringsoflanguages from '../../utils/ScreenStrings';
 import { FETCH } from '../../services/fetch';
-import { useProfile } from '../../context/ProfileContext';
+import { useProfile, useLocal } from '../../context/ProfileContext';
 
 const PostArray = ({ navigation }) => {
+  const {localState, localDispatch} = useLocal()
   const { profileState, dispatch } = useProfile();
-  const name =stringsoflanguages.name;
-  const userName = "User Name";
 
-  const [posts, setPost] = useState([
-    // Add more posts as needed
-  ]);
-
-  let getImages = async()=>{
-    let {status , data} = await FETCH(
-      'GET',
-      '/home/get-images',
-      ''
-    )
-    if(status===200){
-      setPost(data.data)
-    }
-  }
+  const [posts, setPost] = useState([]);
 
   useEffect(()=>{
-    setPost([])
-    getImages().then().catch(err=>console.log('EFFECT ERROR',err))
-  },[])
+    setPost(localState.images)
+  })
   return (
     <View style={styles.postArrayContainer}>
       {posts.map((post , i) => {
         if(i%4===0&&i!==0){
           return (<GoogleAds />)
         }
-        return (<Post2 userName={profileState.name} key={post._id} source={profileState.server + post.path} navigation={navigation}  />)
+        return (<Post2 key={post._id} source={profileState.server + post.path} navigation={navigation} id={post._id} />)
       })}
     </View>
   );

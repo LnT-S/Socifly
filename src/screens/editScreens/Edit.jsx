@@ -7,20 +7,20 @@ import {
   KeyboardAvoidingView,
 } from 'react-native';
 import Swiper from 'react-native-swiper';
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import Post from '../../common/posts/Post';
 import Post1 from '../../common/posts/Post1';
 import Post2 from '../../common/posts/Post2';
 import Post3 from '../../common/posts/Post3';
 import Post4 from '../../common/posts/Post4';
-import {BLACK, PRIMARY, WHITE} from '../../styles/colors';
-import {getResponsiveValue} from '../../styles/responsive';
+import { BLACK, PRIMARY, WHITE } from '../../styles/colors';
+import { getResponsiveValue } from '../../styles/responsive';
 import TextinputC from '../../atoms/TextinputC';
 import ButtonA from '../../atoms/ButtonA';
 import ButtonB from '../../atoms/ButtonB';
 import stringsoflanguages from '../../utils/ScreenStrings';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-
+import { useLocal } from '../../context/ProfileContext';
 import CustomColorPicker from '../../utils/CustomColorPicker';
 
 const handleColorChangeComplete = (color) => {
@@ -29,7 +29,8 @@ const handleColorChangeComplete = (color) => {
 
 
 const Edit = props => {
-  const imageSource = require('../../assets/pics/pic1.png');
+  const {localState, localDispatch} = useLocal()
+  const imageSource = localState.editImage
   const [userName, setUserName] = useState('User Name');
   const [inputValue, setInputValue] = useState('');
 
@@ -77,7 +78,7 @@ const Edit = props => {
           style={styles.slider}
           dotStyle={styles.dot}
           activeDotStyle={styles.activeDot}>
-            <Post2
+          <Post2
             userName={userName}
             source={imageSource}
             props={props}
@@ -91,7 +92,7 @@ const Edit = props => {
             isEditMode={true}
             textColor={currentColor}
           />
-        
+
           <Post3
             userName={userName}
             source={imageSource}
@@ -129,14 +130,14 @@ const Edit = props => {
               }}
             />
 
-<View style={styles.colorC}>
-            <CustomColorPicker
-            color={currentColor}
-            onColorChange={handleColorChange}
-            onColorChangeComplete={handleColorChangeComplete}
-            visible={colorPickerVisible}
-            onClose={closeColorPicker}
-          />
+            <View style={styles.colorC}>
+              <CustomColorPicker
+                color={currentColor}
+                onColorChange={handleColorChange}
+                onColorChangeComplete={handleColorChangeComplete}
+                visible={colorPickerVisible}
+                onClose={closeColorPicker}
+              />
             </View>
 
             <View style={styles.change}>
@@ -163,8 +164,8 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
   },
-  keyBoardAV:{
-    flex: 1, 
+  keyBoardAV: {
+    flex: 1,
     bottom: getResponsiveValue('5%', '15%'),
     // position:"absolute",
     // marginTop:"100%",
@@ -204,8 +205,8 @@ const styles = StyleSheet.create({
 
   statusT: {
     color: BLACK,
-     left: getResponsiveValue(30, 20),
-     top: getResponsiveValue(20, 14),
+    left: getResponsiveValue(30, 20),
+    top: getResponsiveValue(20, 14),
   },
   icon2: {
     color: BLACK,

@@ -3,7 +3,7 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import React, { useEffect, useState,  } from 'react';
 import { InterstitialAd, AdEventType,TestIds } from 'react-native-google-mobile-ads';
 
-const adUnitId2 = __DEV__ ? TestIds.INTERSTITIAL : 'ca-app-pub-7476617068399590~3695488497';
+const adUnitId2 = __DEV__ ? TestIds.INTERSTITIAL : 'ca-app-pub-7928655726884789/4413062386';
 const interstitial = InterstitialAd.createForAdRequest(adUnitId2, {
     requestNonPersonalizedAdsOnly: true,
     keywords: ['fashion', 'clothing'],
