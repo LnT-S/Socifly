@@ -4,7 +4,7 @@ import React, { useEffect, useState,  } from 'react';
 
 import { BannerAd, BannerAdSize, TestIds } from 'react-native-google-mobile-ads';
 
-const adUnitId = __DEV__ ? TestIds.BANNER : 'ca-app-pub-7476617068399590/2806493368';
+const adUnitId = __DEV__ ? TestIds.BANNER : 'ca-app-pub-7928655726884789/4413062386';
 
 const GoogleAds = (props) => {
     const [scaleValue] = useState(new Animated.Value(1));

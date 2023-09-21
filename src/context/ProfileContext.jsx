@@ -12,7 +12,9 @@ export const ProfileProvider = ({ children }) => {
     password : '',
     phone: null,
     avatar:'',
-    server: 'http://10.0.2.2:8000'
+    // server: 'http://10.0.2.2:8000'
+    // server: 'http://192.168.1.8:8000'
+    server: 'http://16.171.251.116:8000/'
     // ... other profile fields
   };
 
@@ -64,9 +66,9 @@ export const ProfileProvider = ({ children }) => {
   const [profileState, dispatch] = useReducer(profileReducer, initialState);
   const [localState, localDispatch] = useReducer(localDataReducer, localData);
   
-  useEffect(()=>{
-    console.log(localState)
-  },[localState])
+  // useEffect(()=>{
+  //   console.log(localState)
+  // },[localState])
   return (
     <ProfileContext.Provider value={{ profileState, dispatch }}>
       <LocalContext.Provider value={{ localState, localDispatch }}>

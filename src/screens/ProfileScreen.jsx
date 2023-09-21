@@ -153,7 +153,7 @@ const ProfileScreen = props => {
     //   value
     // )
     let token = await AsyncStorage.getItem('token')
-    const url = 'http://10.0.2.2:8000/v1/auth/edit-profile'
+    const url = 'http://16.171.251.116:8000/v1/auth/edit-profile'
   try {
       const response = await fetch(url,{
         method : 'POST',
