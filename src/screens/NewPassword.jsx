@@ -55,6 +55,7 @@ const NewPassword = (props) => {
         message: data.message,
         navigationPage: 'LoginScreen',
       })
+      
       setShowModal(true)
     } else {
       let a = setModal({
@@ -62,6 +63,7 @@ const NewPassword = (props) => {
         message: data.message,
         navigationPage: 'ForgotPassword',
       })
+      
       setShowModal(true)
     }
   };

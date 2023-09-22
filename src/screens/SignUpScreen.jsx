@@ -101,7 +101,7 @@ const SignUpScreen = props => {
       setIsLoading(false); // End loading
       if(status!==400 && status!==500){
         console.log('LOG : Status is not 400');
-        setModal({
+        let a = setModal({
           visible : true,
           message : data.message,
           navigationPage : 'LoginScreen'
@@ -114,6 +114,7 @@ const SignUpScreen = props => {
           navigationPage : 'SignUpScreen',
           onClose : ()=>{setShowModal(false)}
         })
+        
         setShowModal(true)
       }
     } catch (error) {

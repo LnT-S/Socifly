@@ -64,20 +64,22 @@ const LoginScreen = props => {
           console.log('LOG : Token is Found')
           await AsyncStorage.setItem('token' , data.data.token)
         }
-        let a = setModal({
+        setModal(prev=>({
+          ...prev ,
           visible : true,
           message : data.message,
           navigationPage : 'HomePage'
-        })
+        }))
         setShowModal(true)
         setTimeout(()=>{setShowModal(false);navigation.navigate('HomePage');},2000)
       }else{
-        let a = setModal({
+        setModal(prev=>({
+          ...prev ,
           visible : true,
           message : data.message || 'Invalid Login Attempt',
           navigationPage : 'SignUpScreen',
           onClose : ()=>{setShowModal(false)}
-        })
+        }))
         setShowModal(true)
       }
     } catch (error) {
@@ -124,6 +126,7 @@ const LoginScreen = props => {
           navigationPage: 'LoginScreen',
           onClose: () => { setShowModal(false) }
         })
+        
         setShowModal(true)
         await AsyncStorage.clear()
       }else{

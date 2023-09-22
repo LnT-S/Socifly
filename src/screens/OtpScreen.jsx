@@ -87,6 +87,7 @@ const OtpScreen = (props) => {
           navigationPage: 'SignUpScreen',
           onClose: () => { setShowModal(false) }
         })
+        
         setShowModal(true)
       }
     } else {

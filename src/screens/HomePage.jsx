@@ -138,6 +138,7 @@ const HomePage = props => {
         navigationPage: 'LoginScreen',
         onClose: () => { setShowModal(false) }
       })
+      
       setShowModal(true)
     }
   }
@@ -174,7 +175,7 @@ const HomePage = props => {
 
       if (status === 200) {
         console.log(data)
-        SetValue(data.data)
+        let a =  SetValue(prev=>({...prev ,...data.data}))
         setAvatar(data.data.image)
         updateContext() 
       } else {
@@ -183,6 +184,7 @@ const HomePage = props => {
           message: 'Service Error',
           navigationPage: 'LoginScreen',
         })
+        
         setShowModal(true)
       }
     } catch (error) { 

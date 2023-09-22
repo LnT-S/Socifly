@@ -44,6 +44,7 @@ const EditPostArray = ({ navigation }) => {
         navigationPage: 'LoginScreen',
         onClose: () => { setShowModal(false) }
       })
+      
       setShowModal(true)
     }
   }

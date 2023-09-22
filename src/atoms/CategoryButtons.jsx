@@ -66,6 +66,7 @@ const CategoryButtons = ({ text }) => {
         navigationPage: 'LoginScreen',
         onClose: () => { setShowModal(false) }
       })
+      
       setShowModal(true)
     }
   }

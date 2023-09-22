@@ -4,7 +4,7 @@ import {useNavigation} from '@react-navigation/native';
 import ButtonA from './ButtonA';
 
 const CustomModal = ({ visible, message, navigationPage , onClose}) => {
-  // console.log('LOG : In Custom MOdal')
+  console.log('LOG : In Custom MOdal',message)
   const navigation = useNavigation();
   function onForceClose(){
     navigation.navigate(navigationPage);

@@ -52,7 +52,7 @@ const ProfileScreen = props => {
   const [value , SetValue] = useState({
     name : profileState.name || '',
     email : profileState.email || '',
-    phone : profileState.phone.toString() || '',
+    phone : profileState.phone || '',
   })
   const [avatar , setAvatar] = useState(profileState.avatar || '')
 
@@ -124,6 +124,7 @@ const ProfileScreen = props => {
         message: 'Service Error',
         navigationPage: 'LoginScreen',
       })
+      
       setShowModal(true)
      }
     } catch (error) {
@@ -173,8 +174,7 @@ const ProfileScreen = props => {
   useEffect(() => {
     loadProfileData().then().catch(err=>console.log('EFFECT ERROR 5',err))
     setSelectedProfileImage('')
-    console.log('---------',profileState,value)
-  }, []);
+  },[profileState]);
 
  
 

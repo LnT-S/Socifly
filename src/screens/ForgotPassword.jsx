@@ -102,6 +102,7 @@ const ForgotPassword = props => {
         navigationPage: 'ForgotPassword',
         onClose: () => { setShowModal(false) }
       })
+      
       setShowModal(true)
     }
     // console.log('***',data)
