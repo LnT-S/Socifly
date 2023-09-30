@@ -82,10 +82,10 @@ const SignUpScreen = props => {
     console.log('LOG : Submiiting Form',value)
     const validationErrors = validateForm(value);
     console.log('LOG : Validation Status',validationErrors)
-    // if (Object.keys(validationErrors).length > 0) {
-    //   setErrors(validationErrors); // Set the validation errors in state
-    //   return;
-    // }
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors); // Set the validation errors in state
+      return;
+    }
 
     try {
       setIsLoading(true); // Start loading
@@ -106,6 +106,7 @@ const SignUpScreen = props => {
           message : data.message,
           navigationPage : 'LoginScreen'
         })
+        console.log('hihi',modal)
         setShowModal(true)
       }else{
         let a = setModal({
@@ -114,7 +115,7 @@ const SignUpScreen = props => {
           navigationPage : 'SignUpScreen',
           onClose : ()=>{setShowModal(false)}
         })
-        
+        console.log('hihi2',modal)
         setShowModal(true)
       }
     } catch (error) {

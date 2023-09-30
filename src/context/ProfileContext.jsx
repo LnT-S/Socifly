@@ -14,7 +14,7 @@ export const ProfileProvider = ({ children }) => {
     avatar:'',
     // server: 'http://10.0.2.2:8000'
     // server: 'http://192.168.1.8:8000'
-    server: 'http://16.171.251.116:8000/'
+    server: 'http://16.171.251.116:8000'
     // ... other profile fields
   };
 

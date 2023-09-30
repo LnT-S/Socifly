@@ -1,6 +1,6 @@
 
 import React, { useState } from "react";
-import {Text , StyleSheet, View, TextInput } from "react-native";
+import { Text, StyleSheet, View, TextInput } from "react-native";
 import { BLACK } from "../styles/colors";
 import { getResponsiveValue, screenWidth } from '../styles/responsive';
 
@@ -24,22 +24,21 @@ const TextinputA = (props) => {
     };
     return (
         <View>
-       
-       <TextInput
-  placeholder={props.placeholder}
-  placeholderTextColor="#888888"
-  onFocus={handleFocus}
-  onBlur={handleBlur}
-  {...props}
-  value={props.value}
-  style={[
-    styles.input,
-    isFocused ? null : props.error ? styles.inputError : null,
-  ]}
-  onChangeText={handleChangeText}
-/>
+            <TextInput
+                placeholder={props.placeholder}
+                placeholderTextColor="#888888"
+                onFocus={handleFocus}
+                onBlur={handleBlur}
+                {...props}
+                value={props.value}
+                style={[
+                    styles.input,
+                    isFocused ? null : props.error ? styles.inputError : null,
+                ]}
+                onChangeText={handleChangeText}
+            />
 
-       
+
         </View>
     );
 };
@@ -58,7 +57,7 @@ const styles = StyleSheet.create({
     inputError: {
         borderColor: 'red',
 
-      },
+    },
 });
 
 export default TextinputA;

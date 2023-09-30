@@ -63,7 +63,7 @@ const InterstitialAds = (props) => {
             interstitial.show();
           } else {
             // Handle the case when the ad is not loaded yet
-            console.log('Interstitial ad is not loaded yet');
+            // console.log('Interstitial ad is not loaded yet');
           }
         }}
       >

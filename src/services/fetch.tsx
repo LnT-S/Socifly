@@ -7,9 +7,9 @@ export async function FETCH(method: string, url: string, params: string | object
   const errMsgLength = 100
   let auth_token = await AsyncStorage.getItem('token')
   if(!auth_token){
-    console.log('LOG : TOKEN NOT FOUND')
+    console.log('FETCH : TOKEN NOT FOUND')
   }
-  console.log('LOG : Calling FETCH')
+  console.log('FETCH : Calling FETCH')
 
   let URL: string
   let baseUrl = server.server
@@ -36,15 +36,15 @@ export async function FETCH(method: string, url: string, params: string | object
   }
 
   // CHecking whether full url has been passed 
-  if (url.includes('http://') || url.includes('localhost:')) {
+  if (url.includes('FETCH : http://') || url.includes('localhost:')) {
     URL = url + finalParams
   }
   else {
     URL = baseUrl + url + finalParams
   }
 
-  console.log('LOG : Calling API: ' , URL)
-  console.log('LOG : Body',JSON.stringify(formData))
+  console.log('FETCH : Calling API: ' , URL)
+  console.log('FETCH : Body',JSON.stringify(formData))
 
   // Calling Api Using fetch 
   try {
@@ -64,14 +64,14 @@ export async function FETCH(method: string, url: string, params: string | object
    }
     const data = await res.json();
 
-    console.log(`Data Recieved after calling API:${URL} is --->`)
+    console.log(`FETCH : Data Recieved after calling API:${URL} is --->`)
     console.log(res.status,data)
 
     return {status : res.status ,data }
 
   } catch (error) {
     if (error) {
-      console.log(`Error in calling API:${URL}--->`)
+      console.log(`FETCH : Error in calling API:${URL}--->`)
     }
     console.log(error)
   }

@@ -174,7 +174,7 @@ const ProfileScreen = props => {
   useEffect(() => {
     loadProfileData().then().catch(err=>console.log('EFFECT ERROR 5',err))
     setSelectedProfileImage('')
-  },[profileState]);
+  },[]);
 
  
 

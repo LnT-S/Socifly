@@ -31,16 +31,16 @@ export const validateForm = formData => {
   if (!formData.password?.trim()) {
     errors.password =stringsoflanguages.passwordRequired;
   }
-  if (!formData.message?.trim()) {
-    errors.message = stringsoflanguages.messageRequired;
-  }
+  // if (!formData.message?.trim()) {
+  //   errors.message = stringsoflanguages.messageRequired;
+  // }
 
   if (!formData.confirm_password?.trim()) {
     errors.confirm_password = stringsoflanguages.confirmPasswordRequired;
   } else if (!isPasswordMatch(formData.password, formData.confirm_password)) {
     errors.confirm_password = stringsoflanguages.confirmPasswordError;
   }
-  if (!formData.birthdate?.trim()) {
+  if (!formData.bday?.trim()) {
     errors.birthdate = stringsoflanguages.birthdateRequired;
   }
   

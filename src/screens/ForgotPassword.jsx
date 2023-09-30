@@ -94,7 +94,13 @@ const ForgotPassword = props => {
         type: 'USERID',
         payload: data.userId
       })
-      props.navigation.navigate('OtpScreen');
+      let a = setModal({
+        visible: true,
+        message: data.message,
+        navigationPage: 'OtpScreen',
+        onClose: ()=>{setShowModal(false)}
+      })
+      setShowModal(true)
     } else {
       let a = setModal({
         visible: true,
@@ -102,7 +108,6 @@ const ForgotPassword = props => {
         navigationPage: 'ForgotPassword',
         onClose: () => { setShowModal(false) }
       })
-      
       setShowModal(true)
     }
     // console.log('***',data)

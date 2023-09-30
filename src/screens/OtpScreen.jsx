@@ -62,10 +62,32 @@ const OtpScreen = (props) => {
     startTimer();
   }, []);
 
-  const handleResend = () => {
+  const handleResend = async() => {
     if (!isTimerRunning) {
       startTimer();
-      // Add logic here to resend the OTP
+      if (otp.length === 6) {
+        const { data, status } = await FETCH(
+          'POST',
+          '/auth/reset-password',
+          localState.userId,
+          { otp }
+        )
+        if (status === 200) {
+          // console.log('Move TO New Password Enter Screen')
+          props.navigation.navigate('NewPassword');
+        } else {
+          let a = setModal({
+            visible: true,
+            message: data.message,
+            navigationPage: 'SignUpScreen',
+            onClose: () => { setShowModal(false) }
+          })
+          
+          setShowModal(true)
+        }
+      } else {
+        setOtpError(stringsoflanguages.otpError);
+      }
     }
   };
 

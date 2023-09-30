@@ -25,7 +25,7 @@ const RewardedAds = (props) => {
     if (props.shouldShowAd) {
       rewarded.show();
     }else {
-      console.log("Rewarded ad is not loaded yet.");
+      // console.log("Rewarded ad is not loaded yet.");
     }
    
     const unsubscribeLoaded = rewarded.addAdEventListener(RewardedAdEventType.LOADED, () => {
@@ -34,7 +34,7 @@ const RewardedAds = (props) => {
     const unsubscribeEarned = rewarded.addAdEventListener(
       RewardedAdEventType.EARNED_REWARD,
       reward => {
-        console.log('User earned reward of ', reward);
+        // console.log('User earned reward of ', reward);
       },
     );
 
@@ -60,7 +60,7 @@ const RewardedAds = (props) => {
     const unsubscribeEarned = rewarded.addAdEventListener(
       RewardedAdEventType.EARNED_REWARD,
       reward => {
-        console.log(`User earned reward of ${reward.amount} ${reward.type}`);
+        // console.log(`User earned reward of ${reward.amount} ${reward.type}`);
       }
     );
 

@@ -24,7 +24,7 @@ const RewardedInterstitialAds = (props) => {
         const unsubscribeEarned = rewardedInterstitial.addAdEventListener(
           RewardedAdEventType.EARNED_REWARD,
           reward => {
-            console.log('User earned reward of ', reward);
+            // console.log('User earned reward of ', reward);
           },
         );
     

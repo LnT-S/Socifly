@@ -1,20 +1,22 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Modal, View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import ButtonA from './ButtonA';
 
 const CustomModal = ({ visible, message, navigationPage , onClose}) => {
   console.log('LOG : In Custom MOdal',message)
+  const [v , setV] = useState(visible)
   const navigation = useNavigation();
   function onForceClose(){
+    setV(false)
     navigation.navigate(navigationPage);
   }
 
   return (
-    <Modal transparent animationType="slide" visible={visible}>
+    <Modal transparent animationType="slide" visible={v}>
       <View style={styles.modalContainer}>
         <View style={styles.modalContent}>
-          <Text style={styles.modalMessage}>{message}</Text>
+          <Text style={styles.modalMessage}>{message===''?'Message':message}</Text>
           <ButtonA onPress={onClose || onForceClose} name={'Close'}/>
         </View>
       </View>
@@ -40,6 +42,8 @@ const styles = StyleSheet.create({
     fontSize: 18,
     marginBottom: 20,
     textAlign: 'center',
+    color : 'black',
+    fontWeight : '400'
   },
   closeButton: {
     marginTop: 10,

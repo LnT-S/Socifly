@@ -111,7 +111,7 @@ const LoginScreen = props => {
       type : "LANG",
       payload : lang
     })
-    console.log(lang)
+    console.log('LOG : Language is ',lang)
     if(token){
       console.log('Token Exists Redirecting to the home page');
       let {status,data} =await FETCH(
@@ -144,6 +144,9 @@ const LoginScreen = props => {
   useEffect(()=>{
     try {
      logs().then().catch(err=>console.log('EFFECT ERROR 0',err))
+     if(profileState.email){
+      setUsername(profileState.email)
+     }
    } catch (error) {
     console.log('ERROR',error)
    }
@@ -157,27 +160,25 @@ const LoginScreen = props => {
 
       <View style={global.aContainer}>
 
-      {showModal?<CustomModal visible={modal.visible} message={modal.message} navigationPage={modal.navigationPage} onClose={modal.onClose} />:''}
-
+      
       <TextinputA
-          style={[
-            styles.input,
-            errors.email ? styles.inputError : null
-          ]}
-
-          placeholder={stringsoflanguages.emailOrPhone}
-          value={username || profileState.email}
+      style={[
+        styles.input,
+        errors.email ? styles.inputError : null
+      ]}
+      placeholder={stringsoflanguages.emailOrPhone}
+          value={username}
           onChangeText={(text) => {
             setUsername(text);
             setErrors({ ...errors, email: '' }); // Clear the error when typing
           }}
           error={errors.email}
           onChangeError={(errorText) => setErrors({ ...errors, email: errorText })}
-        />
-        {errors.email && <Text style={[global.error, styles.errorText]}>{errors.email}</Text>}
-
-
-        <TextinputB
+          />
+          {errors.email && <Text style={[global.error, styles.errorText]}>{errors.email}</Text>}
+          
+          
+          <TextinputB
           style={[
             styles.input,
             errors.password ? styles.inputError : null
@@ -192,36 +193,37 @@ const LoginScreen = props => {
           error={errors.password}
           onChangeError={(errorText) => setErrors({ ...errors, password: errorText })}
         />
-       
         {errors.password && <Text style={[global.error, styles.errorText1]}>{errors.password}</Text>}
-
+        
+        
         <ButtonA
-          name={stringsoflanguages.login}
-          // onPress={handleNextPage}
-          onPress={handleLogin}
-          disabled={isLoading}
+        name={stringsoflanguages.login}
+        // onPress={handleNextPage}
+        onPress={handleLogin}
+        disabled={isLoading}
         />
-
+        
         <View style={styles.content}>
-          <Pressable onPress={handleNextPage}>
-            <Text style={styles.link}>{stringsoflanguages.forgotPassword}</Text>
-          </Pressable>
-          <View style={styles.signupContainer}>
-            <Text style={styles.createAccount}>{stringsoflanguages.noAccount}</Text>
-            <Pressable onPress={handleNextPageSignUp}>
-              <Text style={styles.link}>{stringsoflanguages.signUp}</Text>
-            </Pressable>
-           
-          </View>
-          <Pressable style={styles.langBtn} onPress={handleNextLang}>
-              <Text style={styles.lang}>{stringsoflanguages.changeLanguage}</Text>
-            </Pressable>
+        <Pressable onPress={handleNextPage}>
+        <Text style={styles.link}>{stringsoflanguages.forgotPassword}</Text>
+        </Pressable>
+        <View style={styles.signupContainer}>
+        <Text style={styles.createAccount}>{stringsoflanguages.noAccount}</Text>
+        <Pressable onPress={handleNextPageSignUp}>
+        <Text style={styles.link}>{stringsoflanguages.signUp}</Text>
+        </Pressable>
+        
         </View>
-      </View>
-    </SafeAreaView>
-  );
-};
-const styles = StyleSheet.create({
+        <Pressable style={styles.langBtn} onPress={handleNextLang}>
+        <Text style={styles.lang}>{stringsoflanguages.changeLanguage}</Text>
+        </Pressable>
+        {showModal?<CustomModal visible={modal.visible} message={modal.message} navigationPage={modal.navigationPage} onClose={modal.onClose} />:''}
+        </View>
+        </View>
+        </SafeAreaView>
+        );
+      };
+      const styles = StyleSheet.create({
   loginGradient: {
     flex: 0.5,
     justifyContent: 'center',
