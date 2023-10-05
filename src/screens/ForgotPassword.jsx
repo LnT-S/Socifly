@@ -105,8 +105,7 @@ const ForgotPassword = props => {
       let a = setModal({
         visible: true,
         message: data.message,
-        navigationPage: 'ForgotPassword',
-        onClose: () => { setShowModal(false) }
+        navigationPage: 'ForgotPassword'
       })
       setShowModal(true)
     }
@@ -120,8 +119,8 @@ const ForgotPassword = props => {
   const toggleInputType = () => {
     setInputType(inputType === 'email' ? 'phone' : 'email');
     // Clear the input values and validation error when toggling
-    setEmail('');
-    setPhoneNumber('');
+    // setEmail('');
+    // setPhoneNumber('');
     setValidationError('');
   };
 

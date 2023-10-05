@@ -9,7 +9,21 @@ const CustomModal = ({ visible, message, navigationPage , onClose}) => {
   const navigation = useNavigation();
   function onForceClose(){
     setV(false)
-    navigation.navigate(navigationPage);
+    if(navigationPage===''){
+      navigation.goBack()
+    }else{
+      navigation.navigate(navigationPage);
+    }
+  }
+  function handleClickOnClose(){
+    try {
+      if(onClose!==null || onClose !== undefined){
+        onClose()
+      }
+      onForceClose()
+    } catch (err) {
+      console.log('Error CLosing Modal',err)
+    }
   }
 
   return (
@@ -17,7 +31,7 @@ const CustomModal = ({ visible, message, navigationPage , onClose}) => {
       <View style={styles.modalContainer}>
         <View style={styles.modalContent}>
           <Text style={styles.modalMessage}>{message===''?'Message':message}</Text>
-          <ButtonA onPress={onClose || onForceClose} name={'Close'}/>
+          <ButtonA onPress={handleClickOnClose} name={'Close'}/>
         </View>
       </View>
     </Modal>

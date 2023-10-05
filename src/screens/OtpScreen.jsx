@@ -34,6 +34,7 @@ const OtpScreen = (props) => {
   const [isTimerRunning, setIsTimerRunning] = useState(false);
 
   const handleOtpChange = (text) => {
+    console.log('OTP', otp, 'TEXT', text)
     setOtp(text);
     localDispatch({
       type: 'OTP',
@@ -58,11 +59,7 @@ const OtpScreen = (props) => {
     }, 1000); // Decrease the timer every second (1000 milliseconds)
   };
 
-  useEffect(() => {
-    startTimer();
-  }, []);
-
-  const handleResend = async() => {
+  const handleResend = async () => {
     if (!isTimerRunning) {
       startTimer();
       if (otp.length === 6) {
@@ -79,10 +76,10 @@ const OtpScreen = (props) => {
           let a = setModal({
             visible: true,
             message: data.message,
-            navigationPage: 'SignUpScreen',
+            navigationPage: 'OtpScreen',
             onClose: () => { setShowModal(false) }
           })
-          
+
           setShowModal(true)
         }
       } else {
@@ -106,10 +103,10 @@ const OtpScreen = (props) => {
         let a = setModal({
           visible: true,
           message: data.message,
-          navigationPage: 'SignUpScreen',
+          navigationPage: 'OtpScreen',
           onClose: () => { setShowModal(false) }
         })
-        
+
         setShowModal(true)
       }
     } else {
@@ -146,13 +143,12 @@ const OtpScreen = (props) => {
           autoFocusOnLoad
           codeInputFieldStyle={styles.underlineStyleBase}
           codeInputHighlightStyle={styles.underlineStyleHighLighted}
-
-          value={otp}
+          editable={true}
+          // value={otp}
           onCodeChanged={handleOtpChange}
         />
         {otpError ? <Text style={global.error}>{otpError}</Text> : null}
 
-        {showModal ? <CustomModal visible={modal.visible} message={modal.message} navigationPage={modal.navigationPage} onClose={modal.onClose} /> : ''}
 
         <View style={styles.buttonV}>
           <ButtonA onPress={handleNextPage} name={stringsoflanguages.verify} />
@@ -168,7 +164,7 @@ const OtpScreen = (props) => {
           </Text>
         </Pressable>
       </View>
-
+      {showModal ? <CustomModal visible={modal.visible} message={modal.message} navigationPage={modal.navigationPage} onClose={modal.onClose} /> : ''}
     </SafeAreaView>
   );
 };

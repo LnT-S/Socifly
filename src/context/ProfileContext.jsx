@@ -7,7 +7,7 @@ export const LocalContext = createContext()
 export const ProfileProvider = ({ children }) => {
   // Define your initial state and reducer here
   const initialState = {
-    name: 'Aman',
+    name: '',
     email: '',
     password : '',
     phone: null,

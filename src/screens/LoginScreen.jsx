@@ -128,7 +128,7 @@ const LoginScreen = props => {
         })
         
         setShowModal(true)
-        await AsyncStorage.clear()
+        // await AsyncStorage.clear()
       }else{
         dispatch()
         props.navigation.navigate('HomePage')

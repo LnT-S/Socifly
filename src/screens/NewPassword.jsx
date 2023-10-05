@@ -23,7 +23,7 @@ const NewPassword = (props) => {
     visible: false,
     message: '',
     navigationPage: '',
-    onClose: null
+    onClose: ()=>null
   })
   const [errors, setErrors] = useState({});
   const handleChange = (field, text) => {
@@ -54,16 +54,16 @@ const NewPassword = (props) => {
         visible: true,
         message: data.message,
         navigationPage: 'LoginScreen',
-      })
-      
+        onClose : ()=>null
+      }) 
       setShowModal(true)
     } else {
       let a = setModal({
         visible: true,
         message: data.message,
         navigationPage: 'ForgotPassword',
+        onClose : ()=>null
       })
-      
       setShowModal(true)
     }
   };

@@ -37,7 +37,7 @@ import CustomModal from '../atoms/CustomModal';
 const HomePage = props => {
   const { localState, localDispatch } = useLocal()
   const { profileState, dispatch } = useProfile();
-  const [refresh , setRefresh] = useState(true)
+  const [refresh, setRefresh] = useState(true)
   const navigation = useNavigation();
   const [showModal, setShowModal] = useState(false)
   const [modal, setModal] = useState({
@@ -118,18 +118,19 @@ const HomePage = props => {
       type: 'AVATAR',
       payload: avatar
     })
+    return profileState
   }
 
-  async function getImages(){
-    let {status , data} = await FETCH(
+  async function getImages() {
+    let { status, data } = await FETCH(
       'GET',
       '/home/get-images',
-      {lang : localState.lang}
+      { lang: localState.lang }
     )
-    if(status===200){
+    if (status === 200) {
       localDispatch({
-        type : "IMAGES",
-        payload : data.data
+        type: "IMAGES",
+        payload: data.data
       })
     } else {
       let a = setModal({
@@ -138,7 +139,7 @@ const HomePage = props => {
         navigationPage: 'LoginScreen',
         onClose: () => { setShowModal(false) }
       })
-      
+
       setShowModal(true)
     }
   }
@@ -166,7 +167,7 @@ const HomePage = props => {
     }
   }
 
-  async function loadProfileData(){
+  async function loadProfileData() {
     try {
       let { data, status } = await FETCH(
         'GET',
@@ -175,31 +176,55 @@ const HomePage = props => {
 
       if (status === 200) {
         console.log(data)
-        let a =  SetValue(prev=>({...prev ,...data.data}))
+        let a = SetValue(prev => ({ ...prev, ...data.data }))
         setAvatar(data.data.image)
-        updateContext() 
+        dispatch({
+          type: 'USER_NAME',
+          payload: data.data.name
+        })
+        dispatch({
+          type: 'EMAIL',
+          payload: data.data.email
+        })
+        dispatch({
+          type: 'PHONE',
+          payload: data.data.phone
+        })
+        dispatch({
+          type: 'AVATAR',
+          payload: data.data.image
+        })
       } else {
         let a = setModal({
           visible: true,
-          message: 'Service Error',
+          message: 'You are not Logged In !!',
           navigationPage: 'LoginScreen',
+          onClose : ()=>{setShowModal(false)}
         })
-        
+
         setShowModal(true)
       }
-    } catch (error) { 
+    } catch (error) {
       console.log('Error loading profile data 0:', error);
     }
   };
 
-  function REFRESH(){
+  function REFRESH() {
     setRefresh(!refresh)
   }
 
   useEffect(() => {
-    loadProfileData().then().catch(err => console.log('EFFECT ERROR 0', err))
-    getCategory().then().catch(err=>console.log('EFFECT ERROR 1',err))
-    getImages().then().catch(err=>console.log('EFFECT ERROR 2',err))
+    let loads = async () => {
+      console.log('0----------------------------------------------------------------')
+      await loadProfileData().then().catch(err => console.log('EFFECT ERROR 0', err))
+      console.log('1----------------------------------------------------------------')
+      await getCategory().then().catch(err => console.log('EFFECT ERROR 1', err))
+      console.log('2----------------------------------------------------------------')
+      await getImages().then().catch(err => console.log('EFFECT ERROR 2', err))
+      console.log('3----------------------------------------------------------------')
+      updateContext()
+    }
+    loads()
   }, [refresh])
 
 
@@ -247,7 +272,7 @@ const HomePage = props => {
       <View style={styles.cardSection}>
         <Category />
       </View>
-      <ScrollView style={styles.postS}  onPress={REFRESH}>
+      <ScrollView style={styles.postS} onPress={REFRESH}>
         <FlatList
           ref={flatListRef}
           style={styles.adss}
@@ -267,7 +292,7 @@ const HomePage = props => {
         />
         <GoogleAds />
       </ScrollView>
-      <Text style={{textAlign : 'center'}} onPress={REFRESH}>REFRESH</Text>
+      <Text style={{ textAlign: 'center' }} onPress={REFRESH}>REFRESH</Text>
     </SafeAreaView>
   );
 };
