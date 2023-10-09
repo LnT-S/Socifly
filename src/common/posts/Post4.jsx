@@ -211,7 +211,7 @@ const Post4 = props => {
         <Text style={styles.date}>{formattedDate}</Text>
         </View>
           
-            <Text  style={[styles.name, textColorStyle]}>{profileState.name}</Text>
+            <Text  style={[styles.name, textColorStyle]}>{props.newUserName || profileState.name}</Text>
             <View style={styles.horizontal}/>
             
             <View style={styles.infoC}>

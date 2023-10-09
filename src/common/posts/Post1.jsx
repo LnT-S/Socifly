@@ -214,7 +214,7 @@ const Post1 = props => {
         </View>
                
                 <Text style={[styles.name, textColorStyle]}>
-                {profileState.name}
+                {props.newUserName || profileState.name}
                 </Text>
                 <View style={styles.horizontal} />
 

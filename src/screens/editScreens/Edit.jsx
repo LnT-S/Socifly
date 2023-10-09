@@ -84,6 +84,7 @@ const Edit = props => {
             props={props}
             isEditMode={true}
             textColor={currentColor}
+            newUserName={inputValue}
           />
           <Post1
             userName={userName}
@@ -91,6 +92,7 @@ const Edit = props => {
             props={props}
             isEditMode={true}
             textColor={currentColor}
+            newUserName={inputValue}
           />
 
           <Post3
@@ -99,6 +101,7 @@ const Edit = props => {
             props={props}
             isEditMode={true}
             textColor={currentColor}
+            newUserName={inputValue}
           />
           <Post4
             userName={userName}
@@ -106,6 +109,7 @@ const Edit = props => {
             props={props}
             isEditMode={true}
             textColor={currentColor}
+            newUserName={inputValue}
           />
         </Swiper>
         {/* </View> */}
