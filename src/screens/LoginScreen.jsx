@@ -5,19 +5,19 @@ import global from '../styles/global';
 import TextinputA from '../atoms/TextinputA';
 import TextinputB from '../atoms/TextinputB';
 import ButtonA from '../atoms/ButtonA';
-import {BLACK, LINKS} from '../styles/colors';
-import {getResponsiveValue} from '../styles/responsive';
+import { BLACK, LINKS } from '../styles/colors';
+import { getResponsiveValue } from '../styles/responsive';
 import stringsoflanguages from '../utils/ScreenStrings';
 import { validate2 } from '../utils/validation/validate2';
-import {FETCH} from '../services/fetch';
+import { FETCH } from '../services/fetch';
 import CustomModal from '../atoms/CustomModal';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {useNavigation} from '@react-navigation/native';
-import { useLocal , useProfile} from '../context/ProfileContext';
+import { useNavigation } from '@react-navigation/native';
+import { useLocal, useProfile } from '../context/ProfileContext';
 
 const LoginScreen = props => {
-  const {profileState, dispatch} = useProfile()
-  const {localState, localDispatch} = useLocal()
+  const { profileState, dispatch } = useProfile()
+  const { localState, localDispatch } = useLocal()
   const navigation = useNavigation();
   const [errors, setErrors] = useState({});
   // .....
@@ -26,10 +26,10 @@ const LoginScreen = props => {
   const [isLoading, setIsLoading] = useState(false);
   const [showModal, setShowModal] = useState(false)
   const [modal, setModal] = useState({
-    visible : false,
-    message : '',
-    navigationPage : '',
-    onClose : null
+    visible: false,
+    message: '',
+    navigationPage: '',
+    onClose: null
   })
 
   const handleLogin = async () => {
@@ -46,39 +46,39 @@ const LoginScreen = props => {
 
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
-       return;
+      return;
     }
     try {
       setIsLoading(true); // Start loading
       // console.log('VAlue is', { formData1 });
 
-      let {status , data} = await FETCH(
+      let { status, data } = await FETCH(
         'POST',
         '/auth/create-session',
         '',
         formData1,
       );
-      if(status!==400 && status!==500 && status!== 401){
+      if (status !== 400 && status !== 500 && status !== 401) {
         // console.log('LOG : Status is not 400');
-        if(data.data.token){
+        if (data.data.token) {
           console.log('LOG : Token is Found')
-          await AsyncStorage.setItem('token' , data.data.token)
+          await AsyncStorage.setItem('token', data.data.token)
         }
-        setModal(prev=>({
-          ...prev ,
-          visible : true,
-          message : data.message,
-          navigationPage : 'LanguagesScreen'
+        setModal(prev => ({
+          ...prev,
+          visible: true,
+          message: data.message,
+          navigationPage: 'LanguagesScreen'
         }))
         setShowModal(true)
-        setTimeout(()=>{setShowModal(false);navigation.navigate('LanguagesScreen');},2000)
-      }else{
-        setModal(prev=>({
-          ...prev ,
-          visible : true,
-          message : data.message || 'Invalid Login Attempt',
-          navigationPage : 'SignUpScreen',
-          onClose : ()=>{setShowModal(false)}
+        setTimeout(() => { setShowModal(false); navigation.navigate('LanguagesScreen'); }, 2000)
+      } else {
+        setModal(prev => ({
+          ...prev,
+          visible: true,
+          message: data.message || 'Invalid Login Attempt',
+          navigationPage: 'SignUpScreen',
+          onClose: () => { setShowModal(false) }
         }))
         setShowModal(true)
       }
@@ -95,44 +95,45 @@ const LoginScreen = props => {
   const handleNextPageSignUp = () => {
     props.navigation.navigate('SignUpScreen');
   };
-  // const handleNextLang = () => {
-  //   navigation.navigate('LanguagesScreen', { returnTo: 'LoginScreen' });
-  // };
+  const handleNextLang = () => {
+    props.navigation.navigate('ChangeLanguage', { returnTo: 'LoginScreen' });
 
-  const logs = async ()=>{
+  };
+
+  const logs = async () => {
     let token = await AsyncStorage.getItem('token')
     let lang = await AsyncStorage.getItem('selectedLanguage')
-    if(!lang){
-      await AsyncStorage.setItem('selectedLanguage','english')
+    if (!lang) {
+      await AsyncStorage.setItem('selectedLanguage', 'english')
       lang = 'english'
     }
     localDispatch({
-      type : "LANG",
-      payload : lang
+      type: "LANG",
+      payload: lang
     })
-    console.log('LOG : Language is ',lang)
-    if(token){
+    console.log('LOG : Language is ', lang)
+    if (token) {
       console.log('Token Exists Redirecting to the home page');
-      let {status,data} =await FETCH(
+      let { status, data } = await FETCH(
         'GET',
         '/profile/get-info',
         ''
       )
-      if(status === 401){
+      if (status === 401) {
         let a = setModal({
           visible: true,
           message: 'Login Expired',
           navigationPage: 'LoginScreen',
           onClose: () => { setShowModal(false) }
         })
-        
+
         setShowModal(true)
-        await AsyncStorage.clear()
-      }else{
+        // await AsyncStorage.clear()
+      } else {
         dispatch()
         props.navigation.navigate('HomePage')
       }
-    }else{
+    } else {
       console.log('TOken Not Found Enter your Details')
       setUsername('')
       setPassword('')
@@ -140,16 +141,16 @@ const LoginScreen = props => {
   }
 
 
-  useEffect(()=>{
+  useEffect(() => {
     try {
-     logs().then().catch(err=>console.log('EFFECT ERROR 0',err))
-     if(profileState.email){
-      setUsername(profileState.email)
-     }
-   } catch (error) {
-    console.log('ERROR',error)
-   }
-  },[])
+      logs().then().catch(err => console.log('EFFECT ERROR 0', err))
+      if (profileState.email) {
+        setUsername(profileState.email)
+      }
+    } catch (error) {
+      console.log('ERROR', error)
+    }
+  }, [])
 
   return (
     <SafeAreaView style={styles.container}>
@@ -159,13 +160,13 @@ const LoginScreen = props => {
 
       <View style={global.aContainer}>
 
-      
-      <TextinputA
-      style={[
-        styles.input,
-        errors.email ? styles.inputError : null
-      ]}
-      placeholder={stringsoflanguages.emailOrPhone}
+
+        <TextinputA
+          style={[
+            styles.input,
+            errors.email ? styles.inputError : null
+          ]}
+          placeholder={stringsoflanguages.emailOrPhone}
           value={username}
           onChangeText={(text) => {
             setUsername(text);
@@ -173,11 +174,11 @@ const LoginScreen = props => {
           }}
           error={errors.email}
           onChangeError={(errorText) => setErrors({ ...errors, email: errorText })}
-          />
-          {errors.email && <Text style={[global.error, styles.errorText]}>{errors.email}</Text>}
-          
-          
-          <TextinputB
+        />
+        {errors.email && <Text style={[global.error, styles.errorText]}>{errors.email}</Text>}
+
+
+        <TextinputB
           style={[
             styles.input,
             errors.password ? styles.inputError : null
@@ -193,32 +194,32 @@ const LoginScreen = props => {
           onChangeError={(errorText) => setErrors({ ...errors, password: errorText })}
         />
         {errors.password && <Text style={[global.error, styles.errorText1]}>{errors.password}</Text>}
-        
-        
+
+
         <ButtonA
-        name={stringsoflanguages.login}
-        // onPress={handleNextPage}
-        onPress={handleLogin}
-        disabled={isLoading}
+          name={stringsoflanguages.login}
+          // onPress={handleNextPage}
+          onPress={handleLogin}
+          disabled={isLoading}
         />
-        
+
         <View style={styles.content}>
-        <Pressable onPress={handleNextPage}>
-        <Text style={styles.link}>{stringsoflanguages.forgotPassword}</Text>
-        </Pressable>
-        <View style={styles.signupContainer}>
-        <Text style={styles.createAccount}>{stringsoflanguages.noAccount}</Text>
-        <Pressable onPress={handleNextPageSignUp}>
-        <Text style={styles.link}>{stringsoflanguages.signUp}</Text>
-        </Pressable>
+          <Pressable onPress={handleNextPage}>
+            <Text style={styles.link}>{stringsoflanguages.forgotPassword}</Text>
+          </Pressable>
+          <View style={styles.signupContainer}>
+            <Text style={styles.createAccount}>{stringsoflanguages.noAccount}</Text>
+            <Pressable onPress={handleNextPageSignUp}>
+              <Text style={styles.link}>{stringsoflanguages.signUp}</Text>
+            </Pressable>
+          </View>
+          {showModal ? <CustomModal visible={modal.visible} message={modal.message} navigationPage={modal.navigationPage} onClose={modal.onClose} /> : ''}
         </View>
-        {showModal?<CustomModal visible={modal.visible} message={modal.message} navigationPage={modal.navigationPage} onClose={modal.onClose} />:''}
-        </View>
-        </View>
-        </SafeAreaView>
-        );
-      };
-      const styles = StyleSheet.create({
+      </View>
+    </SafeAreaView>
+  );
+};
+const styles = StyleSheet.create({
   loginGradient: {
     flex: 0.5,
     justifyContent: 'center',
@@ -226,7 +227,7 @@ const LoginScreen = props => {
     height: '50%',
 
   },
- 
+
   errorText: {
     textAlign: 'right', // Align the error text to the left
     marginRight: "50%", // Add left margin to the error text for spacing
@@ -245,7 +246,7 @@ const LoginScreen = props => {
   },
 
   content: {
-    top: getResponsiveValue("4%","4%"),
+    top: getResponsiveValue("4%", "4%"),
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -253,9 +254,9 @@ const LoginScreen = props => {
   link: {
     color: LINKS,
     textDecorationLine: 'underline',
-    fontSize: getResponsiveValue(16,12),
-    marginTop: getResponsiveValue("2%","2%"),
-    marginBottom: getResponsiveValue("2%","2%"),
+    fontSize: getResponsiveValue(16, 12),
+    marginTop: getResponsiveValue("2%", "2%"),
+    marginBottom: getResponsiveValue("2%", "2%"),
     // marginBottom: 10,
   },
   signupContainer: {
@@ -267,16 +268,16 @@ const LoginScreen = props => {
     fontSize: getResponsiveValue(16, 12),
     marginRight: 5,
   },
-  lang:{
-    color:"grey",
-    borderWidth:getResponsiveValue(1,1),
-   paddingHorizontal:"2%",
-   paddingVertical:"1%",
-    borderRadius:getResponsiveValue(5,5),
-    fontSize:getResponsiveValue(16,12),
+  lang: {
+    color: "grey",
+    borderWidth: getResponsiveValue(1, 1),
+    paddingHorizontal: "2%",
+    paddingVertical: "1%",
+    borderRadius: getResponsiveValue(5, 5),
+    fontSize: getResponsiveValue(16, 12),
   },
-  langBtn:{
-    top:getResponsiveValue("30%","30%"),
+  langBtn: {
+    top: getResponsiveValue("30%", "30%"),
   },
 });
 

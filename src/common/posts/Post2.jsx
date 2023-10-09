@@ -32,6 +32,12 @@ import { LIKE } from '../../utils/like';
 const Post2 = props => {
   const { localState, localDispatch } = useLocal()
   const { profileState, dispatch } = useProfile()
+  const [value, SetValue] = useState({
+    name: profileState.name || '',
+    email: profileState.email || '',
+    phone: profileState.phone || null,
+  })
+  const [avatar, setAvatar] = useState(profileState.avatar || '')
   const [downloaded, setDownloaded] = useState(false);
   const cardRef = useRef(null); // Create a ref for the card view
   const doubleTapRef = useRef(null);
@@ -122,7 +128,7 @@ const Post2 = props => {
   };
   useEffect(() => {
     // You can add animation logic here for the like button
-    console.log('Likes ',props)
+    console.log('LOG : CAllING POST ARRAY', props.id)
   }, []);
 
   const onShare = async () => {
@@ -148,7 +154,7 @@ const Post2 = props => {
     }
   };
 
-  const handleDoubleTap = async() => {
+  const handleDoubleTap = async () => {
     // Trigger the like animation
     Animated.sequence([
       Animated.timing(likeScale, {
@@ -178,7 +184,7 @@ const Post2 = props => {
     await LIKE(props.id)
   };
 
- 
+
 
   const currentDate = new Date();
   const day = currentDate.getDate().toString().padStart(2, '0');
@@ -189,9 +195,51 @@ const Post2 = props => {
 
   const textColorStyle = { color: props.textColor || WHITE };
 
-  useEffect(()=>{
-    console.log('POST@ PROPS',props,profileState)
-  },[])
+  async function loadProfileData() {
+    try {
+      let { data, status } = await FETCH(
+        'GET',
+        '/profile/get-info',
+      )
+      if (status === 200) {
+        console.log(data)
+        SetValue(prev => ({ ...prev, ...data.data }))
+        setAvatar(data.data.image)
+        dispatch({
+          type: 'USER_NAME',
+          payload: data.data.name
+        })
+        dispatch({
+          type: 'EMAIL',
+          payload: data.data.email
+        })
+        dispatch({
+          type: 'PHONE',
+          payload: data.data.phone
+        })
+        dispatch({
+          type: 'AVATAR',
+          payload: data.data.image
+        })
+      } else {
+        let a = setModal({
+          visible: true,
+          message: 'Service Error',
+          navigationPage: 'LoginScreen',
+          onClose: () => { setShowModal(false) }
+        })
+
+        setShowModal(true)
+      }
+    } catch (error) {
+      console.log('Error loading profile data 0:', error);
+    }
+  };
+
+  useEffect(() => {
+    loadProfileData().then().catch(err => console.log('EFFECT ERROR 0', err))
+    console.log('INFO : PROFILE STATE', profileState)
+  }, [])
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
@@ -201,7 +249,7 @@ const Post2 = props => {
           waitFor={cardRef} // Wait for single tap to finish before detecting double tap
           onHandlerStateChange={({ nativeEvent }) => {
             if (nativeEvent.state === State.ACTIVE) {
-              handleDoubleTap(); 
+              handleDoubleTap();
             }
           }}
           numberOfTaps={2} // Detect double tap
@@ -215,31 +263,29 @@ const Post2 = props => {
                 style={styles.image}
               />
             </View>
-            
             <View style={styles.profileContainer}>
-              <Image source={profileState.avatar?{uri :profileState.server +  profileState.avatar}:defaultProfileImage} style={styles.profileImage} />
+              <Image source={(avatar) ? { uri: profileState.server + (avatar) } : defaultProfileImage} style={styles.profileImage} />
               <View style={styles.infoContainer}>
                 <View style={styles.dateC}>
                   <Text style={styles.date}>{formattedDate}</Text>
                 </View>
-                <Text style={[styles.name, textColorStyle]}>{profileState.name}</Text>
+                <Text style={[styles.name, textColorStyle]}>{value.name || profileState.name  }</Text>
                 <View style={styles.horizontal} />
                 <View style={styles.infoC}>
                   <Icon2 name="phone" style={styles.iconPhone} />
                   <Text style={[styles.info, textColorStyle]}>
-                    {profileState.phone}
+                    {profileState.phone || value.phone}
                   </Text>
                 </View>
                 <View style={styles.infoC}>
                   <EntypoIcon name="email" style={styles.iconPhone} />
                   <Text style={[styles.info, textColorStyle]}>
-                    {profileState.email}
+                    {profileState.email || value.email}
                   </Text>
-                </View>  
+                </View>
               </View>
             </View>
             <View >
-            <Text style={styles.Sociflytext}>Socifly</Text>
             </View>
           </LinearGradient>
         </TapGestureHandler>
@@ -368,12 +414,15 @@ const styles = StyleSheet.create({
     paddingVertical: "2%",
     backgroundColor: "#731bbcca",
     borderRadius: getResponsiveValue(20, 10),
+    left:getResponsiveValue('3%', "3%"),
+   
   },
   dateC: {
     position: "absolute",
     alignItems: "center",
-    bottom: getResponsiveValue('100%', "90%"),
-    left: getResponsiveValue('100%', "90%"),
+    bottom: getResponsiveValue('100%', "95%"),
+    left: getResponsiveValue('100%', "100%"),
+   
   },
   name: {
     fontSize: getResponsiveValue(20, 13),
@@ -416,7 +465,7 @@ const styles = StyleSheet.create({
     textShadowColor: '#000000',
     textShadowOffset: { width: 1, height: 1 },
     textShadowRadius: getResponsiveValue(2, 1),
-    marginLeft:getResponsiveValue(30, 20),
+    // marginLeft: getResponsiveValue(30, 20),
   },
 
   toolbar: {
@@ -470,13 +519,8 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: '60%',
   },
-  
-  Sociflytext:{
-    color: 'grey',
-    bottom:1,
-    marginLeft:'13%'
-    
-  },
+
+
 });
 
 export default Post2;

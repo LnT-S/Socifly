@@ -34,6 +34,7 @@ const OtpScreen = (props) => {
   const [isTimerRunning, setIsTimerRunning] = useState(false);
 
   const handleOtpChange = (text) => {
+    console.log('OTP', otp, 'TEXT', text)
     setOtp(text);
     localDispatch({
       type: 'OTP',
@@ -79,10 +80,10 @@ const OtpScreen = (props) => {
           let a = setModal({
             visible: true,
             message: data.message,
-            navigationPage: 'SignUpScreen',
+            navigationPage: 'OtpScreen',
             onClose: () => { setShowModal(false) }
           })
-          
+
           setShowModal(true)
         }
       } else {
@@ -106,10 +107,10 @@ const OtpScreen = (props) => {
         let a = setModal({
           visible: true,
           message: data.message,
-          navigationPage: 'SignUpScreen',
+          navigationPage: 'OtpScreen',
           onClose: () => { setShowModal(false) }
         })
-        
+
         setShowModal(true)
       }
     } else {
@@ -146,8 +147,8 @@ const OtpScreen = (props) => {
           autoFocusOnLoad
           codeInputFieldStyle={styles.underlineStyleBase}
           codeInputHighlightStyle={styles.underlineStyleHighLighted}
-
-          value={otp}
+          editable={true}
+          // value={otp}
           onCodeChanged={handleOtpChange}
         />
         {otpError ? <Text style={global.error}>{otpError}</Text> : null}
@@ -168,7 +169,7 @@ const OtpScreen = (props) => {
           </Text>
         </Pressable>
       </View>
-
+      {showModal ? <CustomModal visible={modal.visible} message={modal.message} navigationPage={modal.navigationPage} onClose={modal.onClose} /> : ''}
     </SafeAreaView>
   );
 };

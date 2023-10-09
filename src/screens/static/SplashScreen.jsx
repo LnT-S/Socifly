@@ -14,7 +14,6 @@ const SplashScreen = () => {
   const scaleAnim = useRef(new Animated.Value(0)).current;
   const opacityAnim = useRef(new Animated.Value(0)).current;
 
-
   const handleNextPage = () => {
     navigation.navigate('LoginScreen');
   };
@@ -25,7 +24,6 @@ const SplashScreen = () => {
       duration: 3000,
       useNativeDriver: true,
     });
-
     const growingAnim = Animated.timing(scaleAnim, {
       toValue: 1,
       duration: 2000,

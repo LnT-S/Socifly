@@ -23,12 +23,8 @@ import stringsoflanguages from '../utils/ScreenStrings';
 import CustomModal from '../atoms/CustomModal';
 import DialogueBox from '../common/DialogueBox';
 import DateTimePicker from '@react-native-community/datetimepicker'; 
-import { Image } from 'react-native-animatable';
-import defaultProfileImage from '../assets/images/Profile.png';
-import { WHITE } from '../styles/colors';
-import SelectedImages from '../common/SelectedImages'
+import {useNavigation} from '@react-navigation/native';
 
-import * as ImagePicker from 'react-native-image-picker'
 const SignUpScreen = props => {
   const [value, setValue] = useState({
     name: '',
@@ -38,13 +34,13 @@ const SignUpScreen = props => {
     confirm_password: '',
     bday: '', 
   });
-  const [profileImage, setProfileImage] = useState(null);
   const [username, setUsername] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = useState(false);
   const [showPassword1, setShowPassword1] = useState(false);
   const [showModal, setShowModal] = useState(false)
+  const navigation = useNavigation();
   const [modal, setModal] = useState({
     visible : false,
     message : '',
@@ -79,29 +75,6 @@ const SignUpScreen = props => {
     return null;
   };
   
-  const openImagePicker = () => {
-    const options = {
-      title: 'Select Profile Image',
-      storageOptions: {
-        skipBackup: true,
-        path: 'images',
-      },
-    };
-    ImagePicker.showImagePicker(options, (response) => {
-      if (response.didCancel) {
-        console.log('User cancelled image picker');
-      } else if (response.error) {
-        console.log('ImagePicker Error: ', response.error);
-      } else if (response.customButton) {
-        console.log('User tapped custom button: ', response.customButton);
-      } else {
-        // You can access the selected image using response.uri
-        const selectedImage = { uri: response.uri };
-        setProfileImage(selectedImage); // Update the profile image in your state
-      }
-    });
-  };
-  
   const scrollViewRef = useRef(null);
 
   const handleSignUp = async () => {
@@ -134,6 +107,7 @@ const SignUpScreen = props => {
         })
         console.log('hihi',modal)
         setShowModal(true)
+        setTimeout(()=>{setShowModal(false);navigation.navigate('LoginScreen');},2000)
       }else{
         let a = setModal({
           visible : true,
@@ -162,15 +136,6 @@ const SignUpScreen = props => {
       <SafeAreaView style={styles.container}>
         <LinearGradients customStyle={styles.loginGradient}>
           <Text style={global.title}>{stringsoflanguages.signUp}</Text>
-          <Pressable onPress={openImagePicker}>
-          {profileImage ? (
-            <Image source={profileImage} style={styles.profileImage} />
-          ) : (
-            <Image source={defaultProfileImage} style={styles.profileImage} />
-          )}
-        </Pressable>
-
-        <SelectedImages/>
         </LinearGradients>
 
         <View style={global.bContainer}>
@@ -307,15 +272,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     right: 15,
     top: "68%", // Adjust the top position as needed 
-  },
-  profileImage: {
-    width: getResponsiveValue(240, 120),
-    height: getResponsiveValue(240, 120),
-    borderRadius: getResponsiveValue(120, 60),
-    marginBottom: getResponsiveValue(15, 15),
-    borderColor:WHITE,
-    borderWidth:getResponsiveValue(4,2),
-  },
+  }
 });
 
 export default SignUpScreen;

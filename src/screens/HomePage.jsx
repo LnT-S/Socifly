@@ -7,7 +7,7 @@ import {
   ScrollView,
   Animated,
   FlatList,
-  RefreshControl,
+  RefreshControl
 } from 'react-native';
 import React, { useState, useEffect, useRef } from 'react';
 import LinearGradient2 from '../atoms/LinearGradient2';
@@ -32,15 +32,15 @@ import { FETCH } from '../services/fetch';
 import { useProfile, useLocal } from '../context/ProfileContext';
 import CustomModal from '../atoms/CustomModal';
 import { TouchableOpacity, ActivityIndicator } from 'react-native';
-
+import MaterialIconsIcon from 'react-native-vector-icons/MaterialIcons';
 //import RewardedInterstitialAds from '../common/RewardedInterstitialAds';
 
 const HomePage = props => {
   const { localState, localDispatch } = useLocal()
   const { profileState, dispatch } = useProfile();
-  const [refresh , setRefresh] = useState(true)
-  const navigation = useNavigation();
+  const [refresh, setRefresh] = useState(true);
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const navigation = useNavigation();
   const [showModal, setShowModal] = useState(false)
   const [modal, setModal] = useState({
     visible: false,
@@ -67,14 +67,18 @@ const HomePage = props => {
     token().then().catch(err => console.log('EFFECT ERROR', err))
   }, [])
 
+
   const [shouldShowAd, setShouldShowAd] = useState(false);
   const [isRewardedAdLoaded, setIsRewardedAdLoaded] = useState(false);
-  const bannerData = [1, 2, 3];
+  const bannerData = [1, 2];
   const [currentBannerIndex, setCurrentBannerIndex] = useState(0);
   const flatListRef = useRef(null);
 
   const handleNextPage = () => {
     props.navigation.navigate('ProfileScreen');
+  };
+  const handleNextPage2 = () => {
+    props.navigation.navigate('Settings');
   };
 
   useEffect(() => {
@@ -120,18 +124,19 @@ const HomePage = props => {
       type: 'AVATAR',
       payload: avatar
     })
+    return profileState
   }
 
-  async function getImages(){
-    let {status , data} = await FETCH(
+  async function getImages() {
+    let { status, data } = await FETCH(
       'GET',
       '/home/get-images',
-      {lang : localState.lang}
+      { lang: localState.lang }
     )
-    if(status===200){
+    if (status === 200) {
       localDispatch({
-        type : "IMAGES",
-        payload : data.data
+        type: "IMAGES",
+        payload: data.data
       })
     } else {
       let a = setModal({
@@ -140,7 +145,6 @@ const HomePage = props => {
         navigationPage: 'LoginScreen',
         onClose: () => { setShowModal(false) }
       })
-      
       setShowModal(true)
     }
   }
@@ -168,7 +172,7 @@ const HomePage = props => {
     }
   }
 
-  async function loadProfileData(){
+  async function loadProfileData() {
     try {
       let { data, status } = await FETCH(
         'GET',
@@ -177,24 +181,40 @@ const HomePage = props => {
 
       if (status === 200) {
         console.log(data)
-        let a =  SetValue(prev=>({...prev ,...data.data}))
+        let a = SetValue(prev => ({ ...prev, ...data.data }))
         setAvatar(data.data.image)
-        updateContext() 
+        dispatch({
+          type: 'USER_NAME',
+          payload: data.data.name
+        })
+        dispatch({
+          type: 'EMAIL',
+          payload: data.data.email
+        })
+        dispatch({
+          type: 'PHONE',
+          payload: data.data.phone
+        })
+        dispatch({
+          type: 'AVATAR',
+          payload: data.data.image
+        })
       } else {
         let a = setModal({
           visible: true,
-          message: 'Service Error',
+          message: 'You are not Logged In !!',
           navigationPage: 'LoginScreen',
+          onClose: () => { setShowModal(false) }
         })
-        
+
         setShowModal(true)
       }
-    } catch (error) { 
+    } catch (error) {
       console.log('Error loading profile data 0:', error);
     }
   };
 
-  function REFRESH(){
+  function REFRESH() {
     setRefresh(!refresh)
     return new Promise((resolve, reject) => {
       // Your data fetching or refreshing logic here
@@ -205,17 +225,6 @@ const HomePage = props => {
       }, 1000); // Adjust the timeout duration as needed
     });
   }
-  // const REFRESH = () => {
-  //   return new Promise((resolve, reject) => {
-  //     // Your data fetching or refreshing logic here
-  //     // For example, you can simulate a delay using setTimeout
-  //     setTimeout(() => {
-  //       // Resolve the promise when the operation is complete
-  //       resolve();
-  //     }, 1000); // Adjust the timeout duration as needed
-  //   });
-  // };
-
   const handleRefresh = () => {
     setIsRefreshing(true); // Set refreshing state to true
     // Perform your data fetching or refreshing logic here
@@ -231,9 +240,17 @@ const HomePage = props => {
   };
 
   useEffect(() => {
-    loadProfileData().then().catch(err => console.log('EFFECT ERROR 0', err))
-    getCategory().then().catch(err=>console.log('EFFECT ERROR 1',err))
-    getImages().then().catch(err=>console.log('EFFECT ERROR 2',err))
+    let loads = async () => {
+      console.log('0----------------------------------------------------------------')
+      await loadProfileData().then().catch(err => console.log('EFFECT ERROR 0', err))
+      console.log('1----------------------------------------------------------------')
+      await getCategory().then().catch(err => console.log('EFFECT ERROR 1', err))
+      console.log('2----------------------------------------------------------------')
+      await getImages().then().catch(err => console.log('EFFECT ERROR 2', err))
+      console.log('3----------------------------------------------------------------')
+      updateContext()
+    }
+    loads()
   }, [refresh])
 
 
@@ -244,7 +261,7 @@ const HomePage = props => {
           <View style={styles.iconStack}>
             <TextInput placeholder="" style={styles.textInput} />
             <FeatherIcon name="search" style={styles.icon2} />
-          </View>
+          </View> 
           {showModal ? <CustomModal visible={modal.visible} message={modal.message} navigationPage={modal.navigationPage} onClose={modal.onClose} /> : ''}
           <Pressable
             style={styles.button}
@@ -276,19 +293,28 @@ const HomePage = props => {
             ></MaterialCommunityIconsIcon>
           </Pressable>
 
+          <Pressable onPress={handleNextPage2}  style={({ pressed }) => [
+            { opacity: pressed ? 0.8 : 1 },
+            styles.iconWrapper,
+          ]}>
+            <MaterialIconsIcon name="settings" style={styles.icon5} />
+          </Pressable>
+
         </View>
       </LinearGradient2>
       <View style={styles.cardSection}>
         <Category />
       </View>
-      <ScrollView style={styles.postS}   refreshControl={ // Add RefreshControl here
-        <RefreshControl
-          refreshing={isRefreshing}
-          onRefresh={handleRefresh}
-          colors={['#ff0000', '#00ff00', '#0000ff']} // Customize the loading spinner colors
-          tintColor={'#ff0000'} // Customize the loading spinner color
-        />
-      }>
+      <ScrollView style={styles.postS}
+        refreshControl={ // Add RefreshControl here
+          <RefreshControl
+            refreshing={isRefreshing}
+            onRefresh={handleRefresh}
+            colors={['#ff0000', '#00ff00', '#0000ff']} // Customize the loading spinner colors
+            tintColor={'#ff0000'} // Customize the loading spinner color
+          />
+        }>
+
         <FlatList
           ref={flatListRef}
           style={styles.adss}
@@ -307,7 +333,6 @@ const HomePage = props => {
         />
         <GoogleAds />
       </ScrollView>
-      
     </SafeAreaView>
   );
 };
@@ -315,16 +340,13 @@ const HomePage = props => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    
   },
   loginGradient: {
     // flex: 0.12,
     height: getResponsiveValue(100, 60),
   },
 
-
-  adss: {
-    // top:15,
-  },
   Container: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -337,7 +359,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: getResponsiveValue('6%', '4%'),
   },
   iconStack: {
-    flex: 1,
+    flex: 0.7,
     flexDirection: 'row',
     alignItems: 'center',
   },
@@ -345,14 +367,13 @@ const styles = StyleSheet.create({
     color: WHITE,
     fontSize: getResponsiveValue(60, 40),
   },
-  icon2: {
-    position: 'absolute',
-    right: 18,
-    top: getResponsiveValue(3, 4),
-
-    color: WHITE,
-    fontSize: getResponsiveValue(40, 24),
-  },
+  // icon2: {
+  //   position: 'absolute',
+  //   right: 15,
+  //   top: getResponsiveValue(3, 4),
+  //   color: WHITE,
+  //   fontSize: getResponsiveValue(40, 24),
+  // },
   icon3: {
     color: WHITE,
     fontSize: getResponsiveValue(44, 29),
@@ -361,6 +382,12 @@ const styles = StyleSheet.create({
   icon4: {
     color: WHITE,
     fontSize: getResponsiveValue(50, 33),
+    
+  },
+  icon5:{
+    color: WHITE,
+    fontSize: getResponsiveValue(50, 30),
+   
   },
   createRow: {
     // flex:1,
@@ -369,36 +396,39 @@ const styles = StyleSheet.create({
     // justifyContent: "center",
     justifyContent: 'space-between',
     width: '100%',
+    
     // paddingHorizontal:"2%",
+    
   },
-  textInput: {
-    flex: 1,
-    justifyContent: 'center',
-    paddingTop: 3,
-    paddingBottom: 3,
-    marginRight: 8,
-    paddingLeft: '10%',
-    paddingRight: getResponsiveValue('15%', '20%'),
-    // paddingHorizontal:"11%",
-    height: getResponsiveValue(50, 34),
-    borderWidth: getResponsiveValue(3, 2),
-    borderColor: WHITE,
-    borderRadius: getResponsiveValue(25, 22),
-    color: WHITE,
-  },
+  // textInput: {
+  //   flex: 1,
+  //   justifyContent: 'center',
+  //   paddingTop: 3,
+  //   paddingBottom: 3,
+  //   marginRight: 8,
+  //   paddingLeft: '10%',
+  //   // paddingRight: getResponsiveValue('15%', '20%'),
+  //   // paddingHorizontal:"11%",
+  //   height: getResponsiveValue(50, 34),
+  //   borderWidth: getResponsiveValue(3, 2),
+  //   borderColor: WHITE,
+  //   borderRadius: getResponsiveValue(25, 22),
+  //   color: WHITE,
+  
+  // },
   create: {
     marginLeft: getResponsiveValue('7%', '7%'),
-
     color: WHITE,
     fontSize: getResponsiveValue(20, 16),
   },
   button: {
-    width: '30%',
+    width: '40%',
     height: getResponsiveValue(50, 34),
     borderWidth: getResponsiveValue(3, 2),
     borderColor: 'rgba(255,255,255,1)',
     borderRadius: getResponsiveValue(25, 22),
     flexDirection: 'row',
+    right:"30%"
     // alignItems: 'center',
     // justifyContent: 'center',
   },

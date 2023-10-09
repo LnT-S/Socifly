@@ -8,11 +8,9 @@ import {
   Image,
   KeyboardAvoidingView,
   Platform,
-  
 } from 'react-native';
 import React, {useState, useEffect} from 'react';
 import ButtonA from '../atoms/ButtonA';
-
 import LinearGradients from '../atoms/LinearGradients';
 import global from '../styles/global';
 import Icon from 'react-native-vector-icons/Entypo';
@@ -21,7 +19,7 @@ import MaterialIconsIcon from 'react-native-vector-icons/MaterialIcons';
 import {getResponsiveValue} from '../styles/responsive';
 import {ImagePicker ,launchImageLibrary} from 'react-native-image-picker';
 // import { openCropper } from 'react-native-image-crop-picker';
-// import ImagePicker from 'react-native-image-crop-picker';
+import CroppedImagePicker from 'react-native-image-crop-picker';
 import defaultProfileImage from '../assets/images/Profile.png';
 // import SettingsScreen from './Settings';
 import { useProfile } from '../context/ProfileContext'; 
@@ -29,7 +27,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import stringsoflanguages from '../utils/ScreenStrings';
 import { WHITE } from '../styles/colors';
 //import InterstitialAds from '../common/Ads/InterstitialAds';
-//  import RewardedAds from '../common/Ads/RewardedAds';
+ import RewardedAds from '../common/Ads/RewardedAds';
 import { FETCH, MULTIPART_FETCH } from '../services/fetch';
 import CustomModal from '../atoms/CustomModal';
 import { useLocal } from '../context/ProfileContext';
@@ -72,17 +70,50 @@ const ProfileScreen = props => {
   };
 
   const selectImage = async () => {
+    let selectedImage = {
+      fileName : `Socifly${new Date().getTime()}`,
+      fileSize : 0,
+      height : 0,
+      type : "image/png",
+      uri : '',
+      width : 0
+    }
     if (isEditing) {
-      const response = await launchImageLibrary({
-        mediaType: 'photo',
-        includeBase64: false,
-        selectionLimit: 1,
-      });
-      // console.log(response.assets[0])
-      setPickedImage(response.assets[0])
-      setSelectedProfileImage(response.assets[0].uri);
+     try {
+       const response = await CroppedImagePicker.openPicker({
+         mediaType: 'photo',
+         cropping : true,
+         includeBase64: true,
+       });
+      //  console.log(response)
+       selectedImage.fileSize = response.size,
+       selectedImage.height = response.cropRect.height,
+       selectedImage.width = response.cropRect.width,
+       selectedImage.type = response.mime,
+       selectedImage.uri  = response.path
+       selectedImage.data = response.data
+      //  console.log(selectedImage)
+       setPickedImage(selectedImage)
+       setSelectedProfileImage(selectedImage.uri);
+     } catch (error) {
+      if(error){
+        console.log('ERROR  : Error Picking Image',error)
+      }
+     }
     }
   };
+  // const selectImage = async () => {
+  //   if (isEditing) {
+  //     const response = await launchImageLibrary({
+  //       mediaType: 'photo',
+  //       includeBase64: false,
+  //       selectionLimit: 1,
+  //     });
+  //     console.log(response.assets[0])
+  //     setPickedImage(response.assets[0])
+  //     setSelectedProfileImage(response.assets[0].uri);
+  //   }
+  // };
   
   const toggleEdit = () => {
     setIsEditing(!isEditing);
@@ -124,6 +155,7 @@ const ProfileScreen = props => {
         visible: true,
         message: 'Service Error',
         navigationPage: 'LoginScreen',
+        onClose : ()=>{setShowModal(false)}
       })
       
       setShowModal(true)
@@ -165,6 +197,41 @@ const ProfileScreen = props => {
         body : formData
       })
       const data = await response.json()
+      console.log('LOG : Updated Report',response.status,data)
+      if(response.status === 200){
+        dispatch({
+          type : 'USER_NAME',
+          payload : value.name
+        })
+        dispatch({
+          type : 'EMAIL',
+          payload :value.email
+        })
+        dispatch({
+          type : 'PHONE',
+          payload : value.phone
+        })
+        dispatch({
+          type : 'AVATAR',
+          payload : avatar
+        })
+        let a = setModal({
+          visible: true,
+          message: 'Profile Updated successfully',
+          navigationPage: 'HomePage',
+          onClose : ()=>{setShowModal(false)}
+        })
+        setShowModal(true)
+       }else{
+        let a = setModal({
+          visible: true,
+          message: 'Cannot Update',
+          navigationPage: 'LoginScreen',
+          onClose : ()=>{setShowModal(false)}
+        })
+        setShowModal(true)
+      }
+
   } catch (error) {
     console.log('Error',error)
   }
@@ -212,10 +279,13 @@ const ProfileScreen = props => {
     
             <Pressable onPress={selectImage}>
               <Image
+                // source={
+                //   (selectedProfileImage || avatar)
+                //     ? { uri:`data:${imagePickerResponse?.type};base64,${imagePickerResponse?.data}` || profileState.server + avatar }
+                //      : defaultProfileImage
+                // }
                 source={
-                  (selectedProfileImage || avatar)
-                    ? { uri:selectedProfileImage || profileState.server + avatar }
-                     : defaultProfileImage
+                  selectedProfileImage ? { uri:`data:${imagePickerResponse.type};base64,${imagePickerResponse.data}`} : avatar ? {uri : profileState.server + avatar}  : defaultProfileImage
                 }
                 style={styles.profileImage}
               />
@@ -267,7 +337,6 @@ const ProfileScreen = props => {
    
       
       </SafeAreaView>
-
     </KeyboardAvoidingView>
   );
 };

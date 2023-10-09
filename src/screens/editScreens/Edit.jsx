@@ -65,6 +65,7 @@ const Edit = props => {
   const handleColorChange = (color) => {
     setCurrentColor(color);
   };
+  
   function REFRESH(){
     setRefresh(!refresh)
     return new Promise((resolve, reject) => {
@@ -114,29 +115,29 @@ const Edit = props => {
           dotStyle={styles.dot}
           activeDotStyle={styles.activeDot}>
           <Post2
-          userName={userName} // Pass the updated user name as a prop
-          source={imageSource}
-          props={props}
-          isEditMode={true}
-          textColor={currentColor}
-        />
-        <Post1
-        userName={userName} // Pass the updated user name as a prop
-        source={imageSource}
-        props={props}
-        isEditMode={true}
-        textColor={currentColor}
-      />
+            userName={userName}
+            source={imageSource}
+            props={props}
+            isEditMode={true}
+            textColor={currentColor}
+          />
+          <Post1
+            userName={userName}
+            source={imageSource}
+            props={props}
+            isEditMode={true}
+            textColor={currentColor}
+          />
 
           <Post3
-          userName={userName}
+            userName={userName}
             source={imageSource}
             props={props}
             isEditMode={true}
             textColor={currentColor}
           />
           <Post4
-          userName={userName}
+            userName={userName}
             source={imageSource}
             props={props}
             isEditMode={true}

@@ -1,6 +1,6 @@
 import {StatusBar} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import SplashScreen from './src/screens/static/SplashScreen.jsx';
 import LoginScreen from './src/screens/LoginScreen.jsx';
@@ -27,8 +27,31 @@ import stringsoflanguages from './src/utils/ScreenStrings.jsx';
 import { LanguageProvider } from './src/context/LanguageContext.js';
 import NewPassword from './src/screens/NewPassword.jsx';
 import LanguagesScreen from './src/screens/static/LanguagesScreen.jsx';
+
+
 const Stack = createNativeStackNavigator();
 function App() {
+  const [token , setToken] = useState(false)
+  const [isLoading, setIsLoading] = useState(true);
+  let isTokenPresent  = async ()=>{
+    let t = await AsyncStorage.getItem('token')
+    if(t!==undefined){
+      return true
+    }
+    else {
+      return false
+    }
+  }
+  useEffect(() => {
+    setTimeout(() => {
+      setIsLoading(false); // Set isLoading to false when the loading task is complete
+    }, 2500); // Simulate loading for 2 seconds, replace this with your actual loading logic
+  }, []);
+  useEffect(()=>{
+    console.log('APP Token PResent ? ', token)
+    setToken(isTokenPresent())
+  
+  },[])
   useEffect(() => {
     // Load the selected language from AsyncStorage and set it as the initial language
     AsyncStorage.getItem('selectedLanguage').then((value) => {
@@ -43,12 +66,9 @@ function App() {
     <LanguageProvider>
     <NavigationContainer>
       <StatusBar barStyle="light-content" backgroundColor="#8b0e68" />
-      <Stack.Navigator>
-        <Stack.Screen
-          name="SplashScreen"
-          component={SplashScreen}
-          options={{headerShown: false}}
-        />
+      {isLoading ? (
+        <SplashScreen />
+      ) :(<Stack.Navigator initialRouteName={token ? "HomePage" : "LoginScreen"}>      
          <Stack.Screen
           name="ChangeLanguage"
           component={ChangeLanguage}
@@ -139,8 +159,7 @@ function App() {
           component={NewPassword}
           options={{headerShown: false}}
         />
-       
-      </Stack.Navigator>
+      </Stack.Navigator>)}
     </NavigationContainer>
     </LanguageProvider>
      </ProfileProvider>

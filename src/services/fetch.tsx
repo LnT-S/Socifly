@@ -62,7 +62,10 @@ export async function FETCH(method: string, url: string, params: string | object
     // await AsyncStorage.removeItem('token')
     return {data : 'Unauthorized Login Attempt' , status : 401}
    }
-    const data = await res.json();
+    const data = (await res.json()) || {data : {
+      message : 'Network Error! Check Your Internet Connection',
+      status : 400
+    }};
 
     console.log(`FETCH : Data Recieved after calling API:${URL} is --->`)
     console.log(res.status,data)
