@@ -49,6 +49,10 @@ const PostArray = ({ navigation }) => {
     }
     load()
   }, [])
+
+  useEffect(()=>{
+    setPost(localState.images)
+  },[localState])
   return (
     <View style={styles.postArrayContainer}>
       {posts.map((post, i) => {
