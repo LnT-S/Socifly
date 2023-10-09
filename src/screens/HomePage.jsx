@@ -7,6 +7,7 @@ import {
   ScrollView,
   Animated,
   FlatList,
+  BackHandler
 } from 'react-native';
 import React, { useState, useEffect, useRef } from 'react';
 import LinearGradient2 from '../atoms/LinearGradient2';
@@ -30,6 +31,7 @@ import { useNavigation } from '@react-navigation/native';
 import { FETCH } from '../services/fetch';
 import { useProfile, useLocal } from '../context/ProfileContext';
 import CustomModal from '../atoms/CustomModal';
+import DialogueBox from '../common/DialogueBox';
 
 
 //import RewardedInterstitialAds from '../common/RewardedInterstitialAds';
@@ -52,6 +54,18 @@ const HomePage = props => {
     phone: profileState.phone || null,
   })
   const [avatar, setAvatar] = useState(profileState.avatar || '')
+  const [isLogoutDialogVisible, setIsLogoutDialogVisible] = useState(false);
+
+  function handleLogout(){
+    setIsLogoutDialogVisible(true)
+  }
+
+  const handleYesForLogout = async () => {
+    setIsLogoutDialogVisible(false);
+    BackHandler.exitApp();
+  };
+
+
   async function token() {
     let token = await AsyncStorage.getItem('token')
     if (token) {
@@ -186,6 +200,21 @@ const HomePage = props => {
   }, [refresh])
 
 
+  useEffect(() => {
+    const backAction = () => {
+      if (isLogoutDialogVisible) {
+        // If the dialog is already visible, just hide it
+        setIsLogoutDialogVisible(false);
+      } else {
+        // Show the exit confirmation dialog
+        setIsLogoutDialogVisible(true);
+        return true; // Prevent the default back action
+      }
+    };
+    const backHandler = BackHandler.addEventListener('hardwareBackPress', backAction);
+    return () => backHandler.remove();
+  }, [isLogoutDialogVisible]);
+
   return (
     <SafeAreaView style={styles.container} >
       <LinearGradient2 customStyle={styles.loginGradient}>
@@ -250,6 +279,14 @@ const HomePage = props => {
         />
         <GoogleAds />
       </ScrollView>
+      {isLogoutDialogVisible && (
+        <DialogueBox
+          isVisible={isLogoutDialogVisible}
+          handleYes={handleYesForLogout}
+          handleNo = {()=>{setIsLogoutDialogVisible(false)}}
+          textContent="Are you sure you want to Exit?"
+        />
+      )}
       <Text style={{ textAlign: 'center' }} onPress={REFRESH}>REFRESH</Text>
     </SafeAreaView>
   );
