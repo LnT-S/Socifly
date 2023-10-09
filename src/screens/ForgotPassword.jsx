@@ -22,6 +22,7 @@ import { FETCH } from '../services/fetch';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import CustomModal from '../atoms/CustomModal';
 import { useLocal } from '../context/ProfileContext';
+import Icon from 'react-native-vector-icons/AntDesign';
 
 const ForgotPassword = props => {
   const { localState, localDispatch } = useLocal()
@@ -30,6 +31,7 @@ const ForgotPassword = props => {
   const [validationError, setValidationError] = useState('');
   const [errors, setErrors] = useState({});
   const [showModal, setShowModal] = useState(false)
+  const { navigation } = props;
   const [modal, setModal] = useState({
     visible: false,
     message: '',
@@ -134,6 +136,11 @@ const ForgotPassword = props => {
   return (
     <SafeAreaView style={styles.container}>
       <LinearGradients customStyle={styles.loginGradient}>
+      <Pressable onPress={() => navigation.goBack()}>
+      <Text style={styles.headertop}>
+      <Icon name="arrowleft" style={styles.header1}/> {/* Adjust size and color as needed */}
+      </Text>
+      </Pressable>
         <Text style={styles.title2}>{stringsoflanguages.resetPassword}</Text>
       </LinearGradients>
       {showModal ? <CustomModal visible={modal.visible} message={modal.message} navigationPage={modal.navigationPage} onClose={modal.onClose} /> : ''}
@@ -192,6 +199,14 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: getResponsiveValue(50, 30),
     marginBottom: 20,
+  },
+  headertop:{
+    right:"40%",
+    bottom:100,
+  },
+  header1: {
+    color: "#ffffff",
+    fontSize:24,
   },
   toggleType: {
     color: LINKS,

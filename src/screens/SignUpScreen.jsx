@@ -24,7 +24,8 @@ import CustomModal from '../atoms/CustomModal';
 import DialogueBox from '../common/DialogueBox';
 import DateTimePicker from '@react-native-community/datetimepicker'; 
 import {useNavigation} from '@react-navigation/native';
-
+import Icon from 'react-native-vector-icons/AntDesign';
+ 
 const SignUpScreen = props => {
   const [value, setValue] = useState({
     name: '',
@@ -135,6 +136,11 @@ const SignUpScreen = props => {
       style={{ flex: 1 }}>
       <SafeAreaView style={styles.container}>
         <LinearGradients customStyle={styles.loginGradient}>
+        <Pressable onPress={() => navigation.goBack()}>
+        <Text style={styles.headertop}>
+        <Icon name="arrowleft" style={styles.header1}/> {/* Adjust size and color as needed */}
+        </Text>
+        </Pressable>
           <Text style={global.title}>{stringsoflanguages.signUp}</Text>
         </LinearGradients>
 
@@ -272,7 +278,15 @@ const styles = StyleSheet.create({
     position: 'absolute',
     right: 15,
     top: "68%", // Adjust the top position as needed 
-  }
+  },
+  headertop:{
+    right:"40%",
+    bottom:60,
+  },
+  header1: {
+    color: "#ffffff",
+    fontSize:24,
+  },
 });
 
 export default SignUpScreen;

@@ -197,6 +197,7 @@ const Post2 = props => {
 
   async function loadProfileData() {
     try {
+      console.log('Loading Profile in Post2')
       let { data, status } = await FETCH(
         'GET',
         '/profile/get-info',
@@ -222,21 +223,25 @@ const Post2 = props => {
           payload: data.data.image
         })
       } else {
-        let a = setModal({
-          visible: true,
-          message: 'Service Error',
-          navigationPage: 'LoginScreen',
-          onClose: () => { setShowModal(false) }
-        })
+        // let a = setModal({
+        //   visible: true,
+        //   message: 'Service Error',
+        //   navigationPage: 'LoginScreen',
+        //   onClose : ()=>{setShowModal(false)}
+        // })
 
-        setShowModal(true)
+        // setShowModal(true)
       }
     } catch (error) {
       console.log('Error loading profile data 0:', error);
     }
   };
 
-  useEffect(() => {
+  useEffect(()=>{
+    setAvatar(profileState.avatar)
+  })
+
+  useEffect(()=>{
     loadProfileData().then().catch(err => console.log('EFFECT ERROR 0', err))
     console.log('INFO : PROFILE STATE', profileState)
   }, [])
@@ -269,7 +274,7 @@ const Post2 = props => {
                 <View style={styles.dateC}>
                   <Text style={styles.date}>{formattedDate}</Text>
                 </View>
-                <Text style={[styles.name, textColorStyle]}>{value.name || profileState.name  }</Text>
+                <Text style={[styles.name, textColorStyle]}>{props.newUserName ||profileState.name || value.name}</Text>
                 <View style={styles.horizontal} />
                 <View style={styles.infoC}>
                   <Icon2 name="phone" style={styles.iconPhone} />

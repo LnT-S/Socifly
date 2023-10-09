@@ -7,7 +7,8 @@ import {
   ScrollView,
   Animated,
   FlatList,
-  RefreshControl
+  RefreshControl,
+  BackHandler
 } from 'react-native';
 import React, { useState, useEffect, useRef } from 'react';
 import LinearGradient2 from '../atoms/LinearGradient2';
@@ -33,6 +34,9 @@ import { useProfile, useLocal } from '../context/ProfileContext';
 import CustomModal from '../atoms/CustomModal';
 import { TouchableOpacity, ActivityIndicator } from 'react-native';
 import MaterialIconsIcon from 'react-native-vector-icons/MaterialIcons';
+import DialogueBox from '../common/DialogueBox';
+
+
 //import RewardedInterstitialAds from '../common/RewardedInterstitialAds';
 
 const HomePage = props => {
@@ -54,6 +58,18 @@ const HomePage = props => {
     phone: profileState.phone || null,
   })
   const [avatar, setAvatar] = useState(profileState.avatar || '')
+  const [isLogoutDialogVisible, setIsLogoutDialogVisible] = useState(false);
+
+  function handleLogout(){
+    setIsLogoutDialogVisible(true)
+  }
+
+  const handleYesForLogout = async () => {
+    setIsLogoutDialogVisible(false);
+    BackHandler.exitApp();
+  };
+
+
   async function token() {
     let token = await AsyncStorage.getItem('token')
     if (token) {
@@ -63,9 +79,6 @@ const HomePage = props => {
       navigation.navigate('LoginScreen')
     }
   }
-  useEffect(() => {
-    token().then().catch(err => console.log('EFFECT ERROR', err))
-  }, [])
 
 
   const [shouldShowAd, setShouldShowAd] = useState(false);
@@ -107,47 +120,7 @@ const HomePage = props => {
     setIsRewardedAdLoaded(true);
   };
 
-  const updateContext = () => {
-    dispatch({
-      type: 'USER_NAME',
-      payload: value.name
-    })
-    dispatch({
-      type: 'EMAIL',
-      payload: value.email
-    })
-    dispatch({
-      type: 'PHONE',
-      payload: value.phone
-    })
-    dispatch({
-      type: 'AVATAR',
-      payload: avatar
-    })
-    return profileState
-  }
-
-  async function getImages() {
-    let { status, data } = await FETCH(
-      'GET',
-      '/home/get-images',
-      { lang: localState.lang }
-    )
-    if (status === 200) {
-      localDispatch({
-        type: "IMAGES",
-        payload: data.data
-      })
-    } else {
-      let a = setModal({
-        visible: true,
-        message: data.message,
-        navigationPage: 'LoginScreen',
-        onClose: () => { setShowModal(false) }
-      })
-      setShowModal(true)
-    }
-  }
+  
 
   async function getCategory() {
     let { data, status } = await FETCH(
@@ -239,28 +212,44 @@ const HomePage = props => {
       });
   };
 
+  useEffect(()=>{
+    setAvatar(profileState.avatar)
+  })
+
   useEffect(() => {
     let loads = async () => {
+      token().then().catch(err => console.log('EFFECT ERROR', err))
       console.log('0----------------------------------------------------------------')
       await loadProfileData().then().catch(err => console.log('EFFECT ERROR 0', err))
       console.log('1----------------------------------------------------------------')
       await getCategory().then().catch(err => console.log('EFFECT ERROR 1', err))
       console.log('2----------------------------------------------------------------')
-      await getImages().then().catch(err => console.log('EFFECT ERROR 2', err))
-      console.log('3----------------------------------------------------------------')
-      updateContext()
     }
     loads()
   }, [refresh])
 
 
+  useEffect(() => {
+    const backAction = () => {
+      if (isLogoutDialogVisible) {
+        // If the dialog is already visible, just hide it
+        setIsLogoutDialogVisible(false);
+      } else {
+        // Show the exit confirmation dialog
+        setIsLogoutDialogVisible(true);
+        return true; // Prevent the default back action
+      }
+    };
+    const backHandler = BackHandler.addEventListener('hardwareBackPress', backAction);
+    return () => backHandler.remove();
+  }, [isLogoutDialogVisible]);
+
   return (
     <SafeAreaView style={styles.container} >
       <LinearGradient2 customStyle={styles.loginGradient}>
         <View style={styles.iconStackRow}>
-          <View style={styles.iconStack}>
-            <TextInput placeholder="" style={styles.textInput} />
-            <FeatherIcon name="search" style={styles.icon2} />
+          <View style={styles.iconStack}>   
+            <FeatherIcon name="" style={styles.icon2} />
           </View> 
           {showModal ? <CustomModal visible={modal.visible} message={modal.message} navigationPage={modal.navigationPage} onClose={modal.onClose} /> : ''}
           <Pressable
@@ -333,6 +322,15 @@ const HomePage = props => {
         />
         <GoogleAds />
       </ScrollView>
+      {isLogoutDialogVisible && (
+        <DialogueBox
+          isVisible={isLogoutDialogVisible}
+          handleYes={handleYesForLogout}
+          handleNo = {()=>{setIsLogoutDialogVisible(false)}}
+          textContent="Are you sure you want to Exit?"
+        />
+      )}
+     
     </SafeAreaView>
   );
 };
