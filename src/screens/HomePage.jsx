@@ -61,9 +61,6 @@ const HomePage = props => {
       navigation.navigate('LoginScreen')
     }
   }
-  useEffect(() => {
-    token().then().catch(err => console.log('EFFECT ERROR', err))
-  }, [])
 
   const [shouldShowAd, setShouldShowAd] = useState(false);
   const [isRewardedAdLoaded, setIsRewardedAdLoaded] = useState(false);
@@ -101,48 +98,7 @@ const HomePage = props => {
     setIsRewardedAdLoaded(true);
   };
 
-  const updateContext = () => {
-    dispatch({
-      type: 'USER_NAME',
-      payload: value.name
-    })
-    dispatch({
-      type: 'EMAIL',
-      payload: value.email
-    })
-    dispatch({
-      type: 'PHONE',
-      payload: value.phone
-    })
-    dispatch({
-      type: 'AVATAR',
-      payload: avatar
-    })
-    return profileState
-  }
-
-  async function getImages() {
-    let { status, data } = await FETCH(
-      'GET',
-      '/home/get-images',
-      { lang: localState.lang }
-    )
-    if (status === 200) {
-      localDispatch({
-        type: "IMAGES",
-        payload: data.data
-      })
-    } else {
-      let a = setModal({
-        visible: true,
-        message: data.message,
-        navigationPage: 'LoginScreen',
-        onClose: () => { setShowModal(false) }
-      })
-
-      setShowModal(true)
-    }
-  }
+  
 
   async function getCategory() {
     let { data, status } = await FETCH(
@@ -213,16 +169,18 @@ const HomePage = props => {
     setRefresh(!refresh)
   }
 
+  useEffect(()=>{
+    setAvatar(profileState.avatar)
+  })
+
   useEffect(() => {
     let loads = async () => {
+      token().then().catch(err => console.log('EFFECT ERROR', err))
       console.log('0----------------------------------------------------------------')
       await loadProfileData().then().catch(err => console.log('EFFECT ERROR 0', err))
       console.log('1----------------------------------------------------------------')
       await getCategory().then().catch(err => console.log('EFFECT ERROR 1', err))
       console.log('2----------------------------------------------------------------')
-      await getImages().then().catch(err => console.log('EFFECT ERROR 2', err))
-      console.log('3----------------------------------------------------------------')
-      updateContext()
     }
     loads()
   }, [refresh])

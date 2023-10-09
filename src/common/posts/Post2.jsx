@@ -197,6 +197,7 @@ const Post2 = props => {
 
   async function loadProfileData() {
     try {
+      console.log('Loading Profile in Post2')
       let { data, status } = await FETCH(
         'GET',
         '/profile/get-info',
@@ -222,19 +223,23 @@ const Post2 = props => {
           payload: data.data.image
         })
       } else {
-        let a = setModal({
-          visible: true,
-          message: 'Service Error',
-          navigationPage: 'LoginScreen',
-          onClose : ()=>{setShowModal(false)}
-        })
+        // let a = setModal({
+        //   visible: true,
+        //   message: 'Service Error',
+        //   navigationPage: 'LoginScreen',
+        //   onClose : ()=>{setShowModal(false)}
+        // })
 
-        setShowModal(true)
+        // setShowModal(true)
       }
     } catch (error) {
       console.log('Error loading profile data 0:', error);
     }
   };
+
+  useEffect(()=>{
+    setAvatar(profileState.avatar)
+  })
 
   useEffect(()=>{
     loadProfileData().then().catch(err => console.log('EFFECT ERROR 0', err))

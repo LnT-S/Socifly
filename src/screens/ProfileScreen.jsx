@@ -141,6 +141,7 @@ const ProfileScreen = props => {
 
   const loadProfileData = async () => {
     try {
+      console.log('Updating the changes')
      let {data , status} =await  FETCH(
       'GET',
       '/profile/get-info',
@@ -150,7 +151,23 @@ const ProfileScreen = props => {
       // console.log(data)
       SetValue(data.data)
       setAvatar(data.data.image)
-      updateContext()
+      // updateContext()
+      dispatch({
+        type : 'USER_NAME',
+        payload : data.data.name
+      })
+      dispatch({
+        type : 'EMAIL',
+        payload :data.data.email
+      })
+      dispatch({
+        type : 'PHONE',
+        payload : data.data.phone
+      })
+      dispatch({
+        type : 'AVATAR',
+        payload : data.data.image
+      })
      }else{
       let a = setModal({
         visible: true,
@@ -200,22 +217,6 @@ const ProfileScreen = props => {
       const data = await response.json()
       console.log('LOG : Updated Report',response.status,data)
       if(response.status === 200){
-        dispatch({
-          type : 'USER_NAME',
-          payload : value.name
-        })
-        dispatch({
-          type : 'EMAIL',
-          payload :value.email
-        })
-        dispatch({
-          type : 'PHONE',
-          payload : value.phone
-        })
-        dispatch({
-          type : 'AVATAR',
-          payload : avatar
-        })
         let a = setModal({
           visible: true,
           message: 'Profile Updated successfully',
@@ -243,7 +244,7 @@ const ProfileScreen = props => {
   useEffect(() => {
     loadProfileData().then().catch(err=>console.log('EFFECT ERROR 5',err))
     setSelectedProfileImage('')
-  },[]);
+  },[avatar]);
 
  
 
