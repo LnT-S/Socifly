@@ -77,7 +77,7 @@ const LoginScreen = props => {
           ...prev,
           visible: true,
           message: data.message || 'Invalid Login Attempt',
-          navigationPage: 'SignUpScreen',
+          navigationPage: 'LoginScreen',
           onClose: () => { setShowModal(false) }
         }))
         setShowModal(true)

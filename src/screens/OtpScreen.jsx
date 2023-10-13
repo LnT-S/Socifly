@@ -18,12 +18,13 @@ import stringsoflanguages from '../utils/ScreenStrings';
 import { useLocal } from '../context/ProfileContext';
 import { FETCH } from '../services/fetch';
 import CustomModal from '../atoms/CustomModal';
-
+import Icon from 'react-native-vector-icons/AntDesign';
 const OtpScreen = (props) => {
   const { localState, localDispatch } = useLocal()
   const [otp, setOtp] = useState('');
   const [otpError, setOtpError] = useState('');
   const [showModal, setShowModal] = useState(false)
+  const { navigation } = props;
   const [modal, setModal] = useState({
     visible: false,
     message: '',
@@ -121,6 +122,11 @@ const OtpScreen = (props) => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.rect1}>
+      <Pressable onPress={() => navigation.goBack()}>
+      <Text style={styles.headertop}>
+      <Icon name="arrowleft" style={styles.header1}/> {/* Adjust size and color as needed */}
+      </Text>
+      </Pressable>
         <View>
           <Image
             source={require('../assets/images/OTP.png')}
@@ -253,6 +259,14 @@ const styles = StyleSheet.create({
   },
   buttonV: {
     top: getResponsiveValue("10%", 0),
+  },
+  headertop:{
+    right:"40%",
+  },
+  header1: {
+    color: PRIMARY,
+    fontSize:25,
+    fontWeight: "bold",
   },
 });
 

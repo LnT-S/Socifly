@@ -281,11 +281,12 @@ const styles = StyleSheet.create({
   },
   headertop:{
     right:"40%",
-    bottom:60,
+    bottom:65,
   },
   header1: {
     color: "#ffffff",
-    fontSize:24,
+    fontSize:25,
+    fontWeight: "bold",
   },
 });
 

@@ -82,8 +82,13 @@ const ProfileScreen = props => {
      try {
        const response = await CroppedImagePicker.openPicker({
          mediaType: 'photo',
-         cropping : true,
+         cropping: true, // Enable cropping
+         cropperCircleOverlay: false, // Set to true if you want a circular crop overlay
+         freeStyleCropEnabled: true, // Enable free-style cropping
+         aspectRatio: [1, 1], // Set the aspect ratio for cropping (1:1 in this example)
          includeBase64: true,
+         multiple: false, // Set to true if you want to allow multiple selection
+         cropperToolbarTitle: 'Crop Image',
        });
       //  console.log(response)
        selectedImage.fileSize = response.size,

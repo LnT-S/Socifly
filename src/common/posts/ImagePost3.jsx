@@ -29,6 +29,7 @@ import Icon2 from "react-native-vector-icons/FontAwesome";
 import { launchImageLibrary } from 'react-native-image-picker';
 import { useLocal, useProfile } from '../../context/ProfileContext';
 import { LIKE } from '../../utils/like';
+import RewardedAds from '../../common/Ads/RewardedAds';
 
 const ImagePost3 = props => {
   const { localState, localDispatch } = useLocal()
@@ -37,10 +38,14 @@ const ImagePost3 = props => {
   const cardRef = useRef(null); // Create a ref for the card view
   const doubleTapRef = useRef(null);
   const [likedMessageVisible, setLikedMessageVisible] = useState(false);
+  const [shouldShowAd, setShouldShowAd] = useState(false);
 
 
-
+  const handleDownloadAfterAd = () => {
+    setShouldShowAd(false); //ads 
+  };
   const handleDownload = async () => {
+    setShouldShowAd(true);
     if (cardRef.current) {
       try {
         const uri = await captureRef(cardRef, {
@@ -256,7 +261,7 @@ const ImagePost3 = props => {
           </View>
 
         </View>
-
+        <RewardedAds shouldShowAd={shouldShowAd} onAdShown={handleDownloadAfterAd} />
         {downloaded && (
           <Text style={styles.downloadedText}>{stringsoflanguages.imageDownloaded}</Text>
         )}
@@ -494,7 +499,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     padding: 8,
     position: 'absolute',
-    top: '2%',
+    top: '105%',
   },
   likedText: {
     color: 'rgba(235,124,148,1)', // You can adjust the color as needed

@@ -202,11 +202,12 @@ const styles = StyleSheet.create({
   },
   headertop:{
     right:"40%",
-    bottom:100,
+    bottom:105,
   },
   header1: {
     color: "#ffffff",
-    fontSize:24,
+    fontSize:25,
+    fontWeight: "bold",
   },
   toggleType: {
     color: LINKS,

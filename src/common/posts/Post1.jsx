@@ -260,7 +260,7 @@ const Post1 = props => {
           </View>
         </View>
         {downloaded && (
-          <Text style={styles.downloadedText}>Image downloaded!</Text>
+          <Text style={styles.downloadedText}>{stringsoflanguages.imageDownloaded}</Text>
         )}
         <RewardedAds shouldShowAd={shouldShowAd} onAdShown={handleDownloadAfterAd} />
         {downloaded && (
