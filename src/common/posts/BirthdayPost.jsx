@@ -474,6 +474,7 @@ const styles = StyleSheet.create({
     paddingVertical: "2%",
     backgroundColor: "#ae54f8c9",
     borderRadius: getResponsiveValue(20, 10),
+    left:getResponsiveValue('3%', "2%"),
   },
   dateC: {
     position: "absolute",
@@ -578,6 +579,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: '60%',
   },
+
 });
 
 export default BirthdayPost;

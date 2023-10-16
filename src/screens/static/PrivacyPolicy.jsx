@@ -76,19 +76,21 @@ const styles = StyleSheet.create({
     paddingHorizontal: '2%',
   },
   text1: {
-    fontSize: getResponsiveValue(40, 30),
+    fontSize: getResponsiveValue(40, 26),
     color: BLACK,
     fontWeight: 'bold',
-    paddingLeft:'10%'
+    textAlign:'center',
   },
   text2: {
     fontSize: getResponsiveValue(20, 16),
     color: BLACK,
     fontWeight: 'bold',
+    left:5,
   },
   text3: {
     color: BLACK,
     fontSize: getResponsiveValue(18, 13),
+    left:10,
   },
   Status: {
     width: '100%',

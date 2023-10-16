@@ -11,7 +11,6 @@ import {
 } from 'react-native';
 import React, {useState, useEffect} from 'react';
 import ButtonA from '../atoms/ButtonA';
-
 import LinearGradients from '../atoms/LinearGradients';
 import global from '../styles/global';
 import Icon from 'react-native-vector-icons/Entypo';
@@ -83,8 +82,13 @@ const ProfileScreen = props => {
      try {
        const response = await CroppedImagePicker.openPicker({
          mediaType: 'photo',
-         cropping : true,
+         cropping: true, // Enable cropping
+         cropperCircleOverlay: false, // Set to true if you want a circular crop overlay
+         freeStyleCropEnabled: true, // Enable free-style cropping
+         aspectRatio: [1, 1], // Set the aspect ratio for cropping (1:1 in this example)
          includeBase64: true,
+         multiple: false, // Set to true if you want to allow multiple selection
+         cropperToolbarTitle: 'Crop Image',
        });
       //  console.log(response)
        selectedImage.fileSize = response.size,
@@ -339,7 +343,6 @@ const ProfileScreen = props => {
    
       
       </SafeAreaView>
-
     </KeyboardAvoidingView>
   );
 };

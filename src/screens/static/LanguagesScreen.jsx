@@ -1,18 +1,18 @@
 import React, { useEffect,useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import { BLACK, WHITE } from '../../styles/colors';
+import { BLACK, WHITE,PRIMARY, SECONDARY } from '../../styles/colors';
 import { getResponsiveValue } from '../../styles/responsive';
-import stringsoflanguages from '..//../utils/ScreenStrings';
+import stringsoflanguages from '../../utils/ScreenStrings';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useLocal } from '../../context/ProfileContext';
+import RadialGradient from 'react-native-radial-gradient';
 
-
-const ChangeLanguage = ({ navigation }) => {
+const LanguagesScreen = ({ navigation }) => {
   const{localState, localDispatch} = useLocal()
   const lang = [
-    { shortform: 'english', longform: 'English' },
-    { shortform: 'hindi', longform: 'हिन्दी' },
-    { shortform: 'marathi', longform: 'मराठी' },
+    { shortform: 'english', longform: 'ENGLISH' },
+    { shortform: 'hindi', longform: 'HINDI' },
+    { shortform: 'marathi', longform: 'MARATHI' },
   ];
 
   
@@ -49,8 +49,15 @@ const ChangeLanguage = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
+    <RadialGradient
+      colors={[PRIMARY, SECONDARY]}
+      style={styles.container}
+      stops={[0.2, 1]} // Adjust stops as needed
+      radius={350} // Adjust radius as needed
+    >
     <View style={styles.card}>
-      <Text style={styles.header}>{stringsoflanguages.changeLanguage}</Text>
+       
+      <Text style={styles.header}>Select Your Language</Text>
       <View style={styles.vertical} />
 
       {lang.map((item, key) => (
@@ -63,6 +70,7 @@ const ChangeLanguage = ({ navigation }) => {
         </TouchableOpacity>
       ))}
     </View>
+    </RadialGradient>
   </View>
   );
 };
@@ -72,6 +80,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    width: '100%',
   },
   card: {
     backgroundColor: WHITE,
@@ -94,11 +103,13 @@ const styles = StyleSheet.create({
     fontSize: getResponsiveValue(30, 20),
     marginBottom: getResponsiveValue('10%', '10%'),
     color: BLACK,
+    fontWeight: "bold",
   },
   languageOption: {
     fontSize: getResponsiveValue(25, 16),
     marginVertical: getResponsiveValue('5%', '5%'),
     color: 'grey',
+    fontWeight: "bold",
   },
   vertical: {
     width: '100%',
@@ -107,4 +118,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ChangeLanguage;
+export default LanguagesScreen;

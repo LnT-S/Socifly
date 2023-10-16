@@ -23,8 +23,9 @@ import stringsoflanguages from '../utils/ScreenStrings';
 import CustomModal from '../atoms/CustomModal';
 import DialogueBox from '../common/DialogueBox';
 import DateTimePicker from '@react-native-community/datetimepicker'; 
-
-
+import {useNavigation} from '@react-navigation/native';
+import Icon from 'react-native-vector-icons/AntDesign';
+ 
 const SignUpScreen = props => {
   const [value, setValue] = useState({
     name: '',
@@ -34,13 +35,13 @@ const SignUpScreen = props => {
     confirm_password: '',
     bday: '', 
   });
-
   const [username, setUsername] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = useState(false);
   const [showPassword1, setShowPassword1] = useState(false);
   const [showModal, setShowModal] = useState(false)
+  const navigation = useNavigation();
   const [modal, setModal] = useState({
     visible : false,
     message : '',
@@ -75,7 +76,6 @@ const SignUpScreen = props => {
     return null;
   };
   
-
   const scrollViewRef = useRef(null);
 
   const handleSignUp = async () => {
@@ -108,6 +108,7 @@ const SignUpScreen = props => {
         })
         console.log('hihi',modal)
         setShowModal(true)
+        setTimeout(()=>{setShowModal(false);navigation.navigate('LoginScreen');},2000)
       }else{
         let a = setModal({
           visible : true,
@@ -135,6 +136,11 @@ const SignUpScreen = props => {
       style={{ flex: 1 }}>
       <SafeAreaView style={styles.container}>
         <LinearGradients customStyle={styles.loginGradient}>
+        <Pressable onPress={() => navigation.goBack()}>
+        <Text style={styles.headertop}>
+        <Icon name="arrowleft" style={styles.header1}/> {/* Adjust size and color as needed */}
+        </Text>
+        </Pressable>
           <Text style={global.title}>{stringsoflanguages.signUp}</Text>
         </LinearGradients>
 
@@ -272,7 +278,16 @@ const styles = StyleSheet.create({
     position: 'absolute',
     right: 15,
     top: "68%", // Adjust the top position as needed 
-  }
+  },
+  headertop:{
+    right:"40%",
+    bottom:65,
+  },
+  header1: {
+    color: "#ffffff",
+    fontSize:25,
+    fontWeight: "bold",
+  },
 });
 
 export default SignUpScreen;

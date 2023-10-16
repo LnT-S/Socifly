@@ -29,6 +29,7 @@ import Icon2 from "react-native-vector-icons/FontAwesome";
 import { launchImageLibrary } from 'react-native-image-picker';
 import { useLocal, useProfile } from '../../context/ProfileContext';
 import { LIKE } from '../../utils/like';
+import RewardedAds from '../../common/Ads/RewardedAds';
 
 const ImagePost3 = props => {
   const { localState, localDispatch } = useLocal()
@@ -37,10 +38,14 @@ const ImagePost3 = props => {
   const cardRef = useRef(null); // Create a ref for the card view
   const doubleTapRef = useRef(null);
   const [likedMessageVisible, setLikedMessageVisible] = useState(false);
+  const [shouldShowAd, setShouldShowAd] = useState(false);
 
 
-
+  const handleDownloadAfterAd = () => {
+    setShouldShowAd(false); //ads 
+  };
   const handleDownload = async () => {
+    setShouldShowAd(true);
     if (cardRef.current) {
       try {
         const uri = await captureRef(cardRef, {
@@ -188,7 +193,7 @@ const ImagePost3 = props => {
           numberOfTaps={2} // Detect double tap
         >
           <View ref={cardRef} style={styles.cardContainer2}>
-            <Image style={styles.backGround} resizeMode="cover" source={require('../../assets/images/bg3.png')} />
+            <Image style={styles.backGround} resizeMode="cover" source={require('../../assets/images/bg_3.jpg')} />
             <View style={styles.cardContainer}>
               <Image
                 source={
@@ -207,7 +212,7 @@ const ImagePost3 = props => {
 
             <View style={styles.profileContainer}>
               <View style={styles.profileImageBg} />
-              <Image source={profileState.avatar?{uri :profileState.server +  profileState.avatar}:defaultProfileImage} style={styles.profileImage} />
+              <Image source={profileState.avatar ? { uri: profileState.server + profileState.avatar } : defaultProfileImage} style={styles.profileImage} />
               <View style={styles.infoContainer}>
                 <View style={styles.dateC}>
                   <Text style={styles.date}>{formattedDate}</Text>
@@ -217,13 +222,13 @@ const ImagePost3 = props => {
                 <View style={styles.infoC}>
                   <Icon2 name="phone" style={styles.iconPhone} />
                   <Text style={[styles.info, textColorStyle2]}>
-                  {profileState.phone}
+                    {profileState.phone}
                   </Text>
                 </View>
                 <View style={styles.infoC}>
                   <EntypoIcon name="email" style={styles.iconPhone} />
                   <Text style={[styles.info, textColorStyle2]}>
-                  {profileState.email}
+                    {profileState.email}
                   </Text>
                 </View>
               </View>
@@ -256,7 +261,7 @@ const ImagePost3 = props => {
           </View>
 
         </View>
-
+        <RewardedAds shouldShowAd={shouldShowAd} onAdShown={handleDownloadAfterAd} />
         {downloaded && (
           <Text style={styles.downloadedText}>{stringsoflanguages.imageDownloaded}</Text>
         )}
@@ -409,12 +414,13 @@ const styles = StyleSheet.create({
     paddingVertical: "2%",
     backgroundColor: "#4bbc1bc8",
     borderRadius: getResponsiveValue(20, 10),
+    left:getResponsiveValue('3%', "2%"),
   },
   dateC: {
     position: "absolute",
     alignItems: "center",
-    bottom: getResponsiveValue('100%', "90%"),
-    left: getResponsiveValue('100%', "90%"),
+    bottom: getResponsiveValue('100%', "95%"),
+    left: getResponsiveValue('100%', "100%"),
   },
   name: {
     fontSize: getResponsiveValue(20, 13),
@@ -493,7 +499,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     padding: 8,
     position: 'absolute',
-    top: '2%',
+    top: '105%',
   },
   likedText: {
     color: 'rgba(235,124,148,1)', // You can adjust the color as needed
@@ -516,6 +522,7 @@ const styles = StyleSheet.create({
     width: "100%",
     left: "3%",
   },
+
 });
 
 export default ImagePost3;

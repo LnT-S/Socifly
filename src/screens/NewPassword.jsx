@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View, Text, Pressable, } from 'react-native';
 import TextinputB from '../atoms/TextinputB';
 import ButtonA from '../atoms/ButtonA';
 import { getResponsiveValue } from '../styles/responsive';
@@ -10,10 +10,11 @@ import { validateForm } from '../utils/validation/validateForm';
 import { useLocal } from '../context/ProfileContext';
 import { FETCH } from '../services/fetch';
 import CustomModal from '../atoms/CustomModal';
-
+import Icon from 'react-native-vector-icons/AntDesign';
 
 const NewPassword = (props) => {
   const { localState, localDispatch } = useLocal()
+  const { navigation } = props;
   const [value, setValue] = useState({
     password: '',
     confirm_password: '',
@@ -23,7 +24,7 @@ const NewPassword = (props) => {
     visible: false,
     message: '',
     navigationPage: '',
-    onClose: ()=>null
+    onClose: null
   })
   const [errors, setErrors] = useState({});
   const handleChange = (field, text) => {
@@ -70,6 +71,12 @@ const NewPassword = (props) => {
 
   return (
     <View style={styles.container}>
+    <Pressable onPress={() => navigation.goBack()}>
+      <Text style={styles.headertop}>
+      <Icon name="arrowleft" style={styles.header1}/> {/* Adjust size and color as needed */}
+      </Text>
+      </Pressable>
+
       <View style={styles.rect1}>
         <Text style={styles.text1}>{stringsoflanguages.enterNewPassword}</Text>
       </View>
@@ -101,6 +108,7 @@ const NewPassword = (props) => {
           />
         </View>
       </View>
+      
     </View>
   );
 };
@@ -112,6 +120,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  
+
   rect1: {
     alignItems: 'center',
   },
@@ -121,6 +131,15 @@ const styles = StyleSheet.create({
   },
   rect2: {
     top: getResponsiveValue('7%', '6%'),
+  },
+  headertop:{
+    right:"40%",
+    bottom:160,
+  },
+  header1: {
+    color: PRIMARY,
+    fontSize:25,
+    fontWeight: "bold",
   },
 });
 

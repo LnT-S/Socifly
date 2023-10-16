@@ -93,10 +93,9 @@ const RewardedAds = (props) => {
           <TouchableOpacity style={styles.nextadd} onPress={() => {
             rewarded.show().catch((error) => {
               console.error('Failed to show rewarded ad:', error);
+           
             });
           }}>
-            
-             
           </TouchableOpacity>
           
             </View>

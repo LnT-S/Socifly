@@ -5,6 +5,7 @@ import {
   Text,
   View,
   KeyboardAvoidingView,
+  RefreshControl,
 } from 'react-native';
 import Swiper from 'react-native-swiper';
 import React, { useState, useEffect } from 'react';
@@ -33,6 +34,8 @@ const Edit = props => {
   const imageSource = localState.editImage
   const [userName, setUserName] = useState('User Name');
   const [inputValue, setInputValue] = useState('');
+  const [refresh , setRefresh] = useState(true);
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
   const handleInputChange = text => {
     setInputValue(text);
@@ -41,6 +44,7 @@ const Edit = props => {
   const handleChangeClick = () => {
     if (inputValue.trim() !== '') {
       setUserName(inputValue);
+      console.log('New userName:', inputValue);
     }
   };
   const handleNextPage = () => {
@@ -61,6 +65,31 @@ const Edit = props => {
   const handleColorChange = (color) => {
     setCurrentColor(color);
   };
+  
+  function REFRESH(){
+    setRefresh(!refresh)
+    return new Promise((resolve, reject) => {
+      // Your data fetching or refreshing logic here
+      // For example, you can simulate a delay using setTimeout
+      setTimeout(() => {
+        // Resolve the promise when the operation is complete
+        resolve();
+      }, 1000); // Adjust the timeout duration as needed
+    });
+  }
+  const handleRefresh = () => {
+    setIsRefreshing(true); // Set refreshing state to true
+    // Perform your data fetching or refreshing logic here
+    // For example, you can call your `REFRESH` function
+    REFRESH()
+      .then(() => {
+        setIsRefreshing(false); // Set refreshing state to false when done
+      })
+      .catch((error) => {
+        console.error('Error refreshing data:', error);
+        setIsRefreshing(false); // Set refreshing state to false in case of an error
+      });
+  };
 
 
   return (
@@ -72,7 +101,14 @@ const Edit = props => {
           style={styles.icon2}></Icon>
         <Text style={styles.statusT}> {stringsoflanguages.edit}</Text>
       </View>
-      <ScrollView style={styles.scroll}>
+      <ScrollView style={styles.scroll} refreshControl={ // Add RefreshControl here
+        <RefreshControl
+          refreshing={isRefreshing}
+          onRefresh={handleRefresh}
+          colors={['#ff0000', '#00ff00', '#0000ff']} // Customize the loading spinner colors
+          tintColor={'#ff0000'} // Customize the loading spinner color
+        />
+      }>
         {/* <View style={styles.aContainer}> */}
         <Swiper
           style={styles.slider}

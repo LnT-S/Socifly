@@ -128,7 +128,7 @@ const Post2 = props => {
   };
   useEffect(() => {
     // You can add animation logic here for the like button
-    console.log('LOG : CAllING POST ARRAY',props.id)
+    console.log('LOG : CAllING POST ARRAY', props.id)
   }, []);
 
   const onShare = async () => {
@@ -154,7 +154,7 @@ const Post2 = props => {
     }
   };
 
-  const handleDoubleTap = async() => {
+  const handleDoubleTap = async () => {
     // Trigger the like animation
     Animated.sequence([
       Animated.timing(likeScale, {
@@ -184,7 +184,7 @@ const Post2 = props => {
     await LIKE(props.id)
   };
 
- 
+
 
   const currentDate = new Date();
   const day = currentDate.getDate().toString().padStart(2, '0');
@@ -243,8 +243,8 @@ const Post2 = props => {
 
   useEffect(()=>{
     loadProfileData().then().catch(err => console.log('EFFECT ERROR 0', err))
-    console.log('INFO : PROFILE STATE',profileState)
-  },[])
+    console.log('INFO : PROFILE STATE', profileState)
+  }, [])
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
@@ -254,13 +254,13 @@ const Post2 = props => {
           waitFor={cardRef} // Wait for single tap to finish before detecting double tap
           onHandlerStateChange={({ nativeEvent }) => {
             if (nativeEvent.state === State.ACTIVE) {
-              handleDoubleTap(); 
+              handleDoubleTap();
             }
           }}
           numberOfTaps={2} // Detect double tap
         >
           <LinearGradient ref={cardRef} style={styles.cardContainer2} colors={["#6d76b0", "#0aaabb"]}>
-            <Image style={styles.backGround} resizeMode="cover" source={require('../../assets/images/bg2.jpeg')} />
+            <Image style={styles.backGround} resizeMode="cover" source={require('../../assets/images/bg_2.jpg')} />
             <View style={styles.cardContainer}>
               <Image
                 source={{ uri: props.source }}
@@ -269,7 +269,7 @@ const Post2 = props => {
               />
             </View>
             <View style={styles.profileContainer}>
-              <Image source={(avatar)?{uri :profileState.server +  (avatar)}:defaultProfileImage} style={styles.profileImage} />
+              <Image source={(avatar) ? { uri: profileState.server + (avatar) } : defaultProfileImage} style={styles.profileImage} />
               <View style={styles.infoContainer}>
                 <View style={styles.dateC}>
                   <Text style={styles.date}>{formattedDate}</Text>
@@ -289,6 +289,8 @@ const Post2 = props => {
                   </Text>
                 </View>
               </View>
+            </View>
+            <View >
             </View>
           </LinearGradient>
         </TapGestureHandler>
@@ -377,7 +379,7 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     position: 'relative',
-    bottom: '4%',
+    bottom: '3%',
 
   },
   profileContainer: {
@@ -417,12 +419,15 @@ const styles = StyleSheet.create({
     paddingVertical: "2%",
     backgroundColor: "#731bbcca",
     borderRadius: getResponsiveValue(20, 10),
+    left:getResponsiveValue('3%', "3%"),
+   
   },
   dateC: {
     position: "absolute",
     alignItems: "center",
-    bottom: getResponsiveValue('100%', "90%"),
-    left: getResponsiveValue('100%', "90%"),
+    bottom: getResponsiveValue('100%', "95%"),
+    left: getResponsiveValue('100%', "100%"),
+   
   },
   name: {
     fontSize: getResponsiveValue(20, 13),
@@ -465,6 +470,7 @@ const styles = StyleSheet.create({
     textShadowColor: '#000000',
     textShadowOffset: { width: 1, height: 1 },
     textShadowRadius: getResponsiveValue(2, 1),
+    // marginLeft: getResponsiveValue(30, 20),
   },
 
   toolbar: {
@@ -505,8 +511,6 @@ const styles = StyleSheet.create({
     padding: 8,
     position: "absolute",
     top: "105%",
-
-
   },
 
   likedText: {
@@ -520,6 +524,8 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: '60%',
   },
+
+
 });
 
 export default Post2;

@@ -70,9 +70,9 @@ const Settings = props => {
   const handleNextPage3 = () => {
     props.navigation.navigate('PrivacyPolicy');
   };
-  const handleNextPage4 = () => {
-    props.navigation.navigate('TermsCondition');
-  };
+  // const handleNextPage4 = () => {
+  //   props.navigation.navigate('TermsCondition');
+  // };
   const handleNextPage5 = () => {
     props.navigation.navigate('ChangeLanguage', { returnTo: 'Settings' });
     ;
@@ -189,7 +189,7 @@ const Settings = props => {
               <Text style={styles.text4}>{stringsoflanguages.privacyPolicy}</Text>
             </Pressable>
           </View>
-          <View style={styles.vertical}></View>
+          <View><Text style={styles.text6}>|</Text></View>
           <View style={styles.footer}>
             <Pressable
               style={({ pressed }) => [
@@ -197,8 +197,8 @@ const Settings = props => {
                 styles.iconWrapper,
                 styles.row,
               ]}
-              onPress={handleNextPage4}>
-              <Text style={styles.text4}>{stringsoflanguages.termsCondition}</Text>
+              >
+              <Text style={styles.text5}>{stringsoflanguages.termsCondition}</Text>
             </Pressable>
           </View>
         </View>
@@ -300,7 +300,7 @@ const styles = StyleSheet.create({
     backgroundColor: WHITE,
     height: '60%',
     borderRadius: 10,
-    marginBottom: '10%',
+    marginBottom: '5%',
     shadowColor: BLACK,
     shadowOffset: {
       width: 0,
@@ -329,28 +329,20 @@ const styles = StyleSheet.create({
     height: '0.5%',
     backgroundColor: 'grey',
   },
-  rect3: {
-    // position: 'relative',
-    top: getResponsiveValue('2%', '7%'),
-    // flexDirection:"column-reverse",
-    bottom: 0,
-    alignItems: 'center',
-    width: '100%',
-    flexDirection: 'row',
-    justifyContent: 'space-evenly',
+  
+  text4:{
+    bottom:"8%",
+    right:80,
   },
-  text4: {
-    color: 'grey',
-    fontSize: getResponsiveValue(12, 10),
+  text5:{
+    bottom:"40%",
+    left:90,
   },
-  footer: {
-    bottom: '0',
-  },
-  vertical: {
-    width: '0.4%',
-    height: '100%',
-    backgroundColor: 'grey',
-  },
+  text6:{
+    bottom:30,
+    textAlign:'center'
+  }
+ 
 });
 
 export default Settings;

@@ -153,6 +153,7 @@ const handleColorChange2 = (color) => {
             isEditMode={true}
             textColor={currentColor}
             textColor2={currentColor2}
+            
           />
            <ImagePost
             name={name}

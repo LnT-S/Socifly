@@ -178,7 +178,6 @@ const AboutUs = props => {
               </View>
             </View>
           </View>
-          <View></View>
         </View>
       </ScrollView>
     </SafeAreaView>
