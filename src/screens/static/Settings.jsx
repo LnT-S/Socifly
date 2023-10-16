@@ -7,6 +7,7 @@ import {
   TextInput,
   Image,
   Animated,
+  BackHandler,
 } from 'react-native';
 import defaultProfileImage from '../../assets/images/Profile.png';
 import { BLACK, WHITE } from '../../styles/colors';
@@ -21,6 +22,7 @@ import FeatherIcon from 'react-native-vector-icons/Feather';
 import DialogueBox from '../../common/DialogueBox';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useLocal , useProfile } from '../../context/ProfileContext';
+import { useEffect } from 'react';
 
 const Settings = props => {
   const {profileState , dispatch } = useProfile()
@@ -80,6 +82,11 @@ const Settings = props => {
   const handleNextPage = () => {
     navigation.goBack();
   };
+
+  useEffect(() => {
+    const backHandler = BackHandler.addEventListener('hardwareBackPress', ()=>{navigation.navigate('HomePage'); return true});
+    return () => backHandler.remove();
+  }, []);
 
   return (
     <SafeAreaView style={styles.container}>

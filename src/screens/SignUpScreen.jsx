@@ -9,6 +9,7 @@ import {
   Dimensions,
   KeyboardAvoidingView,
   Platform,
+  BackHandler,
   
 } from 'react-native';
 import ButtonA from '../atoms/ButtonA';
@@ -124,6 +125,10 @@ const SignUpScreen = props => {
       console.error('Sign up error:', error);
     }
   };
+  useEffect(() => {
+    const backHandler = BackHandler.addEventListener('hardwareBackPress', ()=>{navigation.goBack(); return true});
+    return () => backHandler.remove();
+  }, []);
 
   // ...
 
