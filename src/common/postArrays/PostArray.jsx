@@ -57,9 +57,15 @@ const PostArray = ({ navigation }) => {
     <View style={styles.postArrayContainer}>
       {posts.map((post, i) => {
         if (i % 4 === 0 && i !== 0) {
-          return (<GoogleAds />)
+          return (<GoogleAds key={i}/>)
         }
-        return (<Post2 key={post._id} source={profileState.server + post.path} navigation={navigation} id={post._id} />)
+        else { 
+          if(post?.category?.type==='Birthday' || post?.category?.type==='birthday'){
+            return (<BirthdayPost key={post._id} source={profileState.server + post.path} navigation={navigation} id={post._id} />)
+          }else{
+            return (<Post2 key={post._id} source={profileState.server + post.path} navigation={navigation} id={post._id} />)
+          }
+        }
       })}
     </View>
   );

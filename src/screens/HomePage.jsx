@@ -72,6 +72,7 @@ const HomePage = props => {
       console.log('LOG : Token Found')
     } else {
       console.log('LOG : Token not found')
+      navigation.goBack()
       navigation.navigate('LoginScreen')
     }
   }
@@ -233,7 +234,7 @@ const HomePage = props => {
               }, 1000); // Adjust the timeout duration as needed
             }}
           >
-            <RewardedAds shouldShowAd={shouldShowAd} onAdLoaded={handleRewardedAdLoaded} />
+         { shouldShowAd && <RewardedAds shouldShowAd={shouldShowAd} onAdLoaded={handleRewardedAdLoaded} />}
             <View style={styles.createRow}>
               {/* <Pressable  style={styles.createRow}> */}
               <Text style={styles.create}>{stringsoflanguages.new}</Text>
