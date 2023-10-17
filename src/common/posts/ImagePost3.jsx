@@ -499,7 +499,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     padding: 8,
     position: 'absolute',
-    top: '105%',
+    top: '48%',
   },
   likedText: {
     color: 'rgba(235,124,148,1)', // You can adjust the color as needed

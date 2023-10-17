@@ -104,6 +104,9 @@ const HomePage = props => {
     // Logic to set shouldShowAd to true
     setShouldShowAd(true);
   };
+  const handleRewardedAdLoaded = () => {
+    setIsRewardedAdLoaded(true);
+  };
 
   useEffect(() => {
     const nextBannerIndex = (currentBannerIndex + 1) % bannerData.length;
@@ -115,12 +118,6 @@ const HomePage = props => {
     }, 3000); // Adjust the timeout duration (milliseconds) as needed for automatic scrolling
     return () => clearTimeout(scrollTimeout);
   }, [currentBannerIndex]);
-
-  const handleRewardedAdLoaded = () => {
-    setIsRewardedAdLoaded(true);
-  };
-
-  
 
   async function getCategory() {
     let { data, status } = await FETCH(
@@ -261,7 +258,7 @@ const HomePage = props => {
               }, 1000); // Adjust the timeout duration as needed
             }}
           >
-          {setShouldShowAd && <RewardedAds shouldShowAd={shouldShowAd} onAdLoaded={handleRewardedAdLoaded} />}
+          {shouldShowAd && (<RewardedAds shouldShowAd={shouldShowAd} onAdLoaded={handleRewardedAdLoaded} />)}
             <View style={styles.createRow}>
               {/* <Pressable  style={styles.createRow}> */}
               <Text style={styles.create}>{stringsoflanguages.new}</Text>
