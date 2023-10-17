@@ -18,6 +18,8 @@ import { openCropper } from 'react-native-image-crop-picker';
 import ButtonB from '../../atoms/ButtonB';
 import stringsoflanguages from '../../utils/ScreenStrings';
 import CustomColorPicker from '../../utils/CustomColorPicker';
+import { useLocal } from '../../context/ProfileContext';
+
 
 const handleColorChangeComplete = (color) => {
   // Handle color change completion here
@@ -25,9 +27,10 @@ const handleColorChangeComplete = (color) => {
 
 
 const BirthdayEdit = props => {
-  const imageSource = require('../../assets/pics/Birthday.jpg');
+  const {localState, localDispatch} = useLocal()
+  const imageSource = localState.editImage
   const [name, setName] = useState(stringsoflanguages.name);
-  const [userName, setUserName] = useState('User Name');
+  const [userName, setUserName] = useState('');
   const [tempName, setTempName] = useState(''); // Temporary name storage
   const [tempUserName, setTempUserName] = useState(''); // Temporary user name storage
   const [selectedImage, setSelectedImage] = useState(null);
@@ -115,13 +118,13 @@ const handleColorChange2 = (color) => {
         <BirthdayPost
           name={name}
           userName={userName}
-          source={require('../../assets/pics/Birthday.jpg')}
+          source={imageSource}
           props={props}
           isEditMode="true"
           selectedImage={selectedImage}
           setSelectedImage={setSelectedImage}
           textColor={currentColor}
-            textColor2={currentColor2}
+          textColor2={currentColor2}
         />
      
         <View style={styles.boxContainer}>

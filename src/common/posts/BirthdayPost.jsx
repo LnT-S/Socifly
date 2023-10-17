@@ -29,10 +29,12 @@ import {
 import RewardedAds from '../../common/Ads/RewardedAds';
 import { launchImageLibrary } from 'react-native-image-picker';
 import { get } from 'react-native/Libraries/TurboModule/TurboModuleRegistry';
-import { useLocal } from '../../context/ProfileContext';
+import { useLocal, useProfile } from '../../context/ProfileContext';
+import { FETCH } from '../../services/fetch';
 
 const BirthdayPost = props => {
   const { localState, localDispatch } = useLocal()
+  const { profileState, dispatch } = useProfile()
   const imageSource = localState.imageSource
   const [downloaded, setDownloaded] = useState(false);
   const cardRef = useRef(null); // Create a ref for the card view
@@ -40,6 +42,12 @@ const BirthdayPost = props => {
   const [likedMessageVisible, setLikedMessageVisible] = useState(false);
   const [shouldShowAd, setShouldShowAd] = useState(false);
   const [downloadClicked, setDownloadClicked] = useState(false);
+  const [avatar, setAvatar] = useState(profileState.avatar || '')
+  const [value, SetValue] = useState({
+    name: profileState.name || '',
+    email: profileState.email || '',
+    phone: profileState.phone || null,
+  })
   const handleDownload = async () => {
     setDownloadClicked(true);
     if (cardRef.current) {
@@ -75,7 +83,11 @@ const BirthdayPost = props => {
   };
 
   const handleNextPage = () => {
-    console.log('Pressing posts navigation');
+    console.log('Pressing Birth Day posts navigation');
+    localDispatch({
+      type: "EDITIMAGEURI",
+      payload: props.source
+    })
     props.navigation.navigate('BirthdayEdit');
   };
 
@@ -178,6 +190,58 @@ const BirthdayPost = props => {
   const textColorStyle = { color: props.textColor || WHITE };
   const textColorStyle2 = { color: props.textColor2 || WHITE };
 
+  async function loadProfileData() {
+    try {
+      console.log('Loading Profile in Birthday Post')
+      let { data, status } = await FETCH(
+        'GET',
+        '/profile/get-info',
+      )
+      if (status === 200) {
+        console.log(data)
+        SetValue(prev => ({ ...prev, ...data.data }))
+        setAvatar(data.data.image)
+        dispatch({
+          type: 'USER_NAME',
+          payload: data.data.name
+        })
+        dispatch({
+          type: 'EMAIL',
+          payload: data.data.email
+        })
+        dispatch({
+          type: 'PHONE',
+          payload: data.data.phone
+        })
+        dispatch({
+          type: 'AVATAR',
+          payload: data.data.image
+        })
+      } else {
+        // let a = setModal({
+        //   visible: true,
+        //   message: 'Service Error',
+        //   navigationPage: 'LoginScreen',
+        //   onClose : ()=>{setShowModal(false)}
+        // })
+
+        // setShowModal(true)
+      }
+    } catch (error) {
+      console.log('Error loading profile data 0:', error);
+    }
+  };
+
+  useEffect(()=>{
+    setAvatar(profileState.avatar)
+  })
+
+  useEffect(()=>{
+    loadProfileData().then().catch(err => console.log('EFFECT ERROR 6', err))
+    console.log('INFO : PROFILE STATE',profileState)
+  },[])
+
+
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <SafeAreaView style={styles.container}>
@@ -207,7 +271,7 @@ const BirthdayPost = props => {
                 source={
                   props.selectedImage
                     ? { uri: props.selectedImage.uri }
-                    : { uri: imageSource }
+                    : defaultProfileImage
                 }
                 style={styles.profileImage2}
               />
@@ -220,24 +284,24 @@ const BirthdayPost = props => {
 
             <View style={styles.profileContainer}>
               <View style={styles.profileImageBg} />
-              <Image source={defaultProfileImage} style={styles.profileImage} />
+              <Image source={(avatar)?{uri :profileState.server +  (avatar)}:defaultProfileImage} style={styles.profileImage} />
               <View style={styles.infoContainer}>
                 <View style={styles.dateC}>
                   <Text style={styles.date}>{formattedDate}</Text>
                 </View>
 
-                <Text style={[styles.name, textColorStyle2]}>{props.userName}</Text>
+                <Text style={[styles.name, textColorStyle2]}>{props.userName ||profileState.name || value.name}</Text>
                 <View style={styles.horizontal} />
                 <View style={styles.infoC}>
                   <Icon2 name="phone" style={styles.iconPhone} />
                   <Text style={[styles.info, textColorStyle2]}>
-                    +91 9405789152
+                  {profileState.phone || value.phone}
                   </Text>
                 </View>
                 <View style={styles.infoC}>
                   <EntypoIcon name="email" style={styles.iconPhone} />
                   <Text style={[styles.info, textColorStyle2]}>
-                    user123email@email.com
+                  {profileState.email || value.email}
                   </Text>
                 </View>
               </View>
