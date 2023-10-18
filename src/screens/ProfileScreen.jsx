@@ -8,6 +8,7 @@ import {
   Image,
   KeyboardAvoidingView,
   Platform,
+  BackHandler,
 } from 'react-native';
 import React, {useState, useEffect} from 'react';
 import ButtonA from '../atoms/ButtonA';
@@ -31,12 +32,13 @@ import { WHITE } from '../styles/colors';
 import { FETCH, MULTIPART_FETCH } from '../services/fetch';
 import CustomModal from '../atoms/CustomModal';
 import { useLocal } from '../context/ProfileContext';
-
+import {useNavigation} from '@react-navigation/native';
 
 const ProfileScreen = props => {
   const {localState, localDispatch} = useLocal()
   const [showModal, setShowModal] = useState(false)
   const [imagePickerResponse, setPickedImage] = useState()
+  const navigation = useNavigation();
   const [modal, setModal] = useState({
     visible: false,
     message: '',
@@ -250,7 +252,11 @@ const ProfileScreen = props => {
     setSelectedProfileImage('')
   },[avatar]);
 
- 
+  useEffect(() => {
+    const backHandler = BackHandler.addEventListener('hardwareBackPress', ()=>{navigation.goBack(); return true});
+    return () => backHandler.remove();
+  }, []);
+
 
   return (
     <KeyboardAvoidingView

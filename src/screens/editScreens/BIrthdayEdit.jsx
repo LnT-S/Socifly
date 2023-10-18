@@ -5,6 +5,7 @@ import {
   Text,
   View,
   KeyboardAvoidingView,
+  BackHandler,
 } from 'react-native';
 // import Swiper from 'react-native-swiper';
 import React, {useState, useEffect} from 'react';
@@ -19,7 +20,7 @@ import ButtonB from '../../atoms/ButtonB';
 import stringsoflanguages from '../../utils/ScreenStrings';
 import CustomColorPicker from '../../utils/CustomColorPicker';
 import { useLocal } from '../../context/ProfileContext';
-
+import {useNavigation} from '@react-navigation/native';
 
 const handleColorChangeComplete = (color) => {
   // Handle color change completion here
@@ -34,6 +35,8 @@ const BirthdayEdit = props => {
   const [tempName, setTempName] = useState(''); // Temporary name storage
   const [tempUserName, setTempUserName] = useState(''); // Temporary user name storage
   const [selectedImage, setSelectedImage] = useState(null);
+  const [showModal, setShowModal] = useState(false)
+  const navigation = useNavigation();
   const selectImage = () => {
     const options = {
       mediaType: 'photo',
@@ -110,6 +113,10 @@ const handleColorChange2 = (color) => {
     }
   };
 
+  useEffect(() => {
+    const backHandler = BackHandler.addEventListener('hardwareBackPress', ()=>{navigation.goBack(); return true});
+    return () => backHandler.remove();
+  }, []);
 
   return (
     <SafeAreaView style={styles.container}>

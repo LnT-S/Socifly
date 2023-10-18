@@ -1,4 +1,4 @@
-import { StyleSheet, View, Text, Pressable, ScrollView } from 'react-native';
+import { StyleSheet, View, Text, Pressable, ScrollView , BackHandler,} from 'react-native';
 import React, { useState, useEffect } from 'react';
 import LinearGradient2 from "../atoms/LinearGradient2";
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -9,7 +9,7 @@ import MaterialIconsIcon from "react-native-vector-icons/MaterialIcons";
 // import Icon from "react-native-vector-icons/MaterialIcons";
 import ImagePost from '../common/posts/ImagePost';
 import { BLACK, WHITE } from '../styles/colors';
-
+import {useNavigation} from '@react-navigation/native';
 import { getResponsiveValue } from '../styles/responsive';
 import EditPostArray from '../common/postArrays/EditPostArray';
 import Icon from "react-native-vector-icons/Entypo";
@@ -24,7 +24,11 @@ const CreatePage = (props) => {
     props.navigation.navigate('Settings');
 
   };
-
+  const navigation = useNavigation();
+  useEffect(() => {
+    const backHandler = BackHandler.addEventListener('hardwareBackPress', ()=>{navigation.goBack(); return true});
+    return () => backHandler.remove();
+  }, []);
 
   const [userName, setUserName] = useState("User Name");
   const [inputValue, setInputValue] = useState("");
