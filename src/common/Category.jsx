@@ -1,4 +1,4 @@
-import { StyleSheet, View, Text, Dimensions } from 'react-native';
+import { StyleSheet, View, Text, Dimensions,ScrollView, } from 'react-native';
 import React, { useEffect, useState } from 'react';
 
 import CategoryButtons from '../atoms/CategoryButtons';
@@ -9,6 +9,7 @@ import stringsoflanguages from '../utils/ScreenStrings';
 import { FETCH } from '../services/fetch';
 import { useLocal } from '../context/ProfileContext';
 import CustomModal from '../atoms/CustomModal';
+
 
 const Category = (props) => {
 
@@ -28,12 +29,14 @@ const Category = (props) => {
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.container1} >
-        {showModal ? <CustomModal visible={modal.visible} message={modal.message} navigationPage={modal.navigationPage} onClose={modal.onClose} /> : ''}
-                <View style={styles.Container2}>
-                {category.map((el,i)=>{
-                    return (<CategoryButtons text={el.type} key={el._id}/>)
-                })}
-                </View>
+                <ScrollView>
+                    {showModal ? <CustomModal visible={modal.visible} message={modal.message} navigationPage={modal.navigationPage} onClose={modal.onClose} /> : ''}
+                    <View style={styles.Container2}>
+                        {category.map((el, i) => {
+                            return (<CategoryButtons text={el.type} key={el._id} />)
+                        })}
+                    </View>
+                </ScrollView>
             </View>
         </SafeAreaView>
     );

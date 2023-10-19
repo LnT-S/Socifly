@@ -276,8 +276,9 @@ const BirthdayPost = props => {
                 style={styles.profileImage2}
               />
               <Image
-                source={require('../../assets/images/name2.png')}
+                source={require('../../assets/images/name.png')}
                 style={styles.nameB}
+                resizeMode="contain"
               />
               <Text style={[styles.nameC, textColorStyle]}>{props.name}</Text>
             </View>
@@ -408,6 +409,7 @@ const styles = StyleSheet.create({
     bottom: '15%',
     left: '10%',
     transform: [{ rotate: '-10deg' }],
+    position: 'absolute',
   },
   profileImageBg: {
 
@@ -431,9 +433,9 @@ const styles = StyleSheet.create({
     shadowRadius: 10,
   },
   profileImage2: {
-    width: getResponsiveValue(270, 120),
-    height: getResponsiveValue(270, 120),
-    borderRadius: getResponsiveValue(160, 60),
+    width: getResponsiveValue(270, 125),
+    height: getResponsiveValue(270, 125),
+    borderRadius: getResponsiveValue(160, 125),
     backgroundColor: WHITE,
     position: 'absolute',
     borderColor: WHITE,
@@ -447,16 +449,17 @@ const styles = StyleSheet.create({
     // backgroundColor: BLACK,
     position: 'absolute',
     // bottom:'200%',
-    top: getResponsiveValue('29%', '29%'),
+    top: getResponsiveValue('29%', '30%'),
+    
     // left:getResponsiveValue('10%','20%'),
   },
   nameC: {
-    fontSize: getResponsiveValue(20, 10),
+    fontSize: getResponsiveValue(20, 14),
     color: WHITE,
     fontWeight: 'bold',
     //  backgroundColor: BLACK,
     position: 'absolute',
-    top: getResponsiveValue('35%', '35%'),
+    top: getResponsiveValue('35%', '34%'),
   },
   infoContainer: {
     position: 'absolute',
@@ -464,27 +467,26 @@ const styles = StyleSheet.create({
     right: '10%',
   },
   date: {
-    fontSize: getResponsiveValue(14, 7),
+    fontSize: getResponsiveValue(14, 9),
     color: WHITE,
     fontWeight: 'bold',
     textShadowColor: "#0000006e",
     textShadowOffset: { width: 1, height: 1 },
     textShadowRadius: getResponsiveValue(4, 2),
     paddingHorizontal: "4%",
-    paddingVertical: "2%",
-    backgroundColor: "#ae54f8c9",
+    paddingVertical: "4%",
+    backgroundColor: "#731bbcca",
     borderRadius: getResponsiveValue(20, 10),
     left:getResponsiveValue('3%', "2%"),
   },
   dateC: {
     position: "absolute",
     alignItems: "center",
-    bottom: getResponsiveValue('100%', "90%"),
-    left: getResponsiveValue('100%', "90%"),
+    bottom: getResponsiveValue('100%', "115%"),
+    left: getResponsiveValue('100%', "105%"),
   },
   horizontal: {
     backgroundColor: "#f50101",
-
     height: getResponsiveValue(2, 1),
     width: '100%',
     top: getResponsiveValue('20%', '20%'),

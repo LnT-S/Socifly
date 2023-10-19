@@ -247,7 +247,7 @@ const HomePage = props => {
       <LinearGradient2 customStyle={styles.loginGradient}>
         <View style={styles.iconStackRow}>
           <View style={styles.iconStack}>   
-            <FeatherIcon name="" style={styles.icon2} />
+           
           </View> 
           {showModal ? <CustomModal visible={modal.visible} message={modal.message} navigationPage={modal.navigationPage} onClose={modal.onClose} /> : ''}
           <Pressable

@@ -21,7 +21,7 @@ import stringsoflanguages from '../../utils/ScreenStrings';
 import CustomColorPicker from '../../utils/CustomColorPicker';
 import { useLocal } from '../../context/ProfileContext';
 import {useNavigation} from '@react-navigation/native';
-
+import ImageCropPicker from 'react-native-image-crop-picker';
 const handleColorChangeComplete = (color) => {
   // Handle color change completion here
 };
@@ -38,28 +38,21 @@ const BirthdayEdit = props => {
   const [showModal, setShowModal] = useState(false)
   const navigation = useNavigation();
   const selectImage = () => {
-    const options = {
-      mediaType: 'photo',
-      maxWidth: 500,
-      maxHeight: 500,
-      quality: 1,
+    ImageCropPicker.openPicker({
+      width: 300, // Set the width of the cropped image
+      height: 300, // Set the height of the cropped image
+      cropping: true,
+      freeStyleCropEnabled: true, // Enable free-style cropping
+      hideBottomControls: true, // Hide the bottom controls for user-friendliness
+      enableRotationGesture: true, // Enable rotation gesture
       includeBase64: false,
-    };
-    launchImageLibrary(options, async (response) => {
-      if (response.assets && response.assets.length > 0) {
-        const selectedImage = response.assets[0];
-        try {
-          const croppedImage = await openCropper({
-            path: selectedImage.uri,
-            width: 300,
-            height: 300,
-          });
-          setSelectedImage({ uri: croppedImage.path });
-        } catch (error) {
-          console.log('Error cropping image:', error);
-        }
-      }
-    });
+    })
+      .then((image) => {
+        setSelectedImage({ uri: image.path });
+      })
+      .catch((error) => {
+        console.log('Error cropping image:', error);
+      });
   };
 
 
