@@ -76,7 +76,7 @@ const HomePage = props => {
       console.log('LOG : Token Found')
     } else {
       console.log('LOG : Token not found')
-      navigation.goBack()
+      // navigation.goBack()
       navigation.navigate('LoginScreen')
     }
   }
