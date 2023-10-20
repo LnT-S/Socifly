@@ -80,6 +80,10 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"
+        vectorDrawables.useSupportLibrary true
+    }
+    lintOptions { 
+        checkReleaseBuilds false 
     }
     signingConfigs {
         release {
@@ -114,7 +118,8 @@ android {
 
 dependencies {
     // The version of react-native is set by the React Native Gradle Plugin
-    implementation("com.facebook.react:react-android")
+    implementation("com.facebook.react:react-android:0.71.0")
+    implementation "com.facebook.react:react-native:+0.71.0"
 
     debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}")
     debugImplementation("com.facebook.flipper:flipper-network-plugin:${FLIPPER_VERSION}") {

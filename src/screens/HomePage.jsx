@@ -46,6 +46,7 @@ const HomePage = props => {
   const [isRefreshing, setIsRefreshing] = useState(false);
   const navigation = useNavigation();
   const [showModal, setShowModal] = useState(false)
+  
   const [modal, setModal] = useState({
     visible: false,
     message: '',
@@ -76,7 +77,7 @@ const HomePage = props => {
       console.log('LOG : Token Found')
     } else {
       console.log('LOG : Token not found')
-      navigation.goBack()
+      // navigation.goBack()
       navigation.navigate('LoginScreen')
     }
   }
@@ -429,7 +430,7 @@ const styles = StyleSheet.create({
     // justifyContent: 'center',
   },
   cardSection: {
-    // height: "20%",
+    height: "10%",
     alignItems: 'center',
 
     backgroundColor: WHITE,
