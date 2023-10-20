@@ -26,6 +26,7 @@ import { useEffect } from 'react';
 
 const Settings = props => {
   const {profileState , dispatch } = useProfile()
+  const { localState, localDispatch } = useLocal()
   const navigation = useNavigation();
   const [isTextContainerPressed, setIsTextContainerPressed] = useState(false);
   const textContainerScaleValue = new Animated.Value(1);
@@ -76,6 +77,7 @@ const Settings = props => {
   //   props.navigation.navigate('TermsCondition');
   // };
   const handleNextPage5 = () => {
+    
     props.navigation.navigate('ChangeLanguage', { returnTo: 'Settings' });
     ;
   };

@@ -225,7 +225,7 @@ const HomePage = props => {
       console.log('2----------------------------------------------------------------')
     }
     loads()
-  }, [refresh])
+  }, [refresh , localState.lang])
 
 
   useEffect(() => {
@@ -319,7 +319,7 @@ const HomePage = props => {
           // renderPostComponent={renderPostComponent}
           navigation={props.navigation}
         />
-        <GoogleAds />
+        {/*<GoogleAds />*/}
       </ScrollView>
       {isLogoutDialogVisible && (
         <DialogueBox
