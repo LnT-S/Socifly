@@ -48,7 +48,7 @@ const PostArray = ({ navigation }) => {
       console.log('Post Array Updated Posts')
     }
     load()
-  }, [])
+  }, [localState.lang])
 
   useEffect(()=>{
     setPost(localState.images)
@@ -60,7 +60,7 @@ const PostArray = ({ navigation }) => {
           return (<GoogleAds key={i}/>)
         }
         else { 
-          if(post?.category?.type==='Birthday' || post?.category?.type==='birthday'){
+          if(post?.category?.type==='Birthday' || post?.category?.type ==='birthday' || post?.category?.type === stringsoflanguages.birthday){
             return (<BirthdayPost key={post._id} source={profileState.server + post.path} navigation={navigation} id={post._id} />)
           }else{
             return (<Post2 key={post._id} source={profileState.server + post.path} navigation={navigation} id={post._id} />)
