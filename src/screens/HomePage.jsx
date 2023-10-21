@@ -291,7 +291,7 @@ const HomePage = props => {
         </View>
       </LinearGradient2>
       <View style={styles.cardSection}>
-        <Category />
+      <Category />
       </View>
       <ScrollView style={styles.postS}
         refreshControl={ // Add RefreshControl here
@@ -430,7 +430,7 @@ const styles = StyleSheet.create({
     // justifyContent: 'center',
   },
   cardSection: {
-    height: "10%",
+    height: "16%",
     alignItems: 'center',
 
     backgroundColor: WHITE,

@@ -256,7 +256,7 @@ const BirthdayPost = props => {
           numberOfTaps={2} // Detect double tap
         >
           <View ref={cardRef} style={styles.cardContainer2}>
-            <Image style={styles.backGround} source={require("../../assets/images/BD1.png")}
+            <Image style={styles.backGround} source={require("../../assets/images/BD12.png")}
               resizeMode="contain"
             />
 
@@ -401,45 +401,46 @@ const styles = StyleSheet.create({
     // bottom:
   },
   profileImage: {
-    width: getResponsiveValue(150, 60),
-    height: getResponsiveValue(150, 60),
-    borderRadius: getResponsiveValue(20, 10),
-    backgroundColor: WHITE,
+    width: getResponsiveValue(150, 80),
+    height: getResponsiveValue(150, 80),
+    borderRadius: getResponsiveValue(20, 60),
+    borderColor: WHITE,
+    borderWidth: getResponsiveValue(4, 2),
     position: 'absolute',
-    bottom: '15%',
+    bottom: '17%',
     left: '10%',
     transform: [{ rotate: '-10deg' }],
-    position: 'absolute',
+   
   },
-  profileImageBg: {
+  // profileImageBg: {
 
-    width: getResponsiveValue(160, 65),
-    height: getResponsiveValue(160, 65),
-    borderRadius: getResponsiveValue(20, 10),
-    backgroundColor: "#c0a0df",
-    position: 'absolute',
-    bottom: '15%',
-    left: '10%',
-    // borderColor:BLACK,
-    // borderWidth:getResponsiveValue(2,1),
-    transform: [{ rotate: '-10deg' }],
-    shadowColor: "#2e0146",
-    shadowOffset: {
-      width: 0,
-      height: 10,
-    },
-    elevation: 30,
-    shadowOpacity: 1,
-    shadowRadius: 10,
-  },
+  //   width: getResponsiveValue(160, 83),
+  //   height: getResponsiveValue(160, 83),
+  //   borderRadius: getResponsiveValue(20, 60),
+  //   backgroundColor: WHITE,
+  //   position: 'absolute',
+  //   bottom: '17%',
+  //   left: '10%',
+  //   // borderColor:BLACK,
+  //   // borderWidth:getResponsiveValue(2,1),
+  //   transform: [{ rotate: '-10deg' }],
+  //   shadowColor: "#2e0146",
+  //   shadowOffset: {
+  //     width: 0,
+  //     height: 10,
+  //   },
+  //   elevation: 30,
+  //   shadowOpacity: 1,
+  //   shadowRadius: 10,
+  // },
   profileImage2: {
     width: getResponsiveValue(270, 125),
     height: getResponsiveValue(270, 125),
-    borderRadius: getResponsiveValue(160, 125),
+    borderRadius: getResponsiveValue(160, 145),
     backgroundColor: WHITE,
     position: 'absolute',
     borderColor: WHITE,
-    borderWidth: getResponsiveValue(4, 2),
+    borderWidth: getResponsiveValue(4, 7),
     top: getResponsiveValue('8%', '8%'),
     // left: '29%',
   },
@@ -454,12 +455,12 @@ const styles = StyleSheet.create({
     // left:getResponsiveValue('10%','20%'),
   },
   nameC: {
-    fontSize: getResponsiveValue(20, 14),
+    fontSize: getResponsiveValue(20, 15),
     color: WHITE,
     fontWeight: 'bold',
     //  backgroundColor: BLACK,
     position: 'absolute',
-    top: getResponsiveValue('35%', '34%'),
+    top: getResponsiveValue('35%', '33.5%'),
   },
   infoContainer: {
     position: 'absolute',
@@ -482,8 +483,8 @@ const styles = StyleSheet.create({
   dateC: {
     position: "absolute",
     alignItems: "center",
-    bottom: getResponsiveValue('100%', "115%"),
-    left: getResponsiveValue('100%', "105%"),
+    bottom: getResponsiveValue('100%', "130%"),
+    left: getResponsiveValue('100%', "110%"),
   },
   horizontal: {
     backgroundColor: "#f50101",
