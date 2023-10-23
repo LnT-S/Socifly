@@ -46,6 +46,7 @@ const HomePage = props => {
   const [isRefreshing, setIsRefreshing] = useState(false);
   const navigation = useNavigation();
   const [showModal, setShowModal] = useState(false)
+  
   const [modal, setModal] = useState({
     visible: false,
     message: '',
@@ -105,6 +106,9 @@ const HomePage = props => {
     // Logic to set shouldShowAd to true
     setShouldShowAd(true);
   };
+  const handleRewardedAdLoaded = () => {
+    setIsRewardedAdLoaded(true);
+  };
 
   useEffect(() => {
     const nextBannerIndex = (currentBannerIndex + 1) % bannerData.length;
@@ -116,12 +120,6 @@ const HomePage = props => {
     }, 3000); // Adjust the timeout duration (milliseconds) as needed for automatic scrolling
     return () => clearTimeout(scrollTimeout);
   }, [currentBannerIndex]);
-
-  const handleRewardedAdLoaded = () => {
-    setIsRewardedAdLoaded(true);
-  };
-
-  
 
   async function getCategory() {
     let { data, status } = await FETCH(
@@ -250,7 +248,7 @@ const HomePage = props => {
       <LinearGradient2 customStyle={styles.loginGradient}>
         <View style={styles.iconStackRow}>
           <View style={styles.iconStack}>   
-            <FeatherIcon name="" style={styles.icon2} />
+           
           </View> 
           {showModal ? <CustomModal visible={modal.visible} message={modal.message} navigationPage={modal.navigationPage} onClose={modal.onClose} /> : ''}
           <Pressable
@@ -262,7 +260,7 @@ const HomePage = props => {
               }, 1000); // Adjust the timeout duration as needed
             }}
           >
-          {setShouldShowAd && <RewardedAds shouldShowAd={shouldShowAd} onAdLoaded={handleRewardedAdLoaded} />}
+          {shouldShowAd && (<RewardedAds shouldShowAd={shouldShowAd} onAdLoaded={handleRewardedAdLoaded} />)}
             <View style={styles.createRow}>
               {/* <Pressable  style={styles.createRow}> */}
               <Text style={styles.create}>{stringsoflanguages.new}</Text>
@@ -293,7 +291,7 @@ const HomePage = props => {
         </View>
       </LinearGradient2>
       <View style={styles.cardSection}>
-        <Category />
+      <Category />
       </View>
       <ScrollView style={styles.postS}
         refreshControl={ // Add RefreshControl here
@@ -432,7 +430,7 @@ const styles = StyleSheet.create({
     // justifyContent: 'center',
   },
   cardSection: {
-    // height: "20%",
+    height: "16%",
     alignItems: 'center',
 
     backgroundColor: WHITE,

@@ -46,6 +46,7 @@ const ImagePost2 = props => {
   const handleDownload = async () => {
     setShouldShowAd(true);
     if (cardRef.current) {
+      
       try {
         const uri = await captureRef(cardRef, {
           format: 'png', // You can choose other formats like 'jpg' as well
@@ -483,7 +484,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     padding: 8,
     position: 'absolute',
-    top: '105%',
+  
   },
   likedText: {
     color: 'rgba(235,124,148,1)', // You can adjust the color as needed

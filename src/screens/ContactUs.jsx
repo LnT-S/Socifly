@@ -14,11 +14,10 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import TextinputA from '../atoms/TextinputA';
 import ButtonA from '../atoms/ButtonA';
 import { validateForm, isNameValid, isEmailValid, isPhoneNumberValid } from '../utils/validation/validateForm';
-
 import global from '../styles/global';
 import TextinputB from '../atoms/TextinputB';
 import stringsoflanguages from '../utils/ScreenStrings';
-
+import { FETCH } from "../services/fetch";
 const ContactUs = props => {
   const [formData, setFormData] = useState({
     name: '',
@@ -27,13 +26,22 @@ const ContactUs = props => {
     message: '',
   });
   const [formErrors, setFormErrors] = useState({});
-  const handleNextPage = () => {
+  const handleNextPage =async () => {
     const validationErrors = validateForm(formData);
 
     if (Object.keys(validationErrors).length > 0) {
       setFormErrors(validationErrors);
+      let { status, data } = await FETCH(
+        'POST',
+        '/auth/user_contact',
+        '',
+        formData
+      );
+      console.log("from if",formData)
     } else {
+      console.log("from else ")
       props.navigation.navigate('Settings');
+      
     }
   };
 

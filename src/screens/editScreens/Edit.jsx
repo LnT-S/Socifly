@@ -6,6 +6,7 @@ import {
   View,
   KeyboardAvoidingView,
   RefreshControl,
+  BackHandler,
 } from 'react-native';
 import Swiper from 'react-native-swiper';
 import React, { useState, useEffect } from 'react';
@@ -23,6 +24,7 @@ import stringsoflanguages from '../../utils/ScreenStrings';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { useLocal } from '../../context/ProfileContext';
 import CustomColorPicker from '../../utils/CustomColorPicker';
+import {useNavigation} from '@react-navigation/native';
 
 const handleColorChangeComplete = (color) => {
   // Handle color change completion here
@@ -36,7 +38,8 @@ const Edit = props => {
   const [inputValue, setInputValue] = useState('');
   const [refresh , setRefresh] = useState(true);
   const [isRefreshing, setIsRefreshing] = useState(false);
-
+  const [showModal, setShowModal] = useState(false)
+  const navigation = useNavigation();
   const handleInputChange = text => {
     setInputValue(text);
   };
@@ -91,6 +94,10 @@ const Edit = props => {
       });
   };
 
+  useEffect(() => {
+    const backHandler = BackHandler.addEventListener('hardwareBackPress', ()=>{navigation.goBack(); return true});
+    return () => backHandler.remove();
+  }, []);
 
   return (
     <SafeAreaView style={styles.container}>

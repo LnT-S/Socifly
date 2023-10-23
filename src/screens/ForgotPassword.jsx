@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import {
   StyleSheet,
   View,
@@ -6,6 +6,7 @@ import {
   Text,
   TextInput,
   SafeAreaView,
+  BackHandler,
 } from 'react-native';
 import LinearGradients from '../atoms/LinearGradients';
 import global from '../styles/global';
@@ -32,6 +33,7 @@ const ForgotPassword = props => {
   const [errors, setErrors] = useState({});
   const [showModal, setShowModal] = useState(false)
   const { navigation } = props;
+ 
   const [modal, setModal] = useState({
     visible: false,
     message: '',
@@ -114,6 +116,11 @@ const ForgotPassword = props => {
     }
     // console.log('***',data)
   };
+
+  useEffect(() => {
+    const backHandler = BackHandler.addEventListener('hardwareBackPress', ()=>{navigation.goBack(); return true});
+    return () => backHandler.remove();
+  }, []);
 
   const sendPhoneOTP = (phoneNumber) => {
     // Send phone OTP logic here
