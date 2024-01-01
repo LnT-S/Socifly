@@ -12,7 +12,7 @@ const BannerAds = (props) => {
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.adContainer}>
-               <BannerAd
+            <BannerAd
             unitId={adUnitId}
             size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
             requestOptions={{
@@ -26,12 +26,12 @@ const BannerAds = (props) => {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
+        flex : 1,
+        marginTop : 10,
+        borderTopColor : 'red',
+        borderBottomColor : 'yellow',
     },
     adContainer: {
-        alignItems: 'center',
-        justifyContent: 'center',
-        marginBottom: 10,
     },
    
 });

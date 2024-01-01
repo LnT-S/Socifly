@@ -135,7 +135,7 @@ const handleColorChange2 = (color) => {
           onPress={handleNextPage}
           name="arrow-back"
           style={styles.icon2}></Icon>
-        <Text style={styles.statusT}> {stringsoflanguages.edit}</Text>
+        <Text style={styles.statusT}>{stringsoflanguages.edit}</Text>
       </View>
       <ScrollView style={styles.scroll}>
         <Swiper

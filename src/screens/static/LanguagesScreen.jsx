@@ -37,7 +37,7 @@ const LanguagesScreen = ({ navigation }) => {
       payload : value
     })
     console.log(`Language set to ${value}`);
-    navigation.navigate('HomePage', { JSON_Clicked_Item: value });
+    navigation.navigate('HomePage', { JSON_Clicked_Item: value  , TOKEN : true});
   };
 
 

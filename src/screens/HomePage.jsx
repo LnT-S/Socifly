@@ -8,24 +8,22 @@ import {
   Animated,
   FlatList,
   RefreshControl,
-  BackHandler
+  BackHandler,
 } from 'react-native';
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, Suspense } from 'react';
 import LinearGradient2 from '../atoms/LinearGradient2';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Category from '../common/Category';
 // import EntypoIcon from 'react-native-vector-icons/Entypo';
-import FeatherIcon from 'react-native-vector-icons/Feather';
+// import FeatherIcon from 'react-native-vector-icons/Feather';
 import IoniconsIcon from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIconsIcon from 'react-native-vector-icons/MaterialCommunityIcons';
-
 import { BLACK, WHITE } from '../styles/colors';
 import { getResponsiveValue } from '../styles/responsive';
-import PostArray from '../common/postArrays/PostArray';
 import stringsoflanguages from '../utils/ScreenStrings';
-import GoogleAds from '../common/Ads/GoogleAds';
-import RewardedAds from '../common/Ads/RewardedAds';
-import InterstitialAds from '../common/Ads/InterstitialAds';
+// import GoogleAds from '../common/Ads/GoogleAds';
+// import RewardedAds from '../common/Ads/RewardedAds';
+// import InterstitialAds from '../common/Ads/InterstitialAds';
 import BannerAds from '../common/Ads/BannerAds';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
@@ -35,18 +33,22 @@ import CustomModal from '../atoms/CustomModal';
 import { TouchableOpacity, ActivityIndicator } from 'react-native';
 import MaterialIconsIcon from 'react-native-vector-icons/MaterialIcons';
 import DialogueBox from '../common/DialogueBox';
-
-
+import PostArray from '../common/postArrays/PostArray';
+const LazyComponent = React.lazy(() => import('../common/postArrays/PostArray'))
 //import RewardedInterstitialAds from '../common/RewardedInterstitialAds';
 
-const HomePage = props => {
+// page starts here 
+const HomePage = (props) => {
   const { localState, localDispatch } = useLocal()
   const { profileState, dispatch } = useProfile();
+  const [isToken , setIsToken] = useState(async ()=>{
+    return await AsyncStorage.getItem('token')
+  })
+  const [postArrayLoadStart, setPostArrayLoadStart] = useState(false)
   const [refresh, setRefresh] = useState(true);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const navigation = useNavigation();
   const [showModal, setShowModal] = useState(false)
-  
   const [modal, setModal] = useState({
     visible: false,
     message: '',
@@ -60,48 +62,20 @@ const HomePage = props => {
   })
   const [avatar, setAvatar] = useState(profileState.avatar || '')
   const [isLogoutDialogVisible, setIsLogoutDialogVisible] = useState(false);
-
-  function handleLogout(){
-    setIsLogoutDialogVisible(true)
-  }
-
-  const handleYesForLogout = async () => {
-    setIsLogoutDialogVisible(false);
-    BackHandler.exitApp();
-  };
-
-
-  async function token() {
-    let token = await AsyncStorage.getItem('token')
-    if (token) {
-      console.log('LOG : Token Found')
-    } else {
-      console.log('LOG : Token not found')
-      // navigation.goBack()
-      navigation.navigate('LoginScreen')
-    }
-  }
-
-
   const [shouldShowAd, setShouldShowAd] = useState(false);
   const [isRewardedAdLoaded, setIsRewardedAdLoaded] = useState(false);
   const bannerData = [1, 2];
   const [currentBannerIndex, setCurrentBannerIndex] = useState(0);
+  const [noOfPost, setNoOfPost] = useState(6)
+  const [scrollPosition, setScrollPosition] = useState(0);
   const flatListRef = useRef(null);
-
   const handleNextPage = () => {
+    console.log('Clicked')
     props.navigation.navigate('ProfileScreen');
   };
   const handleNextPage2 = () => {
     props.navigation.navigate('Settings');
   };
-
-  useEffect(() => {
-    if (shouldShowAd && isRewardedAdLoaded) {
-      RewardedAds.show(); // Show the rewarded ad
-    }
-  }, [shouldShowAd, isRewardedAdLoaded]);
-
   const showRewardedAd = () => {
     // Logic to set shouldShowAd to true
     setShouldShowAd(true);
@@ -109,17 +83,27 @@ const HomePage = props => {
   const handleRewardedAdLoaded = () => {
     setIsRewardedAdLoaded(true);
   };
+  const handleYesForLogout = async () => {
+    setIsLogoutDialogVisible(false);
+    BackHandler.exitApp();
+  };
 
-  useEffect(() => {
-    const nextBannerIndex = (currentBannerIndex + 1) % bannerData.length;
-    const scrollTimeout = setTimeout(() => {
-      if (flatListRef.current) {
-        flatListRef.current.scrollToIndex({ index: nextBannerIndex, animated: true });
-        setCurrentBannerIndex(nextBannerIndex);
-      }
-    }, 3000); // Adjust the timeout duration (milliseconds) as needed for automatic scrolling
-    return () => clearTimeout(scrollTimeout);
-  }, [currentBannerIndex]);
+  async function token() {
+    let token = await AsyncStorage.getItem('token')
+    if (token) {
+      console.log('LOG : Token Found')
+      return true
+    } else {
+      console.log('LOG : Token not found')
+      // navigation.goBack()
+      return false
+    }
+  }
+
+  function handleLogout() {
+    setIsLogoutDialogVisible(true)
+  }
+
 
   async function getCategory() {
     let { data, status } = await FETCH(
@@ -133,6 +117,7 @@ const HomePage = props => {
         type: 'CATEGORY',
         payload: data.data
       })
+      return 1
     } else {
       let a = setModal({
         visible: true,
@@ -141,6 +126,7 @@ const HomePage = props => {
         onClose: () => { setShowModal(false) }
       })
       setShowModal(true)
+      return 0
     }
   }
 
@@ -181,9 +167,38 @@ const HomePage = props => {
 
         setShowModal(true)
       }
+      return 1
     } catch (error) {
       console.log('Error loading profile data 0:', error);
+      return 0
     }
+  };
+
+  useEffect(()=>{
+    let s = setInterval(async()=>{AsyncStorage.getItem('token').then(data=>{
+      if(data){
+        setIsToken(true)
+      }else{
+        setIsToken(false)
+      }
+    })},3000)
+    return ()=>{
+      clearInterval(s)
+    }
+  },[])
+
+  const handleScroll = (event) => {
+    const scrollY = event.nativeEvent.contentOffset.y;
+    const screenHeight = event.nativeEvent.layoutMeasurement.height;
+    const contentHeight = event.nativeEvent.contentSize.height;
+    const scrollPercentage = (scrollY + screenHeight) / contentHeight;
+    // Check if scrollPercentage is close to 90% (10% remaining from the bottom)
+    if (scrollPercentage >= 0.9) {
+      // Call your function here
+      setNoOfPost(noOfPost + 10)
+    }
+    // Update the scroll position state
+    setScrollPosition(scrollY);
   };
 
   function REFRESH() {
@@ -211,22 +226,46 @@ const HomePage = props => {
       });
   };
 
-  useEffect(()=>{
-    setAvatar(profileState.avatar)
-  })
+  useEffect(() => {
+    const nextBannerIndex = (currentBannerIndex + 1) % bannerData.length;
+    const scrollTimeout = setTimeout(() => {
+      if (flatListRef.current) {
+        flatListRef.current.scrollToIndex({ index: nextBannerIndex, animated: true });
+        setCurrentBannerIndex(nextBannerIndex);
+      }
+    }, 3000); // Adjust the timeout duration (milliseconds) as needed for automatic scrolling
+    return () => clearTimeout(scrollTimeout);
+  }, [currentBannerIndex]);
 
   useEffect(() => {
-    let loads = async () => {
-      token().then().catch(err => console.log('EFFECT ERROR', err))
-      console.log('0----------------------------------------------------------------')
-      await loadProfileData().then().catch(err => console.log('EFFECT ERROR 0', err))
-      console.log('1----------------------------------------------------------------')
-      await getCategory().then().catch(err => console.log('EFFECT ERROR 1', err))
-      console.log('2----------------------------------------------------------------')
-    }
-    loads()
-  }, [refresh , localState.lang])
-
+    token().then(data => {
+      console.log('Token Found :::::: ', data)
+      if (data || props.TOKEN) {
+        let loads = async () => {
+          setPostArrayLoadStart(false)
+          token().then().catch(err => console.log('EFFECT ERROR', err))
+          console.log('0----------------------------------------------------------------')
+          let a = await loadProfileData().then().catch(err => console.log('EFFECT ERROR 0', err))
+          console.log('1----------------------------------------------------------------')
+          if (a === 1) {
+            let b = await getCategory().then().catch(err => console.log('EFFECT ERROR 1', err))
+            if (b === 1) {
+              setPostArrayLoadStart(true)
+            } else {
+              setRefresh(!refresh)
+            }
+          } else { setRefresh(!refresh) }
+          console.log('2----------------------------------------------------------------')
+        }
+        loads()
+      } else {
+        navigation.navigate('LoginScreen')
+      }
+    })
+      .catch(err => {
+        console.log("ERROR IN HOMEPAGE TOKEN CHECK", err)
+      })
+  }, [isToken ,refresh, localState.lang])
 
   useEffect(() => {
     const backAction = () => {
@@ -247,9 +286,8 @@ const HomePage = props => {
     <SafeAreaView style={styles.container} >
       <LinearGradient2 customStyle={styles.loginGradient}>
         <View style={styles.iconStackRow}>
-          <View style={styles.iconStack}>   
-           
-          </View> 
+          <View style={styles.iconStack}>
+          </View>
           {showModal ? <CustomModal visible={modal.visible} message={modal.message} navigationPage={modal.navigationPage} onClose={modal.onClose} /> : ''}
           <Pressable
             style={styles.button}
@@ -260,11 +298,10 @@ const HomePage = props => {
               }, 1000); // Adjust the timeout duration as needed
             }}
           >
-          {shouldShowAd && (<RewardedAds shouldShowAd={shouldShowAd} onAdLoaded={handleRewardedAdLoaded} />)}
+            {/*shouldShowAd && (<RewardedAds shouldShowAd={shouldShowAd} onAdLoaded={handleRewardedAdLoaded} />)*/}
             <View style={styles.createRow}>
               {/* <Pressable  style={styles.createRow}> */}
               <Text style={styles.create}>{stringsoflanguages.new}</Text>
-
               <IoniconsIcon
                 name="ios-add-circle-outline"
                 style={styles.icon3}></IoniconsIcon>
@@ -281,28 +318,20 @@ const HomePage = props => {
             ></MaterialCommunityIconsIcon>
           </Pressable>
 
-          <Pressable onPress={handleNextPage2}  style={({ pressed }) => [
+          <Pressable onPress={handleNextPage2} style={({ pressed }) => [
             { opacity: pressed ? 0.8 : 1 },
             styles.iconWrapper,
           ]}>
-            <MaterialIconsIcon name="settings" style={styles.icon5} />
+            {<MaterialIconsIcon name="settings" style={styles.icon5} />}
           </Pressable>
 
         </View>
       </LinearGradient2>
       <View style={styles.cardSection}>
-      <Category />
+        <Category />
       </View>
-      <ScrollView style={styles.postS}
-        refreshControl={ // Add RefreshControl here
-          <RefreshControl
-            refreshing={isRefreshing}
-            onRefresh={handleRefresh}
-            colors={['#ff0000', '#00ff00', '#0000ff']} // Customize the loading spinner colors
-            tintColor={'#ff0000'} // Customize the loading spinner color
-          />
-        }>
 
+      <View style={styles.postS}>
         <FlatList
           ref={flatListRef}
           style={styles.adss}
@@ -313,23 +342,34 @@ const HomePage = props => {
             <BannerAds />
           )}
           keyExtractor={(item) => item.toString()}
+          refreshControl={ // Add RefreshControl here
+            <RefreshControl
+              refreshing={isRefreshing}
+              onRefresh={handleRefresh}
+              colors={['#ff0000', '#00ff00', '#0000ff']} // Customize the loading spinner colors
+              tintColor={'#ff0000'} // Customize the loading spinner color
+            />
+          }
         />
-        <PostArray
-          // posts={posts}
-          // renderPostComponent={renderPostComponent}
-          navigation={props.navigation}
-        />
-        {/*<GoogleAds />*/}
-      </ScrollView>
+      </View>
+      <View style={{ flex: 1 }}>
+        {postArrayLoadStart ? <Suspense fallback={<ActivityIndicator />}>
+          <LazyComponent
+            navigation={props.navigation}
+            arrayLength={noOfPost}
+          />
+        </Suspense> : <ActivityIndicator />}
+      </View>
+      {/*<GoogleAds />*/}
       {isLogoutDialogVisible && (
         <DialogueBox
           isVisible={isLogoutDialogVisible}
           handleYes={handleYesForLogout}
-          handleNo = {()=>{setIsLogoutDialogVisible(false)}}
+          handleNo={() => { setIsLogoutDialogVisible(false) }}
           textContent="Are you sure you want to Exit?"
         />
       )}
-     
+
     </SafeAreaView>
   );
 };
@@ -337,8 +377,8 @@ const HomePage = props => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    
   },
+
   loginGradient: {
     // flex: 0.12,
     height: getResponsiveValue(100, 60),
@@ -379,12 +419,12 @@ const styles = StyleSheet.create({
   icon4: {
     color: WHITE,
     fontSize: getResponsiveValue(50, 33),
-    
+
   },
-  icon5:{
+  icon5: {
     color: WHITE,
     fontSize: getResponsiveValue(50, 30),
-   
+
   },
   createRow: {
     // flex:1,
@@ -393,9 +433,9 @@ const styles = StyleSheet.create({
     // justifyContent: "center",
     justifyContent: 'space-between',
     width: '100%',
-    
+
     // paddingHorizontal:"2%",
-    
+
   },
   // textInput: {
   //   flex: 1,
@@ -411,7 +451,7 @@ const styles = StyleSheet.create({
   //   borderColor: WHITE,
   //   borderRadius: getResponsiveValue(25, 22),
   //   color: WHITE,
-  
+
   // },
   create: {
     marginLeft: getResponsiveValue('7%', '7%'),
@@ -425,7 +465,7 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(255,255,255,1)',
     borderRadius: getResponsiveValue(25, 22),
     flexDirection: 'row',
-    right:"30%"
+    right: "30%"
     // alignItems: 'center',
     // justifyContent: 'center',
   },
@@ -445,8 +485,15 @@ const styles = StyleSheet.create({
     paddingVertical: '2%',
   },
   postS: {
-    flex: 0.8,
+    display: 'flex',
+    borderTopColor: 'red',
+    margin: 0,
+    maxHeight: '10px',
+    flex: 0.2
   },
+  adss: {
+    height: '20%'
+  }
 
 
 });

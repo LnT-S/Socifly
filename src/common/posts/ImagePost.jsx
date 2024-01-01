@@ -32,6 +32,7 @@ import {
 import { LIKE } from '../../utils/like';
 import { launchImageLibrary } from 'react-native-image-picker';
 import RewardedAds from '../../common/Ads/RewardedAds';
+import DraggableText from '../../atoms/DraggableText';
 
 const ImagePost = props => {
   const { localState, localDispatch } = useLocal()
@@ -207,10 +208,10 @@ const ImagePost = props => {
                 resizeMode="contain"
                 style={styles.image}
               />
-              <View style={styles.textBox}>
-
+              <DraggableText text={props.name} textColor={props.textColor}/>
+              {/*<View style={styles.textBox}>
                 <Text style={[styles.nameC, textColorStyle]}>{props.name}</Text>
-              </View>
+              </View>*/}
             </View>
 
             <View style={styles.profileContainer}>
