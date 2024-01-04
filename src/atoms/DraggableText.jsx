@@ -11,8 +11,8 @@ const DraggableText = (props) => {
     onMoveShouldSetPanResponder: () => true,
     onPanResponderMove: (event, gesture) => {
       const { dx, dy } = gesture;
-      const newX = pan.x._value + dx;
-      const newY = pan.y._value + dy;
+      const newX = dx;
+      const newY = dy;
 
       // Define the boundaries for the movable area
       const minX = -115;

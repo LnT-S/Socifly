@@ -24,7 +24,8 @@ export const ProfileProvider = ({ children }) => {
     category: [],
     images: [],
     lang : 'english',
-    editImage  : ''
+    editImage  : '',
+    viewMode : 'initial'
   }
 
   const profileReducer = (state = initialState, action) => {
@@ -57,6 +58,8 @@ export const ProfileProvider = ({ children }) => {
         return { ...state, lang: action.payload }
       case 'EDITIMAGEURI':
         return { ...state, editImage: action.payload }
+      case 'VIEWMODE':
+        return { ...state, viewMode: action.payload }
       default:
         return state;
     }

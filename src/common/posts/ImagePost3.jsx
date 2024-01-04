@@ -29,8 +29,8 @@ import Icon2 from "react-native-vector-icons/FontAwesome";
 import { launchImageLibrary } from 'react-native-image-picker';
 import { useLocal, useProfile } from '../../context/ProfileContext';
 import { LIKE } from '../../utils/like';
-import RewardedAds from '../../common/Ads/RewardedAds';
 import DraggableText from '../../atoms/DraggableText';
+import showRewardedAds from '../Ads/RewardedAds';
 
 const ImagePost3 = props => {
   const { localState, localDispatch } = useLocal()
@@ -46,7 +46,7 @@ const ImagePost3 = props => {
     setShouldShowAd(false); //ads 
   };
   const handleDownload = async () => {
-    setShouldShowAd(true);
+    showRewardedAds()
     if (cardRef.current) {
       try {
         const uri = await captureRef(cardRef, {
@@ -263,7 +263,6 @@ const ImagePost3 = props => {
           </View>
 
         </View>
-        <RewardedAds shouldShowAd={shouldShowAd} onAdShown={handleDownloadAfterAd} />
         {downloaded && (
           <Text style={styles.downloadedText}>{stringsoflanguages.imageDownloaded}</Text>
         )}

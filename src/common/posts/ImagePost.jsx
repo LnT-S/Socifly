@@ -31,7 +31,7 @@ import {
 } from 'react-native-gesture-handler';
 import { LIKE } from '../../utils/like';
 import { launchImageLibrary } from 'react-native-image-picker';
-import RewardedAds from '../../common/Ads/RewardedAds';
+import showRewardedAds from '../../common/Ads/RewardedAds';
 import DraggableText from '../../atoms/DraggableText';
 
 const ImagePost = props => {
@@ -49,7 +49,7 @@ const ImagePost = props => {
   };
   
   const handleDownload = async () => {
-    setShouldShowAd(true);
+    showRewardedAds('')
     if (cardRef.current) {
       try {
         const uri = await captureRef(cardRef, {
@@ -264,7 +264,6 @@ const ImagePost = props => {
           </View>
 
         </View>
-        <RewardedAds shouldShowAd={shouldShowAd} onAdShown={handleDownloadAfterAd} />
         {downloaded && (
           <Text style={styles.downloadedText}>{stringsoflanguages.imageDownloaded}</Text>
         )}

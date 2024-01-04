@@ -1,5 +1,5 @@
 import React, { useEffect, useState, lazy, useRef, Suspense } from 'react';
-import { View, StyleSheet, ActivityIndicator, InteractionManager } from 'react-native';
+import { View, StyleSheet, ActivityIndicator ,InteractionManager  } from 'react-native';
 import Post1 from '../posts/Post1';
 import LoadingPostSuspense from '../posts/LoadingPostSuspense';
 import Post3 from '../posts/Post3';
@@ -13,11 +13,11 @@ import { useProfile, useLocal } from '../../context/ProfileContext';
 import { FlatList, GestureHandlerRootView } from 'react-native-gesture-handler';
 import { VariableSizeList as List } from 'react-window';
 import AutoSizer from 'react-virtualized-auto-sizer';
-import Post2 from '../posts/Post2.jsx';
-const LazyPost2 = React.lazy(() => import('../posts/Post2.jsx'))
+import Post2 from '../posts/Post2';
+const LazyPost2 = React.lazy(()=>import('../posts/Post2.jsx'))
 
 const PostArray = ({ navigation, arrayLength }) => {
-  const [active, setActive] = useState(false)
+  const [active ,setActive] = useState(false)
   const { localState, localDispatch } = useLocal()
   const { profileState, dispatch } = useProfile();
   const [loading, setLoading] = useState(true)
@@ -36,6 +36,7 @@ const PostArray = ({ navigation, arrayLength }) => {
       '/home/get-images',
       { lang: localState.lang }
     )
+    console.log('***************************************', data.data[0].category)
     if (status === 200) {
       setPost(data.data)
       setData(data.data.slice(startIndex, startIndex + 10))
@@ -59,16 +60,16 @@ const PostArray = ({ navigation, arrayLength }) => {
   let interactionHandle
   const loadImages = () => {
     console.log('*******')
-    interactionHandle = InteractionManager.runAfterInteractions(() => {
+    interactionHandle = InteractionManager.runAfterInteractions(()=>{
       setPostLoading(true)
       // Simulating loading images from your array of objects
-      const newData = posts.slice(startIndex, startIndex + 10);
+      const newData = posts.slice(startIndex, startIndex + 3);
       // Update state
       setData((prevData) => [...prevData, ...newData]);
-      setStartIndex(startIndex + 10);
+      setStartIndex(startIndex + 3);
       setPostLoading(false)
     })
-  };
+    };
 
   useEffect(() => {
     let load = async () => {
@@ -89,46 +90,46 @@ const PostArray = ({ navigation, arrayLength }) => {
 
   useEffect(() => {
     setPost(localState.images)
-    setData(localState.images.slice(0, 10))
+    setData(localState.images.slice(0,10))
   }, [localState])
 
-  useEffect(() => {
+  useEffect(()=>{
     loadImages()
-  }, [arrayLength])
+  },[arrayLength])
 
-  useEffect(() => {
-    console.log('UI Settled', localState.viewMode === 'initial')
-    return () => {
+  useEffect(()=>{
+    console.log('UI Settled')
+    return ()=>{
       InteractionManager.clearInteractionHandle(interactionHandle);
     }
-  }, [])
+  },[])
 
   return (
     <GestureHandlerRootView>
       <View style={styles.postArrayContainer}>
-        {loading ? <ActivityIndicator /> : ''}
+      {loading?<ActivityIndicator /> : ''}
         <FlatList
-          ref={flatListRef}
+        ref={flatListRef}
           data={data}
-          renderItem={({ item, index }) => (localState.viewMode === 'initial' || item.category.special === (false)) ? <LazyPost2
-            key={item?._id}
-            source={profileState.server + item?.path}
-            navigation={navigation} id={item?._id}
-            imageLoaded={setLoading} /> : <BirthdayPost key={item._id} source={profileState.server + item.path} navigation={navigation} id={item._id} />}
-          keyExtractor={(item, index) => (index)}
+          renderItem={({ item, index }) => <Post2
+            key={item._id}
+            source={profileState.server + item.path}
+            navigation={navigation} id={item._id}
+            imageLoaded={setLoading} />}
+          keyExtractor={(item, index) => (item._id)}
           onEndReached={loadImages}
           onEndReachedThreshold={0.7}
           onFailed={() => (<View><Text>Failed</Text></View>)}
           onScrollToIndexFailed={(info) => {
             console.warn('onScrollToIndexFailed info:', info);
           }}
-          ListFooterComponent={<LoadingPostSuspense />}
           extraData={data}
-
+          ListFooterComponent={<LoadingPostSuspense />}
         />
       </View>
     </GestureHandlerRootView >
   )
+
 };
 
 const styles = StyleSheet.create({

@@ -18,11 +18,10 @@ import Category from '../common/Category';
 // import FeatherIcon from 'react-native-vector-icons/Feather';
 import IoniconsIcon from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIconsIcon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { BLACK, WHITE } from '../styles/colors';
+import { BLACK, PRIMARY, SECONDARY, WHITE } from '../styles/colors';
 import { getResponsiveValue } from '../styles/responsive';
 import stringsoflanguages from '../utils/ScreenStrings';
 // import GoogleAds from '../common/Ads/GoogleAds';
-// import RewardedAds from '../common/Ads/RewardedAds';
 // import InterstitialAds from '../common/Ads/InterstitialAds';
 import BannerAds from '../common/Ads/BannerAds';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -35,13 +34,14 @@ import MaterialIconsIcon from 'react-native-vector-icons/MaterialIcons';
 import DialogueBox from '../common/DialogueBox';
 import PostArray from '../common/postArrays/PostArray';
 const LazyComponent = React.lazy(() => import('../common/postArrays/PostArray'))
+import showRewardedAds from '../common/Ads/RewardedAds';
 //import RewardedInterstitialAds from '../common/RewardedInterstitialAds';
 
 // page starts here 
 const HomePage = (props) => {
   const { localState, localDispatch } = useLocal()
   const { profileState, dispatch } = useProfile();
-  const [isToken , setIsToken] = useState(async ()=>{
+  const [isToken, setIsToken] = useState(async () => {
     return await AsyncStorage.getItem('token')
   })
   const [postArrayLoadStart, setPostArrayLoadStart] = useState(false)
@@ -174,18 +174,20 @@ const HomePage = (props) => {
     }
   };
 
-  useEffect(()=>{
-    let s = setInterval(async()=>{AsyncStorage.getItem('token').then(data=>{
-      if(data){
-        setIsToken(true)
-      }else{
-        setIsToken(false)
-      }
-    })},3000)
-    return ()=>{
+  useEffect(() => {
+    let s = setInterval(async () => {
+      AsyncStorage.getItem('token').then(data => {
+        if (data) {
+          setIsToken(true)
+        } else {
+          setIsToken(false)
+        }
+      })
+    }, 3000)
+    return () => {
       clearInterval(s)
     }
-  },[])
+  }, [])
 
   const handleScroll = (event) => {
     const scrollY = event.nativeEvent.contentOffset.y;
@@ -265,7 +267,7 @@ const HomePage = (props) => {
       .catch(err => {
         console.log("ERROR IN HOMEPAGE TOKEN CHECK", err)
       })
-  }, [isToken ,refresh, localState.lang])
+  }, [isToken, refresh, localState.lang])
 
   useEffect(() => {
     const backAction = () => {
@@ -292,13 +294,10 @@ const HomePage = (props) => {
           <Pressable
             style={styles.button}
             onPress={() => {
-              showRewardedAd(); // Call showRewardedAd function to set shouldShowAd to true
-              setTimeout(() => {
-                props.navigation.navigate('CreatePage'); // Navigate to next page after ad is shown
-              }, 1000); // Adjust the timeout duration as needed
+              showRewardedAds()
+              navigation.navigate('CreatePage')
             }}
           >
-            {/*shouldShowAd && (<RewardedAds shouldShowAd={shouldShowAd} onAdLoaded={handleRewardedAdLoaded} />)*/}
             <View style={styles.createRow}>
               {/* <Pressable  style={styles.createRow}> */}
               <Text style={styles.create}>{stringsoflanguages.new}</Text>
@@ -361,16 +360,34 @@ const HomePage = (props) => {
         </Suspense> : <ActivityIndicator />}
       </View>
       {/*<GoogleAds />*/}
-      {isLogoutDialogVisible && (
-        <DialogueBox
-          isVisible={isLogoutDialogVisible}
-          handleYes={handleYesForLogout}
-          handleNo={() => { setIsLogoutDialogVisible(false) }}
-          textContent="Are you sure you want to Exit?"
-        />
-      )}
+      <View style={{height: 30, width: '100%', position: 'absolute', bottom: 0, display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'row' }}>
+        <TouchableOpacity activeOpacity={0.8} style={{ backgroundColor: PRIMARY, width: '50%', height: '100%', borderRightColor: 'white', borderRightWidth: 1}}>
+          <View style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+            <Text style={{ fontSize: 18, color: 'white', textAlign: 'center', }}>
+              IMAGES
+            </Text>
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity activeOpacity={0.8} style={{ backgroundColor: PRIMARY, width: '50%', height: '100%',  borderLeftColor: 'white', borderLeftWidth: 1 }}>
+          <View  style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+            <Text style={{ fontSize: 18,color: 'white', textAlign: 'center',}}>
+              VIDEOS
+            </Text>
+          </View>
+          </TouchableOpacity>
+      </View>
+      {
+    isLogoutDialogVisible && (
+      <DialogueBox
+        isVisible={isLogoutDialogVisible}
+        handleYes={handleYesForLogout}
+        handleNo={() => { setIsLogoutDialogVisible(false) }}
+        textContent="Are you sure you want to Exit?"
+      />
+    )
+  }
 
-    </SafeAreaView>
+    </SafeAreaView >
   );
 };
 

@@ -28,7 +28,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import stringsoflanguages from '../utils/ScreenStrings';
 import { WHITE } from '../styles/colors';
 //import InterstitialAds from '../common/Ads/InterstitialAds';
- import RewardedAds from '../common/Ads/RewardedAds';
 import { FETCH, MULTIPART_FETCH } from '../services/fetch';
 import CustomModal from '../atoms/CustomModal';
 import { useLocal } from '../context/ProfileContext';

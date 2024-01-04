@@ -26,7 +26,7 @@ import {
   State,
   GestureHandlerRootView,
 } from 'react-native-gesture-handler';
-import RewardedAds from '../../common/Ads/RewardedAds';
+import showRewardedAds from '../../common/Ads/RewardedAds';
 import { launchImageLibrary } from 'react-native-image-picker';
 import { get } from 'react-native/Libraries/TurboModule/TurboModuleRegistry';
 import { useLocal, useProfile } from '../../context/ProfileContext';
@@ -40,7 +40,6 @@ const BirthdayPost = props => {
   const cardRef = useRef(null); // Create a ref for the card view
   const doubleTapRef = useRef(null);
   const [likedMessageVisible, setLikedMessageVisible] = useState(false);
-  const [shouldShowAd, setShouldShowAd] = useState(false);
   const [downloadClicked, setDownloadClicked] = useState(false);
   const [avatar, setAvatar] = useState(profileState.avatar || '')
   const [value, SetValue] = useState({
@@ -71,15 +70,11 @@ const BirthdayPost = props => {
         setTimeout(() => {
           setDownloaded(false);
         }, 3000);
-        setShouldShowAd(true);
+        showRewardedAds('')
       } catch (error) {
         console.error('Error capturing view:', error);
       }
     }
-  };
-
-  const handleDownloadAfterAd = () => {
-    setShouldShowAd(false); //ads 
   };
 
   const handleNextPage = () => {
@@ -337,7 +332,6 @@ const BirthdayPost = props => {
         {downloaded && (
           <Text style={styles.downloadedText}>{stringsoflanguages.imageDownloaded}</Text>
         )}
-        <RewardedAds shouldShowAd={shouldShowAd} onAdShown={handleDownloadAfterAd} />
         {likedMessageVisible && <Text style={styles.likedText}>{stringsoflanguages.liked}</Text>}
       </SafeAreaView>
     </GestureHandlerRootView>

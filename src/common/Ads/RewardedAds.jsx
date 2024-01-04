@@ -1,9 +1,5 @@
-import { StyleSheet, Text, TouchableOpacity, View, Button } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import React, { useEffect, useState, } from 'react';
 import { AdEventType } from 'react-native-google-mobile-ads';
 import { RewardedAdEventType, RewardedAd, TestIds } from 'react-native-google-mobile-ads';
-import { useNavigation } from '@react-navigation/native';
 
 const adUnitId = __DEV__ ? TestIds.REWARDED : 'ca-app-pub-7928655726884789/2557055236';
 const rewarded = RewardedAd.createForAdRequest(adUnitId, {
@@ -11,112 +7,45 @@ const rewarded = RewardedAd.createForAdRequest(adUnitId, {
   keywords: ['fashion', 'clothing'],
 });
 
+const showRewardedAds = async (navigateTo) => {
+  try {
+    // Load rewarded ad
+    console.log('***////////////////////')
 
-
-const RewardedAds = (props) => {
-  const [loaded, setLoaded] = useState(false);
-  const navigation = useNavigation();
-
-  const pageNotFound = () => {
-    navigation.navigate('NotFound');
-  };
-
-  
-  // No advert ready to show yet
-  const loadRewarded = () => {
-    const unsubscribeLoaded = rewarded.addAdEventListener(
-      RewardedAdEventType.LOADED,
-      () => {
-        setLoaded(true);
-      }
-      );
-      const unsubscribeEarned = rewarded.addAdEventListener(
-        RewardedAdEventType.EARNED_REWARD,
-        reward => {
-          // console.log(`User earned reward of ${reward.amount} ${reward.type}`);
-        }
-        );
-        const unsubscribeClosed = rewarded.addAdEventListener(
-          AdEventType.CLOSED,
-          () => {
-            setLoaded(false);
-            rewarded.load();
-          }
-    );
-
-    rewarded.load();
-
-    return () => {
-      unsubscribeLoaded();
-      unsubscribeClosed();
-      unsubscribeEarned();
-    }
-  };
-  useEffect(() => {
-    if (props.shouldShowAd) {
-      rewarded.show();
-    } else {
-      // console.log("Rewarded ad is not loaded yet.");
-    }
-
-    const unsubscribeLoaded = rewarded.addAdEventListener(RewardedAdEventType.LOADED, () => {
-      setLoaded(true);
+    let rewardedAd = RewardedAd.createForAdRequest(TestIds.REWARDED, {
+      requestNonPersonalizedAdsOnly: true,
+      keywords: ['fashion', 'clothing'],
     });
-    const unsubscribeEarned = rewarded.addAdEventListener(
+    rewardedAd.load();
+    console.log('ok')
+    rewarded.addAdEventListener(RewardedAdEventType.LOADED, async () => {
+      console.log('Ad LOADED')
+      await rewardedAd.show()
+    });
+    rewarded.addAdEventListener(
       RewardedAdEventType.EARNED_REWARD,
       reward => {
-        // console.log('User earned reward of ', reward);
+        console.log('User earned reward of ', reward);
       },
-    );
+      );
+    rewarded.addAdEventListener(
+      RewardedAdEventType.EARNED_REWARD,
+      reward => {
+        console.log('User earned reward of ', reward);
+      },
+      );
+      rewarded.addAdEventListener(
+        AdEventType.CLOSED,
+        () => {
+          console.log('REwarded Ads CLosed')
+        }
+        );
+        rewardedAd.load();
+        await rewardedAd.show()
+        // Navigate to the target page after ad is closed
+      } catch (error) {
+    console.error('Error handling download:', error);
+  }
+};
 
-    // Start loading the rewarded ad straight away
-    rewarded.load();
-
-    // Unsubscribe from events on unmount
-    return () => {
-      unsubscribeLoaded();
-      unsubscribeEarned();
-    };
-  }, [props.shouldShowAd]);
-  useEffect(() => {
-    const unsubscribeInterstitialEvents = loadRewarded();
-    return () => {
-      unsubscribeInterstitialEvents();
-    };
-  }, [])
-  
-  return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.adContainer}>
-        <TouchableOpacity style={styles.nextadd} onPress={() => {
-          rewarded.show().catch((error) => {
-            console.error('Failed to show rewarded ad:', error);
-
-          });
-        }}>
-        </TouchableOpacity>
-
-      </View>
-    </SafeAreaView>
-  );
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  // adContainer: {
-  //     alignItems: 'center',
-  //     justifyContent: 'center',
-  //     marginBottom: 10,
-  // },
-  // nextadd: {
-  //     width:'80%',
-  //     height: 50,
-  //     borderWidth: 1,
-  //     alignSelf:'center',
-
-  // }
-});
-
-export default RewardedAds;
+export default showRewardedAds;

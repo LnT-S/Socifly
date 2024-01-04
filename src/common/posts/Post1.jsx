@@ -19,8 +19,6 @@ import defaultProfileImage from '../../assets/images/profile3.png';
 import Share from 'react-native-share';
 import { captureRef } from 'react-native-view-shot';
 import RNFS from 'react-native-fs';
-import RewardedAds from '../../common/Ads/RewardedAds';
-
 import Icon2 from "react-native-vector-icons/FontAwesome";
 import {
   TapGestureHandler,
@@ -30,6 +28,7 @@ import {
 import stringsoflanguages from '../../utils/ScreenStrings';
 import { useLocal, useProfile } from '../../context/ProfileContext';
 import { LIKE } from '../../utils/like';
+import showRewardedAds from '../Ads/RewardedAds';
 
 const Post1 = props => {
   const { localState, localDispatch } = useLocal()
@@ -41,7 +40,7 @@ const Post1 = props => {
   const [likedMessageVisible, setLikedMessageVisible] = useState(false);
 
   const handleDownload = async () => {
-    setShouldShowAd(true);
+    showRewardedAds('')
     if (cardRef.current) {
       try {
         const uri = await captureRef(cardRef, {
@@ -262,7 +261,6 @@ const Post1 = props => {
         {downloaded && (
           <Text style={styles.downloadedText}>{stringsoflanguages.imageDownloaded}</Text>
         )}
-        <RewardedAds shouldShowAd={shouldShowAd} onAdShown={handleDownloadAfterAd} />
         {downloaded && (
           <Text style={styles.downloadedText}>
             {stringsoflanguages.imageDownloaded}

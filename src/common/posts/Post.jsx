@@ -11,7 +11,7 @@ import defaultProfileImage from '../../assets/images/Profile2.png';
 import Share from 'react-native-share';
 import { captureRef } from 'react-native-view-shot';
 import RNFS from 'react-native-fs';
-import RewardedAds from '../../common/Ads/RewardedAds';
+import showRewardedAds from '../../common/Ads/RewardedAds';
 import { useLocal , useProfile} from '../../context/ProfileContext';
 import { LIKE } from '../../utils/like';
 
@@ -23,7 +23,7 @@ const Post = (props) => {
   const [shouldShowAd, setShouldShowAd] = useState(false);
   const handleDownload = async () => {
   if (cardRef.current) {
-    setShouldShowAd(true);
+    showRewardedAds('')
     try {
       const uri = await captureRef(cardRef, {
         format: 'png', // You can choose other formats like 'jpg' as well
@@ -153,7 +153,6 @@ const handleDownloadAfterAd = () => {
         </View>
       </View>
       {downloaded && <Text style={styles.downloadedText}>Image downloaded!</Text>}
-      <RewardedAds shouldShowAd={shouldShowAd} onAdShown={handleDownloadAfterAd} />
       </SafeAreaView>
   );
 };
