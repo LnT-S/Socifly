@@ -25,6 +25,7 @@ export const ProfileProvider = ({ children }) => {
     images: [],
     lang : 'english',
     editImage  : '',
+    loading : false,
     viewMode : 'initial'
   }
 
@@ -58,6 +59,8 @@ export const ProfileProvider = ({ children }) => {
         return { ...state, lang: action.payload }
       case 'EDITIMAGEURI':
         return { ...state, editImage: action.payload }
+      case 'LOADING':
+        return { ...state, loading: action.payload }
       case 'VIEWMODE':
         return { ...state, viewMode: action.payload }
       default:

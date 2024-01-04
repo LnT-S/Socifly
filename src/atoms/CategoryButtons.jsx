@@ -18,11 +18,19 @@ const CategoryButtons = ({ text }) => {
   })
 
   async function getImageByCategory() {
+    localDispatch({
+      type: "LOADING",
+      payload: true
+    })
+    localDispatch({
+      type: "VIEWMODE",
+      payload: 'category'
+    })
     let { status, data } = await FETCH(
       'GET',
       '/home/get-images-by-category',
       {
-        lang: localState.lang,
+        lang: localState.lang,//?lna: ''&cate:''
         category: text
       }
     )
@@ -38,9 +46,12 @@ const CategoryButtons = ({ text }) => {
         navigationPage: 'LoginScreen',
         onClose: () => { setShowModal(false) }
       })
-      
       setShowModal(true)
     }
+    localDispatch({
+      type: "LOADING",
+      payload: false
+    })
   }
 
   return (

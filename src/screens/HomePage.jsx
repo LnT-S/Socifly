@@ -243,6 +243,10 @@ const HomePage = (props) => {
     token().then(data => {
       console.log('Token Found :::::: ', data)
       if (data || props.TOKEN) {
+        localDispatch({
+          type: "VIEWMODE",
+          payload: 'initial'
+        })
         let loads = async () => {
           setPostArrayLoadStart(false)
           token().then().catch(err => console.log('EFFECT ERROR', err))
@@ -351,6 +355,7 @@ const HomePage = (props) => {
           }
         />
       </View>
+      {localState.loading ? <ActivityIndicator size='large'/> : ''}
       <View style={{ flex: 1 }}>
         {postArrayLoadStart ? <Suspense fallback={<ActivityIndicator />}>
           <LazyComponent

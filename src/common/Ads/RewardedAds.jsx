@@ -41,7 +41,6 @@ const showRewardedAds = async (navigateTo) => {
         }
         );
         rewardedAd.load();
-        await rewardedAd.show()
         // Navigate to the target page after ad is closed
       } catch (error) {
     console.error('Error handling download:', error);

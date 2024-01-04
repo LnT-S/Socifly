@@ -31,11 +31,19 @@ const PostArray = ({ navigation, arrayLength }) => {
   const flatListRef = useRef()
 
   async function getImages() {
+    localDispatch({
+      type: "LOADING",
+      payload: true
+    })
     let { status, data } = await FETCH(
       'GET',
       '/home/get-images',
       { lang: localState.lang }
     )
+    localDispatch({
+      type: "LOADING",
+      payload: false
+    })
     if (status === 200) {
       setPost(data.data)
       setData(data.data.slice(startIndex, startIndex + 10))
@@ -106,7 +114,6 @@ const PostArray = ({ navigation, arrayLength }) => {
   return (
     <GestureHandlerRootView>
       <View style={styles.postArrayContainer}>
-        {loading ? <ActivityIndicator /> : ''}
         <FlatList
           ref={flatListRef}
           data={data}

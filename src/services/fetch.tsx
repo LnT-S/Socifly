@@ -28,8 +28,8 @@ export async function FETCH(method: string, url: string, params: string | object
         if (i !== Object.keys(params).length - 1) {
           temp = temp + `&`
         }
+        finalParams = finalParams + temp
       })
-      finalParams = finalParams + temp
     } else {
       // type your cases here if you want to send params by some other means like array 
     }
