@@ -287,19 +287,19 @@ const BirthdayPost = props => {
                 </View>
 
                 <Text style={[styles.name, textColorStyle2]}>{props.userName ||profileState.name || value.name}</Text>
-                <View style={styles.horizontal} />
-                <View style={styles.infoC}>
+                
+                {(props.showPhone || props.showPhone === undefined) ?<View style={styles.infoC}>
                   <Icon2 name="phone" style={styles.iconPhone} />
                   <Text style={[styles.info, textColorStyle2]}>
                   {profileState.phone || value.phone}
                   </Text>
-                </View>
-                <View style={styles.infoC}>
+                </View> :''}
+                {(props.showEmail || props.showEmail === undefined) ?<View style={styles.infoC}>
                   <EntypoIcon name="email" style={styles.iconPhone} />
                   <Text style={[styles.info, textColorStyle2]}>
                   {profileState.email || value.email}
                   </Text>
-                </View>
+                </View> : ''}
               </View>
             </View>
           </View>
@@ -458,8 +458,12 @@ const styles = StyleSheet.create({
   },
   infoContainer: {
     position: 'absolute',
-    bottom: '100%',
-    right: '10%',
+    width : '70%',
+    bottom: '27%',
+    right: '-21%',
+    display : 'flex',
+    justifyContent : 'space-between',
+    gap : 1.5
   },
   date: {
     fontSize: getResponsiveValue(14, 9),
@@ -477,8 +481,12 @@ const styles = StyleSheet.create({
   dateC: {
     position: "absolute",
     alignItems: "center",
-    bottom: getResponsiveValue('100%', "130%"),
-    left: getResponsiveValue('100%', "110%"),
+    // bottom: getResponsiveValue('100%', "95%"),
+    bottom: 70,
+    // left: getResponsiveValue('100%', "100%"),
+    right: 20,
+    display: 'flex',
+    flexWrap: 'nowrap',
   },
   horizontal: {
     backgroundColor: "#f50101",
@@ -489,18 +497,21 @@ const styles = StyleSheet.create({
   },
   name: {
     fontSize: getResponsiveValue(20, 13),
-    color: BLACK,
+    color: WHITE,
     fontWeight: 'bold',
-    top: getResponsiveValue('20%', '20%'),
-    left: getResponsiveValue('30%', '35%'),
-    textShadowColor: '#05050567',
+    // top: getResponsiveValue('20%', '32%'),
+    // left: getResponsiveValue("40%", "40%"),
+    textShadowColor: "#000000",
     textShadowOffset: { width: 1, height: 1 },
     textShadowRadius: getResponsiveValue(4, 2),
+    borderBottomWidth : getResponsiveValue(2, 1),
+    borderBottomColor : "#f50101",
+    marginBottom : 5,
   },
   info: {
     fontSize: getResponsiveValue(12, 8),
     color: BLACK,
-    marginLeft: getResponsiveValue(10, 5),
+    // marginLeft: getResponsiveValue(10, 5),
     fontWeight: 'bold',
     textShadowColor: '#05050567',
     textShadowOffset: { width: 1, height: 1 },
@@ -510,8 +521,8 @@ const styles = StyleSheet.create({
   infoC: {
     flexDirection: 'row',
 
-    top: getResponsiveValue('10%', '10%'),
-    left: getResponsiveValue('90%', '90%'),
+    // top: getResponsiveValue('10%', '10%'),
+    // left: getResponsiveValue('90%', '90%'),
   },
   iconPhone: {
     fontSize: getResponsiveValue(20, 10),

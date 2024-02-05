@@ -40,7 +40,7 @@ const Post2 = props => {
     phone: profileState.phone || null,
   })
   const [avatar, setAvatar] = useState(profileState.avatar || '')
-  const [jsxIsLoading ,setJsxIsLoading] = useState(true)
+  const [jsxIsLoading, setJsxIsLoading] = useState(true)
   const [downloaded, setDownloaded] = useState(false);
   const cardRef = useRef(null); // Create a ref for the card view
   const doubleTapRef = useRef(null);
@@ -50,7 +50,7 @@ const Post2 = props => {
   const [shouldShowAd, setShouldShowAd] = useState(false);
   const [likedMessageVisible, setLikedMessageVisible] = useState(false);
   const [downloadClicked, setDownloadClicked] = useState(false);
-  const [imageLoading , setImageLoading] = useState(true)
+  const [imageLoading, setImageLoading] = useState(true)
 
 
   const handleDownload = async () => {
@@ -129,7 +129,7 @@ const Post2 = props => {
     // You can add animation logic here for the like button
     console.log('LOG : CAllING POST ARRAY', props.id)
     setJsxIsLoading(false)
-    return ()=>(null)
+    return () => (null)
   }, []);
 
   const onShare = async () => {
@@ -196,9 +196,9 @@ const Post2 = props => {
 
   const textColorStyle = { color: props.textColor || WHITE };
 
-  useEffect(()=>{
+  useEffect(() => {
     setAvatar(profileState.avatar)
-  },[profileState.avatar])
+  }, [profileState.avatar])
 
 
   return (
@@ -214,23 +214,23 @@ const Post2 = props => {
           }}
           numberOfTaps={2} // Detect double tap
         >
-         {!jsxIsLoading?( <LinearGradient ref={cardRef} style={styles.cardContainer2} colors={["#6d76b0", "#0aaabb"]}>
+          {!jsxIsLoading ? (<LinearGradient ref={cardRef} style={styles.cardContainer2} colors={["#6d76b0", "#0aaabb"]}>
             <Image style={styles.backGround} resizeMode="cover" source={require('../../assets/images/bg_2.jpg')} />
             <View style={styles.cardContainer}>
-            {imageLoading && <ActivityIndicator size={'large'} style={styles.activityIndicator}/>}
-            <FastImage
-                source={{ uri: props.source,priority: FastImage.priority.normal, cache: FastImage.cacheControl.immutable,}}
+              {imageLoading && <ActivityIndicator size={'large'} style={styles.activityIndicator} />}
+              <FastImage
+                source={{ uri: props.source, priority: FastImage.priority.normal, cache: FastImage.cacheControl.immutable, }}
                 resizeMode={FastImage.resizeMode.contain}
                 style={styles.image}
-                onLoadEnd={()=>setImageLoading(false)}
-                onProgress={()=>setImageLoading(true)}
+                onLoadEnd={() => setImageLoading(false)}
+                onProgress={() => setImageLoading(true)}
               />
             </View>
             <View style={styles.profileContainer}>
               {
-               <Image 
-                source={(avatar) ? { uri: profileState.server + (avatar) } : defaultProfileImage} 
-                style={styles.profileImage} 
+                <Image
+                  source={(avatar) ? { uri: profileState.server + (avatar) } : defaultProfileImage}
+                  style={styles.profileImage}
                 />
               }
 
@@ -238,25 +238,28 @@ const Post2 = props => {
                 <View style={styles.dateC}>
                   <Text style={styles.date}>{formattedDate}</Text>
                 </View>
-                <Text style={[styles.name, textColorStyle]}>{props.newUserName ||profileState.name || value?.name}</Text>
-                <View style={styles.horizontal} />
-                <View style={styles.infoC}>
+              <View>
+                <Text style={[styles.name, textColorStyle]}>{props.newUserName || profileState.name || value?.name}</Text>
+                
+              </View>
+
+                {(props.showPhone || props.showPhone === undefined) ? <View style={styles.infoC}>
                   <Icon2 name="phone" style={styles.iconPhone} />
                   <Text style={[styles.info, textColorStyle]}>
                     {profileState.phone || value?.phone || ''}
                   </Text>
-                </View>
-                <View style={styles.infoC}>
+                </View> : ''}
+                {(props.showEmail || props.showEmail === undefined) ? <View style={styles.infoC}>
                   <EntypoIcon name="email" style={styles.iconPhone} />
                   <Text style={[styles.info, textColorStyle]}>
                     {profileState.email || value?.email}
                   </Text>
-                </View>
+                </View> : ''}
               </View>
             </View>
             <View >
             </View>
-          </LinearGradient>):(<ActivityIndicator />)}
+          </LinearGradient>) : (<ActivityIndicator />)}
         </TapGestureHandler>
 
 
@@ -301,11 +304,11 @@ const Post2 = props => {
 };
 
 const styles = StyleSheet.create({
-  activityIndicator :{
-    position : 'absolute',
-    top : '40%',
-    left : '50%',
-    zIndex : 999
+  activityIndicator: {
+    position: 'absolute',
+    top: '40%',
+    left: '50%',
+    zIndex: 999
   },
   container: {
     flex: 1,
@@ -374,8 +377,12 @@ const styles = StyleSheet.create({
   },
   infoContainer: {
     position: 'absolute',
-    bottom: '110%',
-    right: '10%',
+    width : '70%',
+    bottom: '27%',
+    right: '-21%',
+    display : 'flex',
+    justifyContent : 'space-between',
+    gap : 1.5
   },
   date: {
     fontSize: getResponsiveValue(14, 9),
@@ -384,42 +391,50 @@ const styles = StyleSheet.create({
     textShadowColor: "#0000006e",
     textShadowOffset: { width: 1, height: 1 },
     textShadowRadius: getResponsiveValue(4, 2),
-    paddingHorizontal: "4%",
-    paddingVertical: "2%",
+    paddingHorizontal: 4,
+    paddingVertical: 3,
     backgroundColor: "#731bbcca",
     borderRadius: getResponsiveValue(20, 10),
-    left:getResponsiveValue('3%', "3%"),
-   
+    // left: getResponsiveValue('3%', "3%"),
+    flexWrap: 'nowrap'
+
   },
   dateC: {
     position: "absolute",
     alignItems: "center",
-    bottom: getResponsiveValue('100%', "95%"),
-    left: getResponsiveValue('100%', "100%"),
-   
+    // bottom: getResponsiveValue('100%', "95%"),
+    bottom: 70,
+    // left: getResponsiveValue('100%', "100%"),
+    right: 20,
+    display: 'flex',
+    flexWrap: 'nowrap',
+
   },
   name: {
     fontSize: getResponsiveValue(20, 13),
     color: WHITE,
     fontWeight: 'bold',
-    top: getResponsiveValue('20%', '32%'),
-    left: getResponsiveValue("40%", "40%"),
+    // top: getResponsiveValue('20%', '32%'),
+    // left: getResponsiveValue("40%", "40%"),
     textShadowColor: "#000000",
     textShadowOffset: { width: 1, height: 1 },
     textShadowRadius: getResponsiveValue(4, 2),
+    borderBottomWidth : getResponsiveValue(2, 1),
+    borderBottomColor : "#e8ad23",
+    marginBottom : 5,
   },
   horizontal: {
     backgroundColor: "#e8ad23",
-
     height: getResponsiveValue(2, 1),
     width: "100%",
-    top: getResponsiveValue('20%', '30%'),
-    left: getResponsiveValue('40%', '40%'),
+    marginBottom : 5,
+    // top: getResponsiveValue('20%', '30%'),
+    // left: getResponsiveValue('40%', '40%'),
   },
   info: {
     fontSize: getResponsiveValue(12, 9),
     color: WHITE,
-    marginLeft: getResponsiveValue(10, 5),
+    // marginLeft: getResponsiveValue(10, 5),
     textShadowColor: "#000000",
     textShadowOffset: { width: 1, height: 1 },
     textShadowRadius: getResponsiveValue(4, 2),
@@ -427,9 +442,8 @@ const styles = StyleSheet.create({
   },
   infoC: {
     flexDirection: 'row',
-
-    top: getResponsiveValue('10%', '12%'),
-    left: getResponsiveValue('100%', '105%'),
+    // top: getResponsiveValue('10%', '12%'),
+    // left: getResponsiveValue('100%', '105%'),
   },
   iconPhone: {
     fontSize: getResponsiveValue(23, 10),

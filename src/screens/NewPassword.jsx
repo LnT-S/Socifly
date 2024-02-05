@@ -98,7 +98,7 @@ const NewPassword = (props) => {
         />
 
         {errors.confirm_password && (
-          <Text style={global.error}>{errors.confirm_password}</Text>
+          <Text style={or}>{errors.confirm_password}</Text>
         )}
 
         <View style={styles.buttonS}>

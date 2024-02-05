@@ -8,9 +8,9 @@ import {
   BackHandler,
 } from 'react-native';
 // import Swiper from 'react-native-swiper';
-import React, {useState, useEffect} from 'react';
-import {BLACK, PRIMARY, WHITE} from '../../styles/colors';
-import {getResponsiveValue} from '../../styles/responsive';
+import React, { useState, useEffect } from 'react';
+import { BLACK, PRIMARY, WHITE } from '../../styles/colors';
+import { getResponsiveValue } from '../../styles/responsive';
 import TextinputC from '../../atoms/TextinputC';
 import ButtonA from '../../atoms/ButtonA';
 import BirthdayPost from '../../common/posts/BirthdayPost';
@@ -20,15 +20,16 @@ import ButtonB from '../../atoms/ButtonB';
 import stringsoflanguages from '../../utils/ScreenStrings';
 import CustomColorPicker from '../../utils/CustomColorPicker';
 import { useLocal } from '../../context/ProfileContext';
-import {useNavigation} from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import ImageCropPicker from 'react-native-image-crop-picker';
+import CheckBoxWithText from '../../atoms/CheckBoxWithText';
 const handleColorChangeComplete = (color) => {
   // Handle color change completion here
 };
 
 
 const BirthdayEdit = props => {
-  const {localState, localDispatch} = useLocal()
+  const { localState, localDispatch } = useLocal()
   const imageSource = localState.editImage
   const [name, setName] = useState(stringsoflanguages.name);
   const [userName, setUserName] = useState('');
@@ -36,6 +37,8 @@ const BirthdayEdit = props => {
   const [tempUserName, setTempUserName] = useState(''); // Temporary user name storage
   const [selectedImage, setSelectedImage] = useState(null);
   const [showModal, setShowModal] = useState(false)
+  const [showPhone, setShowPhone] = useState(true)
+  const [showEmail, setShowEmail] = useState(true)
   const navigation = useNavigation();
   const selectImage = () => {
     ImageCropPicker.openPicker({
@@ -72,20 +75,20 @@ const BirthdayEdit = props => {
 
 
   const [currentColor2, setCurrentColor2] = useState('#fff');
-const [colorPickerVisible2, setColorPickerVisible2] = useState(false);
+  const [colorPickerVisible2, setColorPickerVisible2] = useState(false);
 
-// Create functions for the second color wheel
-const openColorPicker2 = () => {
-  setColorPickerVisible2(true);
-};
+  // Create functions for the second color wheel
+  const openColorPicker2 = () => {
+    setColorPickerVisible2(true);
+  };
 
-const closeColorPicker2 = () => {
-  setColorPickerVisible2(false);
-};
+  const closeColorPicker2 = () => {
+    setColorPickerVisible2(false);
+  };
 
-const handleColorChange2 = (color) => {
-  setCurrentColor2(color);
-};
+  const handleColorChange2 = (color) => {
+    setCurrentColor2(color);
+  };
 
 
   const handleNameChange = (newName) => {
@@ -107,7 +110,7 @@ const handleColorChange2 = (color) => {
   };
 
   useEffect(() => {
-    const backHandler = BackHandler.addEventListener('hardwareBackPress', ()=>{navigation.goBack(); return true});
+    const backHandler = BackHandler.addEventListener('hardwareBackPress', () => { navigation.goBack(); return true });
     return () => backHandler.remove();
   }, []);
 
@@ -125,68 +128,75 @@ const handleColorChange2 = (color) => {
           setSelectedImage={setSelectedImage}
           textColor={currentColor}
           textColor2={currentColor2}
+          showEmail={showEmail}
+          showPhone={showPhone}
         />
-     
+
         <View style={styles.boxContainer}>
           <View style={styles.ccontainer}>
             <Text style={styles.text}>{stringsoflanguages.edit}</Text>
           </View>
           <View style={styles.colorC}>
             <CustomColorPicker
-            color={currentColor}
-            onColorChange={handleColorChange}
-            onColorChangeComplete={handleColorChangeComplete}
-            visible={colorPickerVisible}
-            onClose={closeColorPicker}
-          />
-            </View>
+              color={currentColor}
+              onColorChange={handleColorChange}
+              onColorChangeComplete={handleColorChangeComplete}
+              visible={colorPickerVisible}
+              onClose={closeColorPicker}
+            />
+          </View>
 
 
-            <View style={styles.colorC}>
+          <View style={styles.colorC}>
             <CustomColorPicker
-            color={currentColor2}
-            onColorChange={handleColorChange2}
-            visible={colorPickerVisible2}
-            onClose={closeColorPicker2}
-          />
-            </View>
-            
-            <View style={styles.change}>
-              <ButtonB
-                name={stringsoflanguages.changeNameColor}
-                onPress={openColorPicker}
-                names="palette"
-              />
-            </View>
-          <View style={styles.change}>
-              <ButtonB
-                name={stringsoflanguages.changeInfoColor}
-                onPress={() => openColorPicker2('text2')}
-                names="palette"
-              />
-            </View>
-
-       
+              color={currentColor2}
+              onColorChange={handleColorChange2}
+              visible={colorPickerVisible2}
+              onClose={closeColorPicker2}
+            />
+          </View>
 
           <View style={styles.change}>
-          <ButtonB   names="folder" name={stringsoflanguages.selectImage} onPress={selectImage} />
-        </View>
+            <ButtonB
+              name={stringsoflanguages.changeNameColor}
+              onPress={openColorPicker}
+              names="palette"
+            />
+          </View>
+          <View style={styles.change}>
+            <ButtonB
+              name={stringsoflanguages.changeInfoColor}
+              onPress={() => openColorPicker2('text2')}
+              names="palette"
+            />
+          </View>
+
+
+
+          <View style={styles.change}>
+            <ButtonB names="folder" name={stringsoflanguages.selectImage} onPress={selectImage} />
+          </View>
 
           <TextinputC
             placeholder={stringsoflanguages.changeName}
-            value={tempName} 
-            onChangeText={handleNameChange} 
+            value={tempName}
+            onChangeText={handleNameChange}
             maxLength={19}
           />
 
           <TextinputC
             placeholder={stringsoflanguages.changeYourName}
-            value={tempUserName} 
-            onChangeText={handleUserNameChange} 
+            value={tempUserName}
+            onChangeText={handleUserNameChange}
             maxLength={19}
           />
-       
-          <ButtonA name={stringsoflanguages.change} onPress={handleApplyChanges}/>
+
+          <View>
+            <CheckBoxWithText text={'Show Email in Post'} checked={showEmail} setChecked={setShowEmail} />
+            <CheckBoxWithText text={'Show Phone No in Post'} checked={showPhone} setChecked={setShowPhone} />
+          </View>
+
+          <ButtonA name={stringsoflanguages.change} onPress={handleApplyChanges} />
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -225,15 +235,15 @@ const styles = StyleSheet.create({
     // bottom: getResponsiveValue('5%', '5%'),
     top: getResponsiveValue('5%', '10%'),
     backgroundColor: WHITE,
-    width: getResponsiveValue("102%","100%"),
+    width: getResponsiveValue("102%", "100%"),
     paddingHorizontal: getResponsiveValue('20%', '10%'),
     paddingVertical: getResponsiveValue('5%', '5%'),
     paddingBottom: '40%',
     // bottom:0,
     borderRadius: getResponsiveValue(60, 30),
   },
-  bdContainer:{
-    flex:1.5,
+  bdContainer: {
+    flex: 1.5,
     // height:"40%",
   },
   icon: {
@@ -245,7 +255,7 @@ const styles = StyleSheet.create({
   },
   change: {
     marginBottom: '8%',
- 
+
   },
 });
 

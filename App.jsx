@@ -27,6 +27,7 @@ import stringsoflanguages from './src/utils/ScreenStrings.jsx';
 import { LanguageProvider } from './src/context/LanguageContext.js';
 import NewPassword from './src/screens/NewPassword.jsx';
 import LanguagesScreen from './src/screens/static/LanguagesScreen.jsx';
+import VideoArray from './src/common/postArrays/VIdeoArray.jsx';
 
 
 const Stack = createNativeStackNavigator();
@@ -161,6 +162,11 @@ function App() {
             <Stack.Screen
               name="NewPassword"
               component={NewPassword}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="VideoArray"
+              component={VideoArray}
               options={{ headerShown: false }}
             />
           </Stack.Navigator>)}

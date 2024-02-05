@@ -33,7 +33,9 @@ import { TouchableOpacity, ActivityIndicator } from 'react-native';
 import MaterialIconsIcon from 'react-native-vector-icons/MaterialIcons';
 import DialogueBox from '../common/DialogueBox';
 import PostArray from '../common/postArrays/PostArray';
+import VideoArray from '../common/postArrays/VIdeoArray';
 const LazyComponent = React.lazy(() => import('../common/postArrays/PostArray'))
+const LazyVideoComponent = React.lazy(() => import('../common/postArrays/VIdeoArray'))
 import showRewardedAds from '../common/Ads/RewardedAds';
 //import RewardedInterstitialAds from '../common/RewardedInterstitialAds';
 
@@ -99,11 +101,34 @@ const HomePage = (props) => {
       return false
     }
   }
+  async function language() {
+    let lang = await AsyncStorage.getItem('selectedLanguage')
+    if (lang) {
+      console.log('LOG : LANGUAGE :: ',lang)
+      localDispatch({
+        type: 'LANG',
+        payload: lang
+      })
+      return true
+    } else {
+      await AsyncStorage.setItem('selectedLanguage','english')
+      console.log('LOG : LANGUAGE NOT FOUND :: DEFAULT ENGLISH')
+      // navigation.goBack()
+      return false
+    }
+  }
 
   function handleLogout() {
     setIsLogoutDialogVisible(true)
   }
 
+
+  function handleView(type){
+    localDispatch({
+      type: 'VIEWTYPE',
+      payload: type
+    })
+  }
 
   async function getCategory() {
     let { data, status } = await FETCH(
@@ -247,23 +272,27 @@ const HomePage = (props) => {
           type: "VIEWMODE",
           payload: 'initial'
         })
-        let loads = async () => {
-          setPostArrayLoadStart(false)
-          token().then().catch(err => console.log('EFFECT ERROR', err))
-          console.log('0----------------------------------------------------------------')
-          let a = await loadProfileData().then().catch(err => console.log('EFFECT ERROR 0', err))
-          console.log('1----------------------------------------------------------------')
-          if (a === 1) {
-            let b = await getCategory().then().catch(err => console.log('EFFECT ERROR 1', err))
-            if (b === 1) {
-              setPostArrayLoadStart(true)
-            } else {
-              setRefresh(!refresh)
+        language().then(data =>{
+          if(data){
+            let loads = async () => {
+              setPostArrayLoadStart(false)
+              token().then().catch(err => console.log('EFFECT ERROR', err))
+              console.log('0----------------------------------------------------------------')
+              let a = await loadProfileData().then().catch(err => console.log('EFFECT ERROR 0', err))
+              console.log('1----------------------------------------------------------------')
+              if (a === 1) {
+                let b = await getCategory().then().catch(err => console.log('EFFECT ERROR 1', err))
+                if (b === 1) {
+                  setPostArrayLoadStart(true)
+                } else {
+                  setRefresh(!refresh)
+                }
+              } else { setRefresh(!refresh) }
+              console.log('2----------------------------------------------------------------')
             }
-          } else { setRefresh(!refresh) }
-          console.log('2----------------------------------------------------------------')
-        }
-        loads()
+            loads()
+          }
+        }).catch(err=>console.log('Language Effect Error' , err))
       } else {
         navigation.navigate('LoginScreen')
       }
@@ -356,24 +385,33 @@ const HomePage = (props) => {
         />
       </View>
       {localState.loading ? <ActivityIndicator size='large'/> : ''}
-      <View style={{ flex: 1 }}>
+     { localState.viewType === 'image' ?  (<View style={{ flex: 1 }}>
         {postArrayLoadStart ? <Suspense fallback={<ActivityIndicator />}>
           <LazyComponent
             navigation={props.navigation}
             arrayLength={noOfPost}
           />
         </Suspense> : <ActivityIndicator />}
-      </View>
+      </View>) 
+      : 
+      (<View style={{ flex: 1 }}>
+        {postArrayLoadStart ? <Suspense fallback={<ActivityIndicator />}>
+          <LazyVideoComponent
+            navigation={props.navigation}
+            arrayLength={noOfPost}
+          />
+        </Suspense> : <ActivityIndicator />}
+      </View>)}
       {/*<GoogleAds />*/}
       <View style={{height: 30, width: '100%', position: 'absolute', bottom: 0, display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'row' }}>
-        <TouchableOpacity activeOpacity={0.8} style={{ backgroundColor: PRIMARY, width: '50%', height: '100%', borderRightColor: 'white', borderRightWidth: 1}}>
+        <TouchableOpacity activeOpacity={0.8} style={{ backgroundColor: PRIMARY, width: '50%', height: '100%', borderRightColor: 'white', borderRightWidth: 1}} onPress={()=>handleView('image')}>
           <View style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
             <Text style={{ fontSize: 18, color: 'white', textAlign: 'center', }}>
               IMAGES
             </Text>
           </View>
         </TouchableOpacity>
-        <TouchableOpacity activeOpacity={0.8} style={{ backgroundColor: PRIMARY, width: '50%', height: '100%',  borderLeftColor: 'white', borderLeftWidth: 1 }}>
+        <TouchableOpacity activeOpacity={0.8} style={{ backgroundColor: PRIMARY, width: '50%', height: '100%',  borderLeftColor: 'white', borderLeftWidth: 1 }} onPress={()=>handleView('video')}>
           <View  style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
             <Text style={{ fontSize: 18,color: 'white', textAlign: 'center',}}>
               VIDEOS

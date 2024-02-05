@@ -25,6 +25,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import { useLocal } from '../../context/ProfileContext';
 import CustomColorPicker from '../../utils/CustomColorPicker';
 import {useNavigation} from '@react-navigation/native';
+import CheckBoxWithText from '../../atoms/CheckBoxWithText';
 
 const handleColorChangeComplete = (color) => {
   // Handle color change completion here
@@ -39,6 +40,8 @@ const Edit = props => {
   const [refresh , setRefresh] = useState(true);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [showModal, setShowModal] = useState(false)
+  const [showPhone , setShowPhone] = useState(true)
+  const [showEmail , setShowEmail] = useState(true)
   const navigation = useNavigation();
   const handleInputChange = text => {
     setInputValue(text);
@@ -128,6 +131,8 @@ const Edit = props => {
             isEditMode={true}
             textColor={currentColor}
             newUserName={inputValue}
+            showEmail={showEmail}
+            showPhone={showPhone}
           />
           <Post1
             userName={userName}
@@ -136,6 +141,8 @@ const Edit = props => {
             isEditMode={true}
             textColor={currentColor}
             newUserName={inputValue}
+            showEmail={showEmail}
+            showPhone={showPhone}
           />
 
           <Post3
@@ -145,6 +152,8 @@ const Edit = props => {
             isEditMode={true}
             textColor={currentColor}
             newUserName={inputValue}
+            showEmail={showEmail}
+            showPhone={showPhone}
           />
           <Post4
             userName={userName}
@@ -153,6 +162,8 @@ const Edit = props => {
             isEditMode={true}
             textColor={currentColor}
             newUserName={inputValue}
+            showEmail={showEmail}
+            showPhone={showPhone}
           />
         </Swiper>
         {/* </View> */}
@@ -193,6 +204,11 @@ const Edit = props => {
                 onPress={openColorPicker}
                 names="palette"
               />
+            </View>
+
+            <View>
+              <CheckBoxWithText text = {'Show Email in Post'} checked = {showEmail} setChecked = {setShowEmail}/>
+              <CheckBoxWithText text = {'Show Phone No in Post'} checked = {showPhone} setChecked = {setShowPhone}/>
             </View>
 
             <ButtonA

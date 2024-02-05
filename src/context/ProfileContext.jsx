@@ -26,7 +26,8 @@ export const ProfileProvider = ({ children }) => {
     lang : 'english',
     editImage  : '',
     loading : false,
-    viewMode : 'initial'
+    viewMode : 'initial',
+    viewType: 'image'
   }
 
   const profileReducer = (state = initialState, action) => {
@@ -63,6 +64,8 @@ export const ProfileProvider = ({ children }) => {
         return { ...state, loading: action.payload }
       case 'VIEWMODE':
         return { ...state, viewMode: action.payload }
+      case 'VIEWTYPE':
+        return { ...state, viewType: action.payload }
       default:
         return state;
     }

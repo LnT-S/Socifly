@@ -21,7 +21,4 @@ buildscript {
         classpath("com.android.tools.build:gradle")
         classpath("com.facebook.react:react-native-gradle-plugin")
     }
-    dependencies {
-        implementation 'com.google.android.gms:play-services-ads:22.6.0'
-    }
 }
