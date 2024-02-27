@@ -1,5 +1,5 @@
 import React, { useEffect, useState, lazy, useRef, Suspense } from 'react';
-import { View, StyleSheet, ActivityIndicator, InteractionManager } from 'react-native';
+import { View, StyleSheet, ActivityIndicator, InteractionManager, Text } from 'react-native';
 import Post1 from '../posts/Post1';
 import LoadingPostSuspense from '../posts/LoadingPostSuspense';
 import Post3 from '../posts/Post3';
@@ -24,6 +24,7 @@ const PostArray = ({ navigation, arrayLength }) => {
   const [postLoading, setPostLoading] = useState(false)
   const [refresh, setRefresh] = useState(false)
   const [startIndex, setStartIndex] = useState(0);
+  const [notEndReached , setNotEndReached] = useState(true)
 
   const [posts, setPost] = useState([]);
   const [data, setData] = useState([]);
@@ -35,6 +36,8 @@ const PostArray = ({ navigation, arrayLength }) => {
       type: "LOADING",
       payload: true
     })
+    setData([])
+    setStartIndex(0)
     let { status, data } = await FETCH(
       'GET',
       '/home/get-images',
@@ -71,6 +74,10 @@ const PostArray = ({ navigation, arrayLength }) => {
       setPostLoading(true)
       // Simulating loading images from your array of objects
       const newData = posts.slice(startIndex, startIndex + 10);
+      console.log('New Dta',startIndex , posts.length , notEndReached)
+      if(startIndex>=posts.length && startIndex!==0){
+        setNotEndReached(false)
+      }
       // Update state
       setData((prevData) => [...prevData, ...newData]);
       setStartIndex(startIndex + 10);
@@ -81,6 +88,7 @@ const PostArray = ({ navigation, arrayLength }) => {
   useEffect(() => {
     let load = async () => {
       console.log('Post Array Updating Posts')
+      setData([])
       let a = await getImages().then(a => {
         if (a === 1) {
           // Fetch Logic Here
@@ -117,11 +125,11 @@ const PostArray = ({ navigation, arrayLength }) => {
         <FlatList
           ref={flatListRef}
           data={data}
-          renderItem={({ item, index }) => (localState.viewMode === 'initial' || item.category.special === (false)) ? <LazyPost2
+          renderItem={({ item, index }) => (localState.viewMode === 'initial' || item?.category?.special === (false)) ? <LazyPost2
             key={item?._id}
             source={profileState.server + item?.path}
             navigation={navigation} id={item?._id}
-            imageLoaded={setLoading} /> : <BirthdayPost key={item._id} source={profileState.server + item.path} navigation={navigation} id={item._id} />}
+            imageLoaded={setLoading} /> : <BirthdayPost key={item?._id} source={profileState.server + item?.path} navigation={navigation} id={item?._id} />}
           keyExtractor={(item, index) => (index)}
           onEndReached={loadImages}
           onEndReachedThreshold={0.7}
@@ -129,7 +137,7 @@ const PostArray = ({ navigation, arrayLength }) => {
           onScrollToIndexFailed={(info) => {
             console.warn('onScrollToIndexFailed info:', info);
           }}
-          ListFooterComponent={<LoadingPostSuspense />}
+          ListFooterComponent={(notEndReached===true)?<LoadingPostSuspense />:<Text>EndReached</Text>}
           extraData={data}
 
         />
